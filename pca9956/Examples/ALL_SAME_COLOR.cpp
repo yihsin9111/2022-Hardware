@@ -28,6 +28,8 @@ int main(int argc, char *argv[]){
 		reset.PWM_R = 0;
 		reset.PWM_G = 0;
 		reset.PWM_B = 0;
+		Set_All_Same_Color(pca9956_led, reset);
+		break;
             case 'R':
                 LED red;
                 red.IREF_R = 134;
