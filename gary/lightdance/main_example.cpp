@@ -71,7 +71,7 @@ int main(){
 	while(1){
 		for (int i = 0; i < nStrips; ++i) { 
 			for (int j = 0; j < nLeds[i] * 3; ++j)
-					buf[i][j]=(char)100;
+					buf[i][j]=(char)10;
 			strips.sendToStrip(i, buf[i]);
 			usleep(10*1000);
 		}

@@ -71,15 +71,64 @@ int main(){
 	while(1){
 		for (int i = 0; i < nLeds.size(); ++i) { 
 			for (int j = 0; j < nLeds[i]; ++j){
-				buf[i][3*j  ] = rainbow[(angle + 18*i + j      ) % 360]; // g
-				buf[i][3*j+1] = rainbow[(angle + 18*i + j + 120) % 360]; // r
-				buf[i][3*j+2] = rainbow[(angle + 18*i + j + 240) % 360]; // b
+				buf[i][3*j  ] = rainbow[(angle + 18*i + j      ) % 360]/10; // g
+				buf[i][3*j+1] = rainbow[(angle + 18*i + j + 120) % 360]/10; // r
+				buf[i][3*j+2] = rainbow[(angle + 18*i + j + 240) % 360]/10; // b
 			}
 		}
 		++angle;
 		angle = angle % 360;
 		strips.sendToStrip(buf);
-		usleep(30 * 1000);
+		usleep(27 * 1000);
 	}
-
+  // int a;
+  // while(cin >> a) {
+  //   if ( a < 0 ) {
+  //     a = 1;
+  //   }
+  //   else if ( a > 255) {
+  //     a = 255;
+  //   }
+  //   for (int i = 0; i < nLeds.size(); ++i) {
+  //     for (int j = 0; j < nLeds[i]; ++j) {
+  //       if (i % 7 == 0) {
+  //         buf[i][3*j  ] = a; // g
+  //         buf[i][3*j+1] = 0; // r
+  //         buf[i][3*j+2] = 0; // b          
+  //       }
+  //       else if (i % 7 == 1) {
+  //         buf[i][3*j  ] = 0; // g
+  //         buf[i][3*j+1] = a; // r
+  //         buf[i][3*j+2] = 0; // b               
+  //       }
+  //       else if (i % 7 == 2) {
+  //         buf[i][3*j  ] = 0; // g
+  //         buf[i][3*j+1] = 0; // r
+  //         buf[i][3*j+2] = a; // b               
+  //       }
+  //       else if (i % 7 == 3) {
+  //         buf[i][3*j  ] = a/2; // g
+  //         buf[i][3*j+1] = a/2; // r
+  //         buf[i][3*j+2] = 0; // b               
+  //       }    
+  //       else if (i % 7 == 4) {
+  //         buf[i][3*j  ] = 0; // g
+  //         buf[i][3*j+1] = a/2; // r
+  //         buf[i][3*j+2] = a/2; // b               
+  //       }    
+  //       else if (i % 7 == 5) {
+  //         buf[i][3*j  ] = a/2; // g
+  //         buf[i][3*j+1] = 0; // r
+  //         buf[i][3*j+2] = a/2; // b               
+  //       }
+  //       else if (i % 7 == 6) {
+  //         buf[i][3*j  ] = a/3; // g
+  //         buf[i][3*j+1] = a/3; // r
+  //         buf[i][3*j+2] = a/3; // b           
+  //       }
+  //     }
+  //   }
+  //   strips.sendToStrip(buf);
+	// 	usleep(27 * 1000);
+  // }
 }

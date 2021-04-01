@@ -11,14 +11,17 @@ int main(int argc, char *argv[]){
     PCA9956 pca9956(0x2b);
     PCA9956 pca9956_2(0x3f);
     PCA9956 pca9956_3(0x56);
-    PCA9956 pca9956_4(0x32);
+    //PCA9956 pca9956_4(0x32);
 
     pca9956.SetAllIREF(100);
+    pca9956_2.SetAllIREF(100);
+    pca9956_3.SetAllIREF(100);
+//     pca9956_4.SetAllIREF(100);
 
     PCA9956_LED pca9956_led(pca9956);
     PCA9956_LED pca9956_led_2(pca9956_2);
     PCA9956_LED pca9956_led_3(pca9956_3);
-    PCA9956_LED pca9956_led_4(pca9956_4);
+    //PCA9956_LED pca9956_led_4(pca9956_4);
 
     cout << "Usage: Plz enter \nR as RED /G as GREEN /B as BLUE /\nY as YELLOW /C as CYAN /M as MAGENTA /W as WHITE\n 0 as reset\n>> <Color>\n" ;
 
@@ -37,7 +40,7 @@ int main(int argc, char *argv[]){
 		Set_All_Same_Color(pca9956_led, reset);
 		Set_All_Same_Color(pca9956_led_2, reset);
 		Set_All_Same_Color(pca9956_led_3, reset);
-		Set_All_Same_Color(pca9956_led_4, reset);
+		//Set_All_Same_Color(pca9956_led_4, reset);
 		break;
             case 'R':
                 ;LED red;
@@ -50,7 +53,7 @@ int main(int argc, char *argv[]){
                 Set_All_Same_Color(pca9956_led, red);
 		Set_All_Same_Color(pca9956_led_2, red);
 		Set_All_Same_Color(pca9956_led_3, red);
-		Set_All_Same_Color(pca9956_led_4, red);
+		//Set_All_Same_Color(pca9956_led_4, red);
                 break;
             case 'G':
                 LED green;
@@ -63,7 +66,7 @@ int main(int argc, char *argv[]){
                 Set_All_Same_Color(pca9956_led, green);
 		Set_All_Same_Color(pca9956_led_2, green);
 		Set_All_Same_Color(pca9956_led_3, green);
-		Set_All_Same_Color(pca9956_led_4, green);
+		//Set_All_Same_Color(pca9956_led_4, green);
                 break;
             case 'B':
                 LED blue;
@@ -76,7 +79,7 @@ int main(int argc, char *argv[]){
                 Set_All_Same_Color(pca9956_led, blue);
 		Set_All_Same_Color(pca9956_led_2, blue);
 		Set_All_Same_Color(pca9956_led_3, blue);
-		Set_All_Same_Color(pca9956_led_4, blue);
+		//Set_All_Same_Color(pca9956_led_4, blue);
                 break;
             case 'Y':
                 LED yellow;
@@ -89,7 +92,7 @@ int main(int argc, char *argv[]){
                 Set_All_Same_Color(pca9956_led, yellow);
 		Set_All_Same_Color(pca9956_led_2, yellow);
 		Set_All_Same_Color(pca9956_led_3, yellow);
-		Set_All_Same_Color(pca9956_led_4, yellow);
+		//Set_All_Same_Color(pca9956_led_4, yellow);
                 break;
             case 'C':
                 LED cyan;
@@ -121,9 +124,9 @@ int main(int argc, char *argv[]){
 		for(int i=0;i<24;i++){
 		    cout << "pca3:" << i << ", PWM:" << pca9956_3.GetPWM(i) << ", IREF" << pca9956_3.GetIREF(i) << endl;
 		}
-		for(int i=0;i<24;i++){
+		/*for(int i=0;i<24;i++){
 		    cout << "pca4:" << i << ", PWM:" << pca9956_4.GetPWM(i) << ", IREF" << pca9956_4.GetIREF(i) << endl;
-		}
+		}*/
 		break;
             default:
                 LED white;
@@ -136,7 +139,7 @@ int main(int argc, char *argv[]){
                 Set_All_Same_Color(pca9956_led, white);
 		Set_All_Same_Color(pca9956_led_2, white);
 		Set_All_Same_Color(pca9956_led_3, white);
-		Set_All_Same_Color(pca9956_led_4, white);
+		//Set_All_Same_Color(pca9956_led_4, white);
                 break;
         }
     }

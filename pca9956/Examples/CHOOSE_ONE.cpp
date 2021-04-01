@@ -8,16 +8,16 @@ int main(int argc, char *argv[]){
     PCA9956 pca9956_1(0x3f);
     PCA9956 pca9956_2(0x2b);
     PCA9956 pca9956_3(0x56);
-    PCA9956 pca9956_4(0x32);
+   // PCA9956 pca9956_4(0x32);
 
-    pca9956_1.SetAllIREF(100);
-    pca9956_2.SetAllIREF(100);
-    pca9956_3.SetAllIREF(100);
-    pca9956_4.SetAllIREF(100);
+    pca9956_1.SetAllIREF(255);
+    pca9956_2.SetAllIREF(255);
+    pca9956_3.SetAllIREF(255);
+    //pca9956_4.SetAllIREF(100);
     pca9956_1.SetFullOff();
     pca9956_2.SetFullOff();
     pca9956_3.SetFullOff();
-    pca9956_4.SetFullOff();
+    //pca9956_4.SetFullOff();
 
     cout << "Usage: \n Plz enter led address and RGB\n>> <channel><R><G><B>" ;
     
@@ -27,12 +27,12 @@ int main(int argc, char *argv[]){
 	    int R=0, G=0, B=0;
 	    cin >> R >> G >> B;
 
-	    if(channel>23){
+	    /*if(channel>23){
 	    	channel -= 24;
 		pca9956_4.SetPWM(channel*3, R);
 		pca9956_4.SetPWM(channel*3+1, G);
 		pca9956_4.SetPWM(channel*3+2, B);
-	    }else if(channel>15){
+	    }else */if(channel>15){
 	    	channel -= 16;
 		pca9956_3.SetPWM(channel*3, R);
 		pca9956_3.SetPWM(channel*3+1, G);
@@ -44,8 +44,8 @@ int main(int argc, char *argv[]){
 		pca9956_2.SetPWM(channel*3+2, B);
 	    }else{
 	    	pca9956_1.SetPWM(channel*3, R);
-		pca9956_2.SetPWM(channel*3+1, G);
-		pca9956_3.SetPWM(channel*3+2, B);
+		pca9956_1.SetPWM(channel*3+1, G);
+		pca9956_1.SetPWM(channel*3+2, B);
 	    }
 	}
     }
