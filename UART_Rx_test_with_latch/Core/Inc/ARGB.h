@@ -23,9 +23,9 @@ typedef enum ARGB_STATE {
 
 ARGB_STATE ARGB_Init(void);   // Initialization
 
-ARGB_STATE ARGB_SetBrightness(u8_t br); // Set global brightness
+//ARGB_STATE ARGB_SetBrightness(u8_t br); // Set global brightness
 // ARGB_STATE ARGB_SetRGB(u16_t i, u8_t r, u8_t g, u8_t b);  // Set single LED by RGB
 
-ARGB_STATE ARGB_Show(u8_t*, u16_t); // Push data to the strip
+ARGB_STATE ARGB_Fire(u8_t*, u16_t); // Push data to the strip
 
 #endif /* ARGB_H_ */

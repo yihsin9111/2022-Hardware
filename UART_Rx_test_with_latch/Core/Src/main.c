@@ -70,7 +70,26 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void fireLED(){
+	place = 0;
+	for(uint8_t ID = 0; ID < LED_CHANNEL_COUNT; ++ID){
+		if(LEDLength[ID] == 0) continue;
+		// MUX OUTPUT CHANNEL SELECT
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10,  (ID >> 0) & (0x1));
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11,  (ID >> 1) & (0x1));
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12,  (ID >> 2) & (0x1));
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13,  (ID >> 3) & (0x1));
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14,  ~(ID >> 3) & (0x1));
 
+		while (!ARGB_Fire(LED + place*3, LEDLength[ID]));
+		place += LEDLength[ID];
+		if(place == totalLEDLength)
+			break;
+		else
+			HAL_Delay(LEDLength[ID]/20);
+	}
+	return;
+}
 /* USER CODE END 0 */
 
 /**
@@ -134,22 +153,8 @@ int main(void)
 
   LED = calloc(totalLEDLength * 3, sizeof(uint8_t));
   for(int i = 0; i < totalLEDLength * 3; ++i)
-	  LED[i] = 200;
-
-  place = 0;
-	for(uint8_t ID = 0; ID < LED_CHANNEL_COUNT; ++ID){
-		if(LEDLength[ID] == 0) continue;
-		// MUX OUTPUT CHANNEL SELECT
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10,  (ID >> 0) & (0x1));
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11,  (ID >> 1) & (0x1));
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12,  (ID >> 2) & (0x1));
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13,  (ID >> 3) & (0x1));
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14,  ~(ID >> 3) & (0x1));
-
-		while (!ARGB_Show(LED + place*3, LEDLength[ID]));
-		place += LEDLength[ID];
-		HAL_Delay(LEDLength[ID]/10);
-	}
+	  LED[i] = 50;
+  fireLED();
 
   HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
   /* USER CODE END 2 */
@@ -162,23 +167,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//	if(flag){
 	  HAL_UART_Receive(&huart1, LED, totalLEDLength * 3, 100);
-	  place = 0;
-	  for(uint8_t ID = 0; ID < LED_CHANNEL_COUNT; ++ID){
-		if(LEDLength[ID] == 0) continue;
-		// MUX OUTPUT CHANNEL SELECT
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10,  (ID >> 0) & (0x1));
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11,  (ID >> 1) & (0x1));
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12,  (ID >> 2) & (0x1));
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13,  (ID >> 3) & (0x1));
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14,  ~(ID >> 3) & (0x1));
-		while (!ARGB_Show(LED + place*3, LEDLength[ID]));
-		place += LEDLength[ID];
-		HAL_Delay(LEDLength[ID] >> 4);
-	  }
-//	  flag = 0;
-//	}
+	  fireLED();
   }
   /* USER CODE END 3 */
 }
