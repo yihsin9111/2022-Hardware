@@ -32,14 +32,16 @@
 class PCA9956{
     public:
 
-	PCA9956(int Address = PCA9956_I2C_ADDRESS_DEFAULT);
-	PCA9956() {};
-	~PCA9956() {};
+	PCA9956() {}
+	~PCA9956() {}
+	PCA9956(int Address);
 
 	int SetPWMAI(int channel, int *PWM, int size);
 	int SetIREFAI(int channel, int *IREF, int size);
 
 	int SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref, int Giref, int Biref);
+
+	void GetAll();
 
     private:
 

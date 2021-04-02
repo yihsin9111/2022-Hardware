@@ -1,3 +1,4 @@
+#include <iostream>
 #include "../include/pca9956.h"
 #include "../../../WiringPi/wiringPi/wiringPiI2C.h"
 #include "../../../WiringPi/wiringPi/wiringPi.h"
@@ -10,6 +11,8 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <asm/ioctl.h>
+
+using namespace std;
 
 enum PCA9956Reg{
     PCA9956_REG_PWMALL = 0x3f,
@@ -53,7 +56,10 @@ int PCA9956::SetPWMAI(int channel, int *PWM, int size){
     args.size = 5;
     args.data = &regData;
 
-    return ioctl(fd, 0x0720, &args) && SetPWM(channel, PWM[0]);
+    int AI = ioctl(fd, 0x0720, &args);
+    int RV = SetPWM(channel, PWM[0]);
+
+    return AI && RV;
 };
 
 int PCA9956::SetIREFAI(int channel, int *IREF, int size){
@@ -76,7 +82,10 @@ int PCA9956::SetIREFAI(int channel, int *IREF, int size){
     args.size = 5;
     args.data = &regData;
 
-    return ioctl(fd, 0x0720, &args) && SetIREF(channel, IREF[0]);
+    int AI = ioctl(fd, 0x0720, &args);
+    int RV = SetIREF(channel, IREF[0]);
+
+    return AI && RV;
 };
 
 
@@ -90,10 +99,16 @@ int PCA9956::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref,
     IREF[0] = Riref;
     IREF[1] = Giref;
     IREF[2] = Biref;
-    SetPWMAI(led_address*3 + PCA9956_PWM0_ADDR, PWM, 3);
-    SetIREFAI(led_address*3 + PCA9956_IREF0_ADDR, IREF, 3);
-    return 0;	
-}
+    int pAI = SetPWMAI(led_address*3, PWM, 3);
+    int iAI = SetIREFAI(led_address*3, IREF, 3);
+    return pAI && iAI;
+};
+
+void PCA9956::GetAll(){
+    for(int i=0;i<24;i++){
+        cout << "addr : " << i << ", IREF : " << GetIREF(i) << ", PWM : " << GetPWM(i) << endl;
+    }
+};
 
 int PCA9956::SetPWM(int channel, int PWM){
     PWM = PWM < PWM_MIN ? PWM_MIN : PWM > PWM_MAX ? PWM_MAX : PWM ;

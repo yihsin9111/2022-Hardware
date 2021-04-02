@@ -32,7 +32,7 @@
 class PCA9955{
     public:
 
-	PCA9955(int Address = PCA9955_I2C_ADDRESS_DEFAULT);
+	PCA9955(int Address);
     PCA9955() {};
 	~PCA9955() {};
 
@@ -40,6 +40,8 @@ class PCA9955{
 	int SetIREFAI(int channel, int *IREF, int size);
 
 	int SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref, int Giref, int Biref);
+
+    void GetAll();
 
     private:
 
