@@ -32,8 +32,8 @@
 class PCA9955{
     public:
 
-	PCA9955(int Address = PCA9955_I2C_ADDRESS_DEFAULT);
-    PCA9955() {};
+	PCA9955(int Address);
+        PCA9955() {};
 	~PCA9955() {};
 
 	int SetPWMAI(int channel, int *PWM, int size);

@@ -19,12 +19,12 @@ int main(int argc, char* argv[]){
     for(int i=0;i<n;i++){
         int temp = 0;
         cin >> temp;
-        pca9956 = PCA9956(temp);
+        pca9956[i] = PCA9956(temp);
     }
     for(int i=0;i<m;i++){
         int temp = 0;
         cin >> temp;
-        pca9955 = PCA9955(temp);
+        pca9955[i] = PCA9955(temp);
     }
 
     while(1){
