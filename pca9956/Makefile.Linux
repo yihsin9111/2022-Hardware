@@ -1,0 +1,6 @@
+#
+DEFINES = RASPPI NDEBUG
+#
+EXTRA_INCLUDES = ../../rpidmx512/lib-hal/include
+#
+include ../../rpidmx512/firmware-template-linux/lib/Rules.mk

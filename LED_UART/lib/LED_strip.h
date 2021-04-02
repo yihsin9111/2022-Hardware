@@ -8,7 +8,6 @@
 
 #ifndef _LED_STRIP_H_
 #define _LED_STRIP_H_
-
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
