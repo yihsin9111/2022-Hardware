@@ -10,7 +10,6 @@ Color_regulator::Color_regulator(float g){
 void Color_regulator:: gamma_correction(float &c)
 {
   float temp_c = (c) / 256;
-
   c = pow(temp_c, gamma) * 256;
 
 }
