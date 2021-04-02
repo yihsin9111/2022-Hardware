@@ -1,4 +1,4 @@
-#include "../include/pca9956.h"
+#include "../include/pca9955.h"
 #include "../../../WiringPi/wiringPi/wiringPiI2C.h"
 #include "../../../WiringPi/wiringPi/wiringPi.h"
 
@@ -11,9 +11,9 @@
 #include <sys/ioctl.h>
 #include <asm/ioctl.h>
 
-enum PCA9956Reg{
-    PCA9956_REG_PWMALL = 0x3f,
-    PCA9956_REF_IREFALL = 0x40,
+enum PCA9955Reg{
+    PCA9955_REG_PWMALL = 0x42,
+    PCA9955_REF_IREFALL = 0x43,
 };
 
 union i2c_smbus_data {
@@ -29,11 +29,11 @@ struct i2c_smbus_ioctl_data{
     union i2c_smbus_data *data;
 };
 
-PCA9956::PCA9956(int Address):PCA9956_Address(Address){
-    fd = wiringPiI2CSetup(PCA9956_Address);
+PCA9955::PCA9955(int Address):PCA9955_Address(Address){
+    fd = wiringPiI2CSetup(PCA9955_Address);
 };
 
-int PCA9956::SetPWMAI(int channel, int *PWM, int size){
+int PCA9955::SetPWMAI(int channel, int *PWM, int size){
 
     union i2c_smbus_data regData;
 
@@ -49,14 +49,14 @@ int PCA9956::SetPWMAI(int channel, int *PWM, int size){
 
     struct i2c_smbus_ioctl_data args;
     args.rw = 0;
-    args.cmd = channel+PCA9956_PWM0_ADDR+128;
+    args.cmd = channel+PCA9955_PWM0_ADDR+128;
     args.size = 5;
     args.data = &regData;
 
     return ioctl(fd, 0x0720, &args) && SetPWM(channel, PWM[0]);
 };
 
-int PCA9956::SetIREFAI(int channel, int *IREF, int size){
+int PCA9955::SetIREFAI(int channel, int *IREF, int size){
 
     union i2c_smbus_data regData;
 
@@ -72,7 +72,7 @@ int PCA9956::SetIREFAI(int channel, int *IREF, int size){
 
     struct i2c_smbus_ioctl_data args;
     args.rw = 0;
-    args.cmd = channel+PCA9956_IREF0_ADDR+128;
+    args.cmd = channel+PCA9955_IREF0_ADDR+128;
     args.size = 5;
     args.data = &regData;
 
@@ -80,7 +80,7 @@ int PCA9956::SetIREFAI(int channel, int *IREF, int size){
 };
 
 
-int PCA9956::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref, int Giref, int Biref){
+int PCA9955::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref, int Giref, int Biref){
     int *PWM, *IREF;
     PWM = new int [3];
     IREF = new int [3];
@@ -90,31 +90,31 @@ int PCA9956::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref,
     IREF[0] = Riref;
     IREF[1] = Giref;
     IREF[2] = Biref;
-    SetPWMAI(led_address*3 + PCA9956_PWM0_ADDR, PWM, 3);
-    SetIREFAI(led_address*3 + PCA9956_IREF0_ADDR, IREF, 3);
+    SetPWMAI(led_address*3 + PCA9955_PWM0_ADDR, PWM, 3);
+    SetIREFAI(led_address*3 + PCA9955_IREF0_ADDR, IREF, 3);
     return 0;	
 }
 
-int PCA9956::SetPWM(int channel, int PWM){
+int PCA9955::SetPWM(int channel, int PWM){
     PWM = PWM < PWM_MIN ? PWM_MIN : PWM > PWM_MAX ? PWM_MAX : PWM ;
-    return I2CWriteReg(channel+PCA9956_PWM0_ADDR, PWM);
+    return I2CWriteReg(channel+PCA9955_PWM0_ADDR, PWM);
 };
-int PCA9956::GetPWM(int channel){
-    return I2CReadReg(channel+PCA9956_PWM0_ADDR);
+int PCA9955::GetPWM(int channel){
+    return I2CReadReg(channel+PCA9955_PWM0_ADDR);
 };
-int PCA9956::SetIREF(int channel, int IREF){
+int PCA9955::SetIREF(int channel, int IREF){
     IREF = IREF < IREF_MIN ? IREF_MIN : IREF > IREF_MAX ? IREF_MAX : IREF ;
-    return I2CWriteReg(channel+PCA9956_IREF0_ADDR, IREF);
+    return I2CWriteReg(channel+PCA9955_IREF0_ADDR, IREF);
 };
-int PCA9956::GetIREF(int channel){
-    return I2CReadReg(channel+PCA9956_IREF0_ADDR);
+int PCA9955::GetIREF(int channel){
+    return I2CReadReg(channel+PCA9955_IREF0_ADDR);
 };
 
-int PCA9956::I2CWriteReg(int reg, int value){
+int PCA9955::I2CWriteReg(int reg, int value){
     return wiringPiI2CWriteReg8(fd, reg, value);
 };
 
-int PCA9956::I2CReadReg(int reg){
+int PCA9955::I2CReadReg(int reg){
     return wiringPiI2CReadReg8(fd, reg);
 }
 
