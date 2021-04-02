@@ -1,6 +1,7 @@
 #include <iostream>
 #include <time.h>
 #include "../lib/LED_strip.h"
+#include "../lib/gamma_correction.h"
 
 using namespace std;
 
@@ -59,6 +60,10 @@ const uint8_t rainbow[360] = {
 };
 
 LED_Strip strips(nLeds);
+Color_regulator reg_r(5);
+Color_regulator reg_g(5);
+Color_regulator reg_b(5);
+
 
 int main(){
 	buf.resize(nLeds.size());
@@ -68,18 +73,25 @@ int main(){
 
 
 	int angle = 0;
-	while(1){
+  int level=230;
+  while(level>=0){
 		for (int i = 0; i < nLeds.size(); ++i) { 
 			for (int j = 0; j < nLeds[i]; ++j){
-				buf[i][3*j  ] = rainbow[(angle + 18*i + j      ) % 360]/10; // g
-				buf[i][3*j+1] = rainbow[(angle + 18*i + j + 120) % 360]/10; // r
-				buf[i][3*j+2] = rainbow[(angle + 18*i + j + 240) % 360]/10; // b
+        float temp=level;
+        reg_r.gamma_correction(temp);
+				buf[i][3*j  ] = temp;
+				buf[i][3*j+1] = 0;
+				buf[i][3*j+2] = 0;
+        if(i==j&&j==0){
+          cout<< temp<<endl;
+        }
+        
+
 			}
 		}
-		++angle;
-		angle = angle % 360;
 		strips.sendToStrip(buf);
-		usleep(27 * 1000);
+		usleep(300 * 1000);
+    level-=10;
 	}
   // int a;
   // while(cin >> a) {
