@@ -35,7 +35,25 @@ class PCA9956{
 	PCA9956(int Address = PCA9956_I2C_ADDRESS_DEFAULT);
 	~PCA9956() {};
 
-	int SetPWMAI(int channel, int *PWM, int size);
+	int SetPWMAI(int *PWM, int size);
+	int SetIREFAI(int *PWM, int size);
+
+	int SetRGB(int channel, int Rduty, int Gduty, int Bduty, int Riref, int Giref, int Biref);
+
+    private:
+
+	int SetPWM(int channel, int PWM);
+
+    public:
+	int GetPWM(int channel);
+    private:
+	int SetIREF(int channel, int IREF);
+	int GetIREF(int channel);
+	
+    private:
+	
+	int I2CWriteReg(int reg, int value);
+	int I2CReadReg(int reg);
 
     private:
 

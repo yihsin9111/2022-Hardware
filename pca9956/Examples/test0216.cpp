@@ -9,19 +9,15 @@ int main(){
 
    int* PWM;
 
-   PWM = new int [24];
+   PWM = new int [15];
 
-   for(int i=0;i<24;i++)
-	   PWM[i] = 255;
+   for(int i=0;i<15;i++)
+	   PWM[i] = 12;
 
-   int* IREF;
+   cout <<   pca9956.SetPWMAI(PWM, 15) << endl;
 
-   IREF = new int [24];
-
-   for(int i=0;i<24;i++)
-	   IREF[i] = 134;
-
-   pca9956.SetPWMAI(10, PWM, 24);
-   pca9956.SetPWMAI(34, IREF, 24);
-
+   for(int i=0;i<24;i++){
+   cout << "i=0, " << pca9956.GetPWM(i) << endl;
+   }
+   
 }
