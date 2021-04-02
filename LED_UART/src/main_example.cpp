@@ -77,13 +77,11 @@ int main(){
   while(level>=0){
 		for (int i = 0; i < nLeds.size(); ++i) { 
 			for (int j = 0; j < nLeds[i]; ++j){
-        float temp=level;
-        reg_r.gamma_correction(temp);
-				buf[i][3*j  ] = temp;
+				buf[i][3*j  ] = reg_r.gamma_correction(level);
 				buf[i][3*j+1] = 0;
 				buf[i][3*j+2] = 0;
         if(i==j&&j==0){
-          cout<< temp<<endl;
+          reg_r.gamma_correction(level);
         }
         
 

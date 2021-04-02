@@ -7,10 +7,11 @@ using namespace std;
 Color_regulator::Color_regulator(float g){
   gamma=g;
 }
-void Color_regulator:: gamma_correction(float &c)
+float Color_regulator:: gamma_correction(float c)
 {
   float temp_c = (c) / 256;
-  c = pow(temp_c, gamma) * 256;
+  float c_out = pow(temp_c, gamma) * 256;
+  return c_out;
 
 }
 void Color_regulator:: rgba_to_rgb(float &r, float &g, float &b, float &a)
