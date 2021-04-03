@@ -14,8 +14,9 @@ int Color_regulator:: gamma_correction(float c)
   return int(c_out + 0.5);
 
 }
-void Color_regulator:: rgba_to_rgb(float &r, float &g, float &b, float &a)
+void rgba_to_rgb(float &r, float &g, float &b, float &a)
 {
+  a=a/15;
   r=r/(r+g+b);
   g=g/(r+g+b);
   b=b/(r+g+b);

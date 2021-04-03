@@ -12,6 +12,9 @@ bin/gamma_test: ./src/gamma_test.cpp  ./obj/LED_strip.o ./obj/gamma_correction.o
 bin/main_example: ./src/main_example.cpp  ./obj/LED_strip.o ./obj/gamma_correction.o
 	$(CC) $(FLAG) ./src/main_example.cpp ./obj/LED_strip.o ./obj/gamma_correction.o -o ./bin/main_example
 
+bin/minimum_example: ./src/minimum_example.cpp ./obj/LED_strip.o
+	$(CC) $(FLAG) ./src/minimum_example.cpp ./obj/LED_strip.o -o ./bin/minimum_example
+
 ./obj/LED_strip.o: ./src/LED_strip.cpp ./lib/LED_strip.h
 	$(CC) $(FLAG) -c ./src/LED_strip.cpp -o ./obj/LED_strip.o
 

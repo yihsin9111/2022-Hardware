@@ -216,6 +216,104 @@ void rainbow_shine_beta(int fps = 30) {
     }
 }
 
+void part_test(float rate){  //rate = LED shining period
+  for (int c=0;c<nLeds.size();++c){
+    cout<<c<<endl;
+    for (int i = 0; i < nLeds.size(); ++i) { 
+      for (int j = 0; j < nLeds[i]; ++j){
+        if(i==c){
+          buf[i][3*j  ] = 50; // g
+          buf[i][3*j+1] = 50; // r
+          buf[i][3*j+2] = 50; // b
+        }
+        else{
+          buf[i][3*j  ] = 0; // g
+          buf[i][3*j+1] = 0; // r
+          buf[i][3*j+2] = 0; // b
+        }
+      }
+	  }
+    strips.sendToStrip(buf);
+    usleep(rate*1000*1000);
+  }
+}
+void off_example(){
+  for (int i = 0; i < nLeds.size(); ++i) { 
+    for (int j = 0; j < nLeds[i]; ++j){
+      buf[i][3*j  ] = 0; // g
+      buf[i][3*j+1] = 0; // r
+      buf[i][3*j+2] = 0; // b
+    }
+  }
+  strips.sendToStrip(buf);
+}
+void test_color(){
+  int channel=0;
+  char mode='\0';
+  uint32_t color;
+  float alpha=0,r=0,g=0,b=0;
+  bool channel_state=true;
+  while(channel_state){
+    cout<<"please enter the target channel (dec): ";
+    cin>>channel;
+    if(channel<0 ||channel>=nLeds.size()){}
+    else{
+      channel_state=false;
+    }
+  }
+  
+  cout<<"\nplease choose your testing mode.A for rgba;B for rgb: ";
+  cin>>mode;
+  if(mode=='a'||mode=='A'){
+    cout<<"\nplease enter the color(HEX) in the order of R G B & alpha (ex:0xfffabf 8): ";
+    cin>>color>>alpha;
+    r=color/256;
+    color-=r*256;
+    g=color/16;
+    color-=g*16;
+    b=color;
+    rgba_to_rgb(r,g,b,alpha);
+    for(int i=0;i<nLeds.size();++i){
+      for (int j = 0; j < nLeds[i]; ++j){
+        if(i==channel){
+          buf[i][3*j  ] = reg_g.gamma_correction(g); // g
+          buf[i][3*j+1] = reg_r.gamma_correction(r); // r
+          buf[i][3*j+2] = reg_b.gamma_correction(b); // b
+        }
+        else{
+          buf[i][3*j  ] = 0; // g
+          buf[i][3*j+1] = 0; // r
+          buf[i][3*j+2] = 0; // b
+        }
+      }
+    }
+    strips.sendToStrip(buf);
+  }
+  else if(mode=='b'||mode=='B'){
+    cout<<"\nplease enter the color(HEX) in the order of R G B (ex:0xff12a3): ";
+    cin>>color;
+    r=(int)(color/256);
+    color-=r*256;
+    g=(int)color/16;
+    color-=g*16;
+    b=(int)color;
+    for(int i=0;i<nLeds.size();++i){
+      for (int j = 0; j < nLeds[i]; ++j){
+        if(i==channel){
+          buf[i][3*j  ] = (int)g; // g
+          buf[i][3*j+1] = (int)r; // r
+          buf[i][3*j+2] = (int)b; // b
+        }
+        else{
+          buf[i][3*j  ] = 0; // g
+          buf[i][3*j+1] = 0; // r
+          buf[i][3*j+2] = 0; // b
+        }
+      }
+    }
+    strips.sendToStrip(buf);
+  }
+}
 int main(){
 	buf.resize(nLeds.size());
 	for(int i = 0; i < nLeds.size(); ++i){
@@ -240,10 +338,12 @@ int main(){
 	// 	strips.sendToStrip(buf);
 	// 	usleep(300 * 1000);
   // breath, brightness maximum and minimum(0-255) ,g,r,b(0-1)
-  breathe_beta(200,0,0.7,0.4,0.3);
+  //breathe_beta(200,0,0.7,0.4,0.3);
+  //part_test(0.5);
+  //off_example();
   // each strip has its own color, set the brightness(0-255)
   // test(12);
-  //rainbow_shine_beta(30); // max 40
+  rainbow_shine_beta(40); // max 40
 
 }
 
