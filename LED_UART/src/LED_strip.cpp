@@ -45,6 +45,17 @@ LED_Strip::LED_Strip(vector<uint16_t>& nLEDs)
 		exit(-1);
 	}
 
+	StmInit();
+}
+
+void LED_Strip::StmInit(){
+	pinMode(0, OUTPUT); // reset pin, actually GPIO 17
+	digitalWrite(0, 0);
+	usleep(100*1000); // pulse
+	digitalWrite(0, 1);
+	sleep(2); // recover
+	pinMode(0, INPUT); // cheat
+
 	// initializing
 	for(int i = 0; i < 3; ++i){
 		serialPutchar(_serialPort, (char)255);
@@ -54,9 +65,12 @@ LED_Strip::LED_Strip(vector<uint16_t>& nLEDs)
 		}
 		// cout << endl;
 		serialPutchar(_serialPort, (char)255);
-		usleep(500*1000);
+		usleep(50*1000);
 	}
-	usleep(1000*1000);
+	usleep(100*1000);
+
+	// how to know?
+	StmAlive = true;
 }
 
 /*!
@@ -64,6 +78,9 @@ LED_Strip::LED_Strip(vector<uint16_t>& nLEDs)
   @param color pixel secquence to send
 */
 void LED_Strip::sendToStrip(std::vector< std::vector<char> >& color){
+	if(!StmAlive)
+		return;
+
 	for(int i = 0 ; i < color.size(); ++i)
 	{
 		if(color[i].size() != _nLEDs[i]*3){
@@ -76,5 +93,11 @@ void LED_Strip::sendToStrip(std::vector< std::vector<char> >& color){
 		}
 	}
 	// cout << endl;
+	
+	// how to know?
+	if(false){
+		StmAlive = false;
+		// open new thread?
+	}
 }
 

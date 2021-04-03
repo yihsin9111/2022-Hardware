@@ -32,10 +32,12 @@ class LED_Strip
     LED_Strip(){};
     LED_Strip(std::vector<uint16_t>&);
     ~LED_Strip(){};
+    void StmInit();
     void sendToStrip(std::vector< std::vector<char> >&);
   private:
+    bool StmAlive;
     int _serialPort;
-	std::vector<uint16_t> _nLEDs;
+    std::vector<uint16_t> _nLEDs;
 };
 
 #endif // _LED_STRIP_H_

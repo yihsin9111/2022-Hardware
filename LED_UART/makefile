@@ -13,5 +13,5 @@ bin/main_example: ./src/main_example.cpp  ./obj/LED_strip.o ./obj/gamma_correcti
 	$(CC) $(FLAG) -c ./src/gamma_correction.cpp -o ./obj/gamma_correction.o
 
 clean:
-	rm -rf ./bin/*.*
+	rm -rf ./bin/*
 	rm -rf ./obj/*.*
