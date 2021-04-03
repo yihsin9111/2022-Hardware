@@ -28,8 +28,8 @@ int main(int argc, char* argv[]){
     
     int decay = -1, max = 255, min = 0;
     int level = max;
-    clock_t init;
-    init = clock();
+//    clock_t init, clk;
+//    init = clock();
 
     while(1){
 
@@ -42,18 +42,29 @@ int main(int argc, char* argv[]){
         Color_regulator regG(gammaG);
         Color_regulator regB(gammaB);
 
-        while((1000 * (clock() - init)) / CLOCKS_PER_SEC < 1000/frameRate){
-            int Rduty = 0, Gduty = 0, Bduty = 0;
-            Rduty = regR.gamma_correction(level);
-            Gduty = regG.gamma_correction(level);
-            Bduty = regB.gamma_correction(level);
+        int Rduty = 0, Gduty = 0, Bduty = 0;
+	
+	clock_t init;
+	init = clock();
 
-            pca9956.SetRGB(3, Rduty, Gduty, Bduty, VALUE(255*ratioR), VALUE(255*ratioG), VALUE(255*ratioB));
+        while(1){
+    	    while((1000 * (clock() - init)) / CLOCKS_PER_SEC < 1000/30);
+	    cout << "p" ;
+    	    init = clock();
+//    	    if((1000*(clk-init)/CLOCKS_PER_SEC)%(1000/frameRate) == 0){
+//	        init = clk;	
+//              int Rduty = 0, Gduty = 0, Bduty = 0;
+                Rduty = regR.gamma_correction(level);
+                Gduty = regG.gamma_correction(level);
+                Bduty = regB.gamma_correction(level);
+ 
+                pca9956.SetRGB(2, Rduty, Gduty, Bduty, VALUE(255*ratioR), VALUE(255*ratioG), VALUE(255*ratioB));
 
-            if(level <= min || level >= max) {
-                decay -= (decay + decay);
-            }
-            level -= decay;
-        }
+                if(level <= min || level >= max) {
+                    decay -= (decay + decay);
+                }
+                level -= decay;
+//            }
+	}
     }
 }
