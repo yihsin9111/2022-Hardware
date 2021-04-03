@@ -2,7 +2,7 @@ main:
 	g++ -O2 -c ../src/pca9956.cpp -o ../obj/pca9956.o -lwiringPi -lwiringPiDev
 	g++ -O2 -c ../src/pca9955.cpp -o ../obj/pca9955.o -lwiringPi -lwiringPiDev
 	g++ -O2 -c ../src/pca2022.cpp -o ../obj/pca2022.o -lwiringPi -lwiringPiDev
-	g++ -O2 -c ../src/rgba_to_rgb.h -o ../obj/rgba_to_rgb.o
+	g++ -O2 -c ../include/rgba_to_rgb.h -o ../obj/rgba_to_rgb.o
 
 	g++ -O2 -c test.cpp -o ../obj/test.o -lwiringPi -lwiringPiDev
 	g++ -O2 -c 30fps_example.cpp -o ../obj/30fps_example.o -lwiringPi -lwiringPiDev
