@@ -15,17 +15,33 @@ int main(int argc, char* argv[]){
     //slave addr sequentially
     PCA9956 *pca9956 = new PCA9956[n];
     PCA9955 *pca9955 = new PCA9955[m];
-    if(n>0)cout << "Plz enter the addresses of your PCA9956 slaves in decimal sequentially :\n" ;
+    if(n>0){
+	cout << "Plz enter the addresses of your PCA9956 slaves in decimal sequentially :\n" ;
+	cout << "In decimal plz!\n";
+    }
     for(int i=0;i<n;i++){
         int temp = 0;
         cin >> temp;
         pca9956[i] = PCA9956(temp);
+	if(pca9956[i].Getfd())cout << "Slave Init Success\n";
+	else {
+	    cout << "Slave Init Failed\n";
+	    i--;
+	}
     }
-    if(m>0)cout << "Plz enter the addresses of your PCA9955 slaves in decimal sequentially :\n" ;
+    if(m>0){
+	cout << "Plz enter the addresses of your PCA9955 slaves in decimal sequentially :\n" ;
+	cout << "In decimal plz!\n";
+    }
     for(int i=0;i<m;i++){
         int temp = 0;
         cin >> temp;
         pca9955[i] = PCA9955(temp);
+	if(pca9955[i].Getfd())cout << "Slave Init Success\n";
+	else {
+	    cout << "Slave Init Failed\n";
+	    i--;
+	}
     }
 
     while(1){
@@ -107,14 +123,15 @@ int main(int argc, char* argv[]){
                     for(int i=0;i<m;i++){
                         pca9955[i].GetAll();
                     }
-                }
-                cin >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref ;
-                if(channel >= n*8){
-                    channel -= n*8;
-                    pca9955[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref);
                 }else{
-                    pca9956[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref);
-                }
+                    cin >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref ;
+                    if(channel >= n*8){
+                        channel -= n*8;
+                        cout << pca9955[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref) << endl;
+                    }else{
+		        cout << pca9956[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref) << endl;
+                    }
+		}
 
             }
 

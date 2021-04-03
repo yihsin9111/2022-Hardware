@@ -43,6 +43,8 @@ class PCA9956{
 
 	void GetAll();
 
+	int Getfd() {return fd;};
+
     private:
 
 	int SetPWM(int channel, int PWM);
