@@ -3,6 +3,12 @@ FLAG = -O2 -lwiringPi -lwiringPiDev
 
 all: bin/main_example
 
+bin/example:  ./src/example.cpp  ./obj/LED_strip.o ./obj/gamma_correction.o
+	$(CC) $(FLAG) ./src/example.cpp ./obj/LED_strip.o ./obj/gamma_correction.o -o ./bin/example
+
+bin/gamma_test: ./src/gamma_test.cpp  ./obj/LED_strip.o ./obj/gamma_correction.o
+	$(CC) $(FLAG) ./src/gamma_test.cpp ./obj/LED_strip.o ./obj/gamma_correction.o -o ./bin/gamma_test
+
 bin/main_example: ./src/main_example.cpp  ./obj/LED_strip.o ./obj/gamma_correction.o
 	$(CC) $(FLAG) ./src/main_example.cpp ./obj/LED_strip.o ./obj/gamma_correction.o -o ./bin/main_example
 

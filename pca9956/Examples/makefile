@@ -7,3 +7,4 @@ main:
 	g++ -O2 ../obj/pca9956.o ../obj/pca9955.o ../obj/color_test.o ../obj/gamma_correction.o -o ../bin/color_test -lwiringPi -l wiringPiDev
 clean:
 	rm -rf ./*.o
+	rm -rf ../bin/color_test

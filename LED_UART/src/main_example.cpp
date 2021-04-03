@@ -7,8 +7,6 @@ using namespace std;
 double wait = 0.005;
 // vector<uint16_t> nLeds{18, 69, 3, 8, 0, 0, 0, 0, 19, 11, 8, 9}; // no longer than 16
 vector<uint16_t> nLeds{100, 30, 30, 35, 35, 26, 26, 47, 47};
-// vector<uint16_t> nLeds{50};
-
 vector< vector<char> > buf;
 
 const uint8_t rainbow[360] = {
@@ -63,29 +61,30 @@ LED_Strip strips(nLeds);
 //pervious 1.19 1.2 1.1
 Color_regulator reg_g(1.8);
 Color_regulator reg_r(1.6);
-Color_regulator reg_b(1.65);
+Color_regulator reg_b(1.66);
 
 void breathe(int max, int min) {
     int decay = -1;
     int level = max;
     while(true){
-	for (int i = 0; i < nLeds.size(); ++i) {
-	    for (int j = 0; j < nLeds[i]; ++j){
-        buf[i][3*j  ] = reg_r.gamma_correction(level * 0.8); // g 
-        buf[i][3*j+1] = reg_g.gamma_correction(level); // r
-        buf[i][3*j+2] = 0; // b 
-	    }
-	}
-	strips.sendToStrip(buf);
-	usleep(300 * 1000);
-    	if(level <= min || level >= max) {
-      	    decay -= (decay + decay);
-    	}
-	level -= decay;
+    for (int i = 0; i < nLeds.size(); ++i) {
+        for (int j = 0; j < nLeds[i]; ++j){
+          buf[i][3*j  ] = reg_r.gamma_correction(level * 0.8); // g 
+          buf[i][3*j+1] = reg_g.gamma_correction(level); // r
+          buf[i][3*j+2] = 0; // b 
+        }
+    }
+    strips.sendToStrip(buf);
+    usleep(300 * 1000);
+    if(level <= min || level >= max) {
+      decay -= (decay + decay);
+    }
+    level -= decay;
     }
 }
 
 void breathe_beta(int max, int min,float g,float r,float b, int fps = 30){
+    
     int decay = -1;
     int level = max;
 
@@ -94,7 +93,7 @@ void breathe_beta(int max, int min,float g,float r,float b, int fps = 30){
 
     while(1){
     	while( (1000 * (clock() - init)) / CLOCKS_PER_SEC < 1000/fps);
-	init = clock();
+	    init = clock();
       for(int i = 0; i < nLeds.size(); ++i) {
         for(int j = 0; j < nLeds[i]; ++j){
           if(reg_g.gamma_correction(level*g)<1&&reg_g.gamma_correction(level*g)>0)
@@ -115,8 +114,8 @@ void breathe_beta(int max, int min,float g,float r,float b, int fps = 30){
             buf[i][3*j+1]=0;
             buf[i][3*j+2]=0;
           }
-          if(i==0&&j==0)
-          cout<<"g: "<<level*0.8<<" "<<(int)buf[0][0]<<"  r: "<<level<<" "<<(int)buf[0][1]<<'\n';
+          // if(i==0&&j==0)
+          // cout<<"g: "<<level*0.8<<" "<<(int)buf[0][0]<<"  r: "<<level<<" "<<(int)buf[0][1]<<'\n';
 
 	    }
 	}
@@ -240,7 +239,6 @@ int main(){
 	// 	}
 	// 	strips.sendToStrip(buf);
 	// 	usleep(300 * 1000);
-
   // breath, brightness maximum and minimum(0-255) ,g,r,b(0-1)
   breathe_beta(200,0,0.7,0.4,0.3);
   // each strip has its own color, set the brightness(0-255)
