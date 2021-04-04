@@ -29,9 +29,9 @@ int PCA::Write(int *data){
 
     int leds = 0;
     PCAnode *current = PCAs.first;
-    while(current->nxt != nullptr){
+    while(current != nullptr){
         
-        if(current->pca9955){
+        if(current->pca9955 != nullptr){
             int pcaData[30] = {0};
             for(int i=0;i<5;i++){
                 pcaData[i*3] = data[(i+leds)*6];
@@ -49,9 +49,9 @@ int PCA::Write(int *data){
                 pcaData[i*3] = data[(i+leds)*6];
                 pcaData[i*3+1] = data[(i+leds)*6+1];
                 pcaData[i*3+2] = data[(i+leds)*6+2];
-                pcaData[i*3+15] = data[(i+leds)*6+3];
-                pcaData[i*3+1+15] = data[(i+leds)*6+4];
-                pcaData[i*3+2+15] = data[(i+leds)*6+5];
+                pcaData[i*3+24] = data[(i+leds)*6+3];
+                pcaData[i*3+1+24] = data[(i+leds)*6+4];
+                pcaData[i*3+2+24] = data[(i+leds)*6+5];
             }
             leds += 8;
             current->pca9956[0].SetPWMIREFAI(pcaData);
@@ -65,14 +65,26 @@ int PCA::Write(int *data){
 
 void PCA::Read(){
     PCAnode *current = PCAs.first;
-    while(current->nxt != nullptr){
+    while(current != nullptr){
         
-        if(current->pca9955){
+        if(current->pca9955 != nullptr){
             current->pca9955[0].GetAll();
         }else{
             current->pca9956[0].GetAll();
         }
         current = current->nxt;
+    }
+};
+
+void PCA::Debug(){
+    PCAnode *current = PCAs.first;
+    while(current != nullptr){
+    	if(current->pca9955 != nullptr){
+	   cout << "9955" << endl;
+	}else{
+	   cout << "9956" << endl;
+	}
+	current = current->nxt;
     }
 };
 
@@ -84,13 +96,13 @@ PCAnode::PCAnode(){
 
 PCAnode::PCAnode(int PCA_ADDR, bool IsPCA9956){
     
-    if(IsPCA9956){
+    if(IsPCA9956 == true){
         pca9955 = nullptr;
-        pca9956 = new PCA9956[0];
+        pca9956 = new PCA9956[1];
         pca9956[0] = PCA9956(PCA_ADDR);
     }else{
         pca9956 = nullptr;
-        pca9955 = new PCA9955[0];
+        pca9955 = new PCA9955[1];
         pca9955[0] = PCA9955(PCA_ADDR);
     }
     

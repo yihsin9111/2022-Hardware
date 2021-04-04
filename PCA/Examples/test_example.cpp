@@ -41,10 +41,10 @@ int main(int argc, char* argv[]){
     int **pcaTypeAddr = new int* [4];
     
     pcaTypeAddr[0] = new int[2];
-    pcaTypeAddr[0][0] = 9955;
+    pcaTypeAddr[0][0] = 9956;
     pcaTypeAddr[0][1] = 0x3f;
     pcaTypeAddr[1] = new int[2];
-    pcaTypeAddr[1][0] = 9955;
+    pcaTypeAddr[1][0] = 9956;
     pcaTypeAddr[1][1] = 0x2b;
     pcaTypeAddr[2] = new int[2];
     pcaTypeAddr[2][0] = 9956;
@@ -67,20 +67,27 @@ int main(int argc, char* argv[]){
             cout << "Choose one led between 0 and 25" << endl;
             cout << "Usage : \n >> <channel> <R> <G> <B> <A>\n";
             cout << "You may enter -1 to quit the current mode\n";
-            int channel = 0, R = 0, G = 0, B = 0, A = 0;
+	    cout << "Also, You may enter -2 to check all register in all PCAs\n";
+            int channel = 0, R = 0, G = 0, B = 0;
+	    float A = 0;
             while(1){
 
                 int newChannel = 0;
                 cin >> newChannel;
 
-                for(int i = 0; i < 6; i++)
-                    OFs[channel*6+i] = 0;
+                //for(int i = 0; i < 6; i++)
+                //    OFs[channel*6+i] = 0;
                 channel = newChannel;
                 if(channel == -1){
                     break;
-                }else{
+                }else if(channel == -2){
+		    pca.Read();
+		}else if(channel == -3){
+	            pca.Debug();			
+		}else{
                     cin >> R >> G >> B >> A;
                     float *color = OFrgba_to_rgb(A);
+		    cout << "pwm : " << color[0] << color[1] << color[2] << endl;
                     OFs[channel*6] = int(color[0]);
                     OFs[channel*6+1] = int(color[1]);
                     OFs[channel*6+2] = int(color[2]);

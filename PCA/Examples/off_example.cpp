@@ -40,10 +40,10 @@ int main(int argc, char* argv[]){
     int **pcaTypeAddr = new int* [4];
     
     pcaTypeAddr[0] = new int[2];
-    pcaTypeAddr[0][0] = 9955;
+    pcaTypeAddr[0][0] = 9956;
     pcaTypeAddr[0][1] = 0x3f;
     pcaTypeAddr[1] = new int[2];
-    pcaTypeAddr[1][0] = 9955;
+    pcaTypeAddr[1][0] = 9956;
     pcaTypeAddr[1][1] = 0x2b;
     pcaTypeAddr[2] = new int[2];
     pcaTypeAddr[2][0] = 9956;

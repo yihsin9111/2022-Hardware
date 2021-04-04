@@ -38,7 +38,8 @@ class PCAnode{
 class PCA{
     public:
         PCA(int *channelOrder, int **pcaTypeAddr);
-
+	
+	void Debug();
         int Write(int *data);
 	void Read();
     private:
