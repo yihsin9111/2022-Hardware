@@ -12,4 +12,4 @@ public:
 private:
   float gamma;
 };
-int* rgba_to_rgb(float r, float g, float b, float a);
+float* rgba_to_rgb(float r, float g, float b, float a);

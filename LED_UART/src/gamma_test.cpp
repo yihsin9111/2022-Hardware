@@ -61,6 +61,7 @@ void breathe_test(float gg, float gr, float gb, int max, int min,float g, float 
     }
 }
 
+
 int main() {
 
     Color_regulator *regulator = new Color_regulator[3];
