@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc, char* argv[]){
     
-    PCA9956 pca9956 = PCA9956(0x56);
+    PCA9956 pca9956 = PCA9956(0x63);
 	if(pca9956.Getfd())cout << "Slave Init Success\n";
 	else {
 	    cout << "Slave Init Failed\n";

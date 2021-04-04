@@ -20,7 +20,11 @@ using namespace std;
   @brief constructor of LED strip, initialize UART communication.
   @param nLEDs length of each LED strips
 */
-LED_Strip::LED_Strip(vector<uint16_t>& nLEDs)
+LED_Strip::LED_Strip()
+{
+	initialized=false;
+}
+void LED_Strip::initialize(vector<uint16_t>& nLEDs)
 {
 	// deepcopy
 	if(nLEDs.size() > MAX_CHANNEL_COUNT){
@@ -46,8 +50,8 @@ LED_Strip::LED_Strip(vector<uint16_t>& nLEDs)
 	}
 
 	StmInit();
+	initialized=true;
 }
-
 void LED_Strip::StmInit(){
 	pinMode(0, OUTPUT); // reset pin, actually GPIO 17
 	digitalWrite(0, 0);

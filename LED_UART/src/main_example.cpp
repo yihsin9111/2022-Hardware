@@ -57,7 +57,8 @@ const uint8_t rainbow[360] = {
   0,   0,   0,   0,   0,   0,   0,   0
 };
 
-LED_Strip strips(nLeds);
+LED_Strip strips;
+
 //pervious 1.19 1.2 1.1
 Color_regulator reg_g(1.8);
 Color_regulator reg_r(1.6);
@@ -315,11 +316,12 @@ void test_color(){
   }
 }
 int main(){
+  strips.initialize(nLeds);
 	buf.resize(nLeds.size());
 	for(int i = 0; i < nLeds.size(); ++i){
 		buf[i].resize(nLeds[i] * 3, (char)0);
 	}
-
+  
   // while(true) {
   //   for (int i = 0; i < nLeds.size(); ++i) { 
 	// 		for (int j = 0; j < nLeds[i]; ++j){

@@ -29,12 +29,13 @@
 class LED_Strip
 {
   public:
-    LED_Strip(){};
-    LED_Strip(std::vector<uint16_t>&);
+    LED_Strip();
+    void initialize(std::vector<uint16_t>&);
     ~LED_Strip(){};
     void StmInit();
     void sendToStrip(std::vector< std::vector<char> >&);
   private:
+    bool initialized;
     bool StmAlive;
     int _serialPort;
     std::vector<uint16_t> _nLEDs;
