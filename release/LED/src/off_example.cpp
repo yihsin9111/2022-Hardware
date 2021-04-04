@@ -22,22 +22,12 @@ int main() {
 	for(int i = 0; i < nLeds.size(); ++i){
 		buf[i].resize(nLeds[i] * 3, (char)0);
 	}
-    clock_t init;
-    // set the colors of every leds
-    // this example set every leds to green
-    // the while loop is for 
-    while(true) {
-        while( (1000 * (clock() - init)) / CLOCKS_PER_SEC < 1000/fps);
-        init = clock();
-        for (int i = 0; i < nLeds.size(); ++i) {
-        for (int j = 0; j < nLeds[i]; ++j) {
-            buf[i][3*j  ] = 0; // g
-            buf[i][3*j+1] = 0; // r
-            buf[i][3*j+2] = 100; // b     
-            }
-        }   
-        // send data to stm32s
-        strips.sendToStrip(buf);
-        // wait for stm to deal with the data
+  for (int i = 0; i < nLeds.size(); ++i) { 
+    for (int j = 0; j < nLeds[i]; ++j){
+      buf[i][3*j  ] = 0; // g
+      buf[i][3*j+1] = 0; // r
+      buf[i][3*j+2] = 0; // b
     }
+  }
+  strips.sendToStrip(buf);
 }

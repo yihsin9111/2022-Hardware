@@ -1,7 +1,7 @@
 #include <iostream>
 #include "../include/pca9956.h"
-#include "../../../WiringPi/wiringPi/wiringPiI2C.h"
-#include "../../../WiringPi/wiringPi/wiringPi.h"
+#include "../../../../WiringPi/wiringPi/wiringPiI2C.h"
+#include "../../../../WiringPi/wiringPi/wiringPi.h"
 
 #include <stdio.h>
 #include <stdlib.h>
