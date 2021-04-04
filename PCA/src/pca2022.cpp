@@ -63,6 +63,10 @@ int PCA::Write(int *data){
 
 };
 
+void PCA::Read(){
+    
+};
+
 PCAnode::PCAnode(){
     pca9956 = nullptr;
     pca9955 = nullptr;

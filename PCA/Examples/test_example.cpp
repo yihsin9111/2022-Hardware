@@ -107,7 +107,10 @@ int main(int argc, char* argv[]){
                 channel = newChannel;
                 if(channel == -1){
                     break;
-                }else{
+                }else if(channel == -2){
+		    
+		    break;
+		}else{
                     cin >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref ;
                     OFs[channel*6] = Rduty;
                     OFs[channel*6+1] = Gduty;

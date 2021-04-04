@@ -28,7 +28,6 @@ float *LEDrgba_to_rgb(float r, float g, float b, float a, int max_brightness)
 float *OFrgba_to_rgb(float a)
 {
   float *color = new float[3];
-  a/=255;
   color[0] = 1/3 * a ;
   color[1] = 1/3 * a ;
   color[2] = 1/3 * a ;

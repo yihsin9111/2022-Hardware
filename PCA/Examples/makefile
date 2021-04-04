@@ -18,7 +18,7 @@ main:
 	g++ -O2 ../obj/pca2022.o ../obj/pca9956.o ../obj/pca9955.o ../obj/30fps_example.o -o ../bin/30fps_example -lwiringPi -l wiringPiDev
 	g++ -O2 ../obj/pca2022.o ../obj/pca9956.o ../obj/pca9955.o ../obj/off_example.o -o ../bin/off_example -lwiringPi -l wiringPiDev
 	g++ -O2 ../obj/pca2022.o ../obj/pca9956.o ../obj/pca9955.o ../obj/part_example.o -o ../bin/part_example -lwiringPi -l wiringPiDev
-	g++ -O2 ../obj/pca2022.o ../obj/pca9956.o ../obj/pca9955.o ../obj/rgba_to_rgb.o ../obj/test_example.o -o ../bin/test_example -lwiringPi -l wiringPiDev
+	g++ -O2 ../obj/pca2022.o ../obj/pca9956.o ../obj/pca9955.o ../obj/test_example.o -o ../bin/test_example -lwiringPi -l wiringPiDev
 clean:
 	rm -rf ../obj/*.o
 	rm -rf ../bin/color_test
