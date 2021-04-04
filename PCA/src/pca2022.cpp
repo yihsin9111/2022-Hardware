@@ -64,7 +64,16 @@ int PCA::Write(int *data){
 };
 
 void PCA::Read(){
-    
+    PCAnode *current = PCAs.first;
+    while(current->nxt != nullptr){
+        
+        if(current->pca9955){
+            current->pca9955[0].GetAll();
+        }else{
+            current->pca9956[0].GetAll();
+        }
+        current = current->nxt;
+    }
 };
 
 PCAnode::PCAnode(){
