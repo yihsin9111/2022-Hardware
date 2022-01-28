@@ -1,0 +1,14 @@
+ARGB.c:462:13:ARGB_TIM_DMADelayPulseCplt	32	static
+ARGB.c:419:13:HSV2RGB.part.0	48	static
+ARGB.c:553:13:ARGB_TIM_DMADelayPulseHalfCplt	24	static
+ARGB.c:122:12:ARGB_Init	24	static
+ARGB.c:186:12:ARGB_SetBrightness	0	static
+ARGB.c:199:12:ARGB_SetRGB	16	static
+ARGB.c:247:12:ARGB_SetHSV	32	static
+ARGB.c:259:12:ARGB_SetWhite	0	static
+ARGB.c:275:12:ARGB_FillRGB	32	static
+ARGB.c:173:12:ARGB_Clear	8	static
+ARGB.c:288:12:ARGB_FillHSV	24	static
+ARGB.c:299:12:ARGB_FillWhite	16	static
+ARGB.c:310:12:ARGB_Ready	0	static
+ARGB.c:319:12:ARGB_Show	32	static

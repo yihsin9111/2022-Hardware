@@ -246,9 +246,9 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
   huart1.Init.BaudRate = 1000000;
-  huart1.Init.WordLength = UART_WORDLENGTH_9B;
-  huart1.Init.StopBits = UART_STOPBITS_2;
-  huart1.Init.Parity = UART_PARITY_EVEN;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
   huart1.Init.Mode = UART_MODE_RX;
   huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
@@ -329,12 +329,23 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	}
 
 	char ID = LED[1];
+
+	// MUX OUTPUT CHANNEL SELECT
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, (ID >> 0) & (0x1));
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, (ID >> 1) & (0x1));
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, (ID >> 2) & (0x1));
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, (ID >> 3) & (0x1));
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, (ID >> 4) & (0x1));
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, (ID >> 5) & (0x1));
+
+	// MUX (ENABLE) SELECT
+	if(ID<8){
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, 0);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, (ID >> 5) & (0x1));
+	}
+	else{
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, 1);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, (ID >> 5) & (0x1));
+	}
 
 	for(int i = 0; i < MAX_NUM_LED; ++i)
 	  ARGB_SetRGB(i, LED[3*i+2], LED[3*i+3], LED[3*i+4]);
