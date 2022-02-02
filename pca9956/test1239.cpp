@@ -42,7 +42,6 @@ int main(){
     int fd01 = wiringPiI2CSetup(0x58);
     cout << "led setup result : " << fd01 << endl;
     int fd02 = wiringPiI2CSetup(0x40);
-    // wiringPiI2CWriteReg8(fd, 0x40, 134);
    setIREF(134, fd);
    setIREF(134, fd01);
    setIREF(134, fd02);
@@ -54,10 +53,6 @@ int main(){
 	int pin = 0;
 	while(1){
 		if(cin >> pin){
-//		for(int i=0;i<24;i++)
-//		wiringPiI2CWriteReg8(fd,i,0);
-//		for(int i=0;i<24;i++){
-//		int result0 = wiringPiI2CWriteReg8(fd, 0, 100);
 			if(pin == -1){
 			    LED_FULLON(fd);
 			    LED_FULLON(fd01);
@@ -114,12 +109,6 @@ int main(){
     				wiringPiI2CWriteReg8(fd, pin+10, 100);
 			}
 		}
-//		int result1 = wiringPiI2CWriteReg16(fd, 1, 100);
-//		cout << "result0 : " << result0 << endl;
-//		cout << "result1 : " << result1 << endl;
-		//}
-//		wiringPiI2CWriteReg8(fd, 0x02, 0x5f);
-//		wiringPiI2CWrite(fd,200);
 	}
 
 }
