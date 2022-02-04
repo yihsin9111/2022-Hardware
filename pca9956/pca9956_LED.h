@@ -15,12 +15,12 @@
 #include "pca9956.h"
 
 struct LED{
-    int PWM_R = 0;
-    int PWM_G = 0;
-    int PWM_B = 0;
-    int IREF_R = 0;
-    int IREF_G = 0;
-    int IREF_B = 0;
+    int PWM_R;
+    int PWM_G;
+    int PWM_B;
+    int IREF_R;
+    int IREF_G;
+    int IREF_B;
 };
 
 class PCA9956_LED {
