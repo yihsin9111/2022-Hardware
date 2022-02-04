@@ -1,5 +1,5 @@
 #include "pca9956.h"
-#include "wiringPiI2C.h"
+#include "../../WiringPi/wiringPi/wiringPiI2C.h"
 
 PCA9956::PCA9956(int Address):PCA9956_Address(ADDRESS(Address)){
     fd = wiringPiI2CSetup(PCA9956_Address);

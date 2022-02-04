@@ -1,5 +1,5 @@
 /**
- * @file pca9685_LED.h
+ * @file pca9956_LED.h
  *
  */
 /* Copyright (C) 2022 by NTUEE, Taiwan

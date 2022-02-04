@@ -1,8 +1,10 @@
 #include <iostream>
-#include "../2022-Hardware/pca9956/pca9956.h"
-#include "pca9956_LED.h"
+#include "../pca9956.h"
+#include "../pca9956_LED.h"
 
 using namespace std;
+
+void Set_All_Same_Color(PCA9956_LED pca, LED data);
 
 int main(int argc, char *argv[]){
 
