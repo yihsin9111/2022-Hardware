@@ -5,7 +5,8 @@ PCA9956_LED::PCA9956_LED(PCA9956 pca):pca9956(pca) {
 };
 
 int PCA9956_LED::SetLED(int LED_ADDR, LED LED_data){
-    LED_ADDR < LED_ADDR_MIN ? return -1 : LED_ADDR > LED_ADDR_MAX ? return -1 : ;
+    if(LED_ADDR < LED_ADDR_MIN) return -1;
+    if(LED_ADDR > LED_ADDR_MAX) return -1;
 
     pca9956.SetIREF(CHANNEL(LED_ADDR*3), VALUE(LED_data.IREF_R));
     pca9956.SetIREF(CHANNEL(LED_ADDR*3+1), VALUE(LED_data.IREF_G));

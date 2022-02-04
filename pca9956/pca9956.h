@@ -1,5 +1,5 @@
 /**
- * @file pca9685.h
+ * @file pca9956.h
  *
  */
 /* Copyright (C) 2022 by NTUEE, Taiwan
@@ -51,7 +51,7 @@ class PCA9956 {
         void SetFullOff();
 
     private:
-        
+
         void I2CWriteReg(int reg, int value);
         int I2CReadReg(int reg);
 
