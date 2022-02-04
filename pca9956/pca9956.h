@@ -2,7 +2,7 @@
  * @file pca9685.h
  *
  */
-/* Copyright (C) 2022 by Ken Chung
+/* Copyright (C) 2022 by NTUEE, Taiwan
  *
  */
 
@@ -25,6 +25,12 @@
 
 #define PCA9956_IREF0_ADDR 0x22
 #define PCA9956_PWM0_ADDR 0x0a
+
+#define IREF_MAX 255
+#define IREF_MIN 0
+
+#define PWM_MAX 255
+#define PWM_MIN  0
 
 #define PCA_PWM_CHANNELS 24
 

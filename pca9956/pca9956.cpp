@@ -8,10 +8,12 @@ PCA9956::PCA9956(int Address):PCA9956_Address(ADDRESS(Address)){
 };
 
 void PCA9956::SetAllIREF(int IREF){
+    IREF = IREF < IREF_MIN ? IREF_MIN : IREF > IREF_MAX ? IREF_MAX : IREF ;
     I2CWriteReg(PCA9956_IREF_ALL_REG, VALUE(IREF));
 };
 
 void PCA9956::SetIREF(int channel, int IREF){
+    IREF = IREF < IREF_MIN ? IREF_MIN : IREF > IREF_MAX ? IREF_MAX : IREF ;
     I2CWriteReg(REG(channel+PCA9956_IREF0_ADDR), VALUE(IREF));
 };
 int PCA9956::GetIREF(int channel){
@@ -19,6 +21,7 @@ int PCA9956::GetIREF(int channel){
 };
 
 void PCA9956::SetPWM(int channel, int PWM){
+    PWM = PWM < PWM_MIN ? PWM_MIN : PWM > PWM_MAX ? PWM_MAX : PWM ;
     I2CWriteReg(REG(channel+PCA9956_PWM0_ADDR), VALUE(PWM));
 };
 int PCA9956::GetPWM(int channel){
@@ -26,7 +29,7 @@ int PCA9956::GetPWM(int channel){
 };
 
 void PCA9956::SetFullOn(){
-    I2CWriteReg(PCA9956_PWM_ALL_REG, 255);
+    I2CWriteReg(PCA9956_PWM_ALL_REG, PWM_MAX);
 };
 void PCA9956::SetFullOff(){
     I2CWriteReg(PCA9956_PWM_ALL_REG, 0);
