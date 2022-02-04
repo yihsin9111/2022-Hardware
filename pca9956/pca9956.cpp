@@ -40,5 +40,5 @@ void PCA9956::I2CWriteReg(int reg, int value){
 };
 
 int PCA9956::I2CReadReg(int reg){
-    return wiringPiI2CReadReg8(fd, reg)
+    return wiringPiI2CReadReg8(fd, reg);
 }
