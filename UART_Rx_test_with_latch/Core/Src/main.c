@@ -175,7 +175,7 @@ int main(void)
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14,  ~(ID >> 3) & (0x1));
 		while (!ARGB_Show(LED + place*3, LEDLength[ID]));
 		place += LEDLength[ID];
-		HAL_Delay(LEDLength[ID]/18);
+		HAL_Delay(LEDLength[ID] >> 4);
 	  }
 //	  flag = 0;
 //	}
