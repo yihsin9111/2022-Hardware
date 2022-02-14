@@ -1,4 +1,4 @@
-ARGB.c:80:12:ARGB_Init	16	static
-ARGB.c:130:12:ARGB_Show	32	static
-ARGB.c:197:13:ARGB_TIM_DMADelayPulseCplt	24	static
-ARGB.c:248:13:ARGB_TIM_DMADelayPulseHalfCplt	24	static
+ARGB.c:78:12:ARGB_Init	16	static
+ARGB.c:108:12:ARGB_Fire	32	static
+ARGB.c:175:13:ARGB_TIM_DMADelayPulseCplt	24	static
+ARGB.c:226:13:ARGB_TIM_DMADelayPulseHalfCplt	24	static

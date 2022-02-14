@@ -1,9 +1,7 @@
 /**
  *******************************************
  * @file    ARGB.c
- * @author  Dmitriy Semenov / Crazy_Geeks
- * @version 1.31
- * @date	21-November-2021
+ * @author  Dmitriy Semenov / Crazy_Geeks / Modified by Chin-Yang Jen
  * @brief   Source file for ARGB (Adreassable RGB)
  *******************************************
  *
@@ -102,32 +100,12 @@ ARGB_STATE ARGB_Init(void) {
 }
 
 /**
- * @brief Set LED with RGB color by index
- * @param[in] i LED position
- * @param[in] r Red component   [0..255]
- * @param[in] g Green component [0..255]
- * @param[in] b Blue component  [0..255]
- * @return #ARGB_STATE enum
- */
-// ARGB_STATE ARGB_SetRGB(u16_t i, u8_t r, u8_t g, u8_t b) {
-//     // Subpixel chain order
-//     const u8_t subp1 = g;
-//     const u8_t subp2 = r;
-//     const u8_t subp3 = b;
-//     // RGB or RGBW
-//     RGB_BUF[3 * i] = subp1;     // subpixel 1
-//     RGB_BUF[3 * i + 1] = subp2; // subpixel 2
-//     RGB_BUF[3 * i + 2] = subp3; // subpixel 3
-//     return ARGB_OK;
-// }
-
-/**
  * @brief Update strip
- * @param none
+ * @param buf start of the LED array
+ * @param num_pixels number of pixels
  * @return #ARGB_STATE enum
  */
-// ARGB_STATE ARGB_Show(void) {
-ARGB_STATE ARGB_Show(u8_t* buf, u16_t num_pixels) {
+ARGB_STATE ARGB_Fire(u8_t* buf, u16_t num_pixels) {
     RGB_BUF = buf;
     NUM_PIXELS = num_pixels;
 
