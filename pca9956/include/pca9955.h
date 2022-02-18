@@ -41,6 +41,8 @@ class PCA9955{
 
 	int SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref, int Giref, int Biref);
 
+    void GetAll();
+
     private:
 
 	int SetPWM(int channel, int PWM);

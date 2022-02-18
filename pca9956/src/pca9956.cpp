@@ -1,3 +1,4 @@
+#include <iostream>
 #include "../include/pca9956.h"
 #include "../../../WiringPi/wiringPi/wiringPiI2C.h"
 #include "../../../WiringPi/wiringPi/wiringPi.h"
@@ -10,6 +11,8 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <asm/ioctl.h>
+
+using namespace std;
 
 enum PCA9956Reg{
     PCA9956_REG_PWMALL = 0x3f,
@@ -93,7 +96,13 @@ int PCA9956::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref,
     SetPWMAI(led_address*3 + PCA9956_PWM0_ADDR, PWM, 3);
     SetIREFAI(led_address*3 + PCA9956_IREF0_ADDR, IREF, 3);
     return 0;	
-}
+};
+
+void PCA9956::GetAll(){
+    for(int i=0;i<24;i++){
+        cout << "addr : " << i << ", IREF : " << GetIREF(i) << ", PWM : " << GetPWM(i) << endl;
+    }
+};
 
 int PCA9956::SetPWM(int channel, int PWM){
     PWM = PWM < PWM_MIN ? PWM_MIN : PWM > PWM_MAX ? PWM_MAX : PWM ;

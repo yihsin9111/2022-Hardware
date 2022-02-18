@@ -99,12 +99,21 @@ int main(int argc, char* argv[]){
             while(1){
                 
                 cin >> channel >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref ;
+                if(channel == -1){
+                    for(int i=0;i<n;i++){
+                        pca9956[i].GetAll();
+                    }
+                    for(int i=0;i<m;i++){
+                        pca9955[i].GetAll();
+                    }
+                }
                 if(channel >= n*8){
                     channel -= n*8;
                     pca9955[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref);
                 }else{
                     pca9956[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref);
                 }
+
             }
 
             break;
