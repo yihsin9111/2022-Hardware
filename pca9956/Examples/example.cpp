@@ -36,6 +36,10 @@ int main(int argc, char* argv[]){
         cin >> Mode;
 
         if(Mode == 'A' || Mode == 'a'){
+            
+            
+            break;
+        }else if(Mode == 'B' || Mode == 'b'){
             clock_t init, clk;
             bool increase = true;
             init = clock();
@@ -62,35 +66,32 @@ int main(int argc, char* argv[]){
                         IREF[i] = 255*bright/30;
                     }
                     for(int i=0;i<n;i++){
-                        pca9956
+                        pca9956[i].SetIREFAI(0, IREF, 24);
                     }
 
 
-                    for(int i=0 ; i<(n+m)*8 ; i++){
+                    // for(int i=0 ; i<(n+m)*8 ; i++){
                         
                         
-                        if(i>23){
-                        }else if(i>15){
-                        pca9956_3.SetPWM((i-16)*3, 255*bright/30);
-                        pca9956_3.SetPWM((i-16)*3+1, 255*bright/30);
-                        pca9956_3.SetPWM((i-16)*3+2, 255*bright/30);
-                        }else if(i>8){
-                        pca9956_2.SetPWM((i-8)*3, 255*bright/30);
-                        pca9956_2.SetPWM((i-8)*3+1, 255*bright/30);
-                        pca9956_2.SetPWM((i-8)*3+2, 255*bright/30);
-                        }else{
-                        pca9956_1.SetPWM(i*3, 255*bright/30);
-                        pca9956_1.SetPWM(i*3+1, 255*bright/30);
-                        pca9956_1.SetPWM(i*3+2, 255*bright/30);
-                        }
-                    }
+                    //     if(i>23){
+                    //     }else if(i>15){
+                    //     pca9956_3.SetPWM((i-16)*3, 255*bright/30);
+                    //     pca9956_3.SetPWM((i-16)*3+1, 255*bright/30);
+                    //     pca9956_3.SetPWM((i-16)*3+2, 255*bright/30);
+                    //     }else if(i>8){
+                    //     pca9956_2.SetPWM((i-8)*3, 255*bright/30);
+                    //     pca9956_2.SetPWM((i-8)*3+1, 255*bright/30);
+                    //     pca9956_2.SetPWM((i-8)*3+2, 255*bright/30);
+                    //     }else{
+                    //     pca9956_1.SetPWM(i*3, 255*bright/30);
+                    //     pca9956_1.SetPWM(i*3+1, 255*bright/30);
+                    //     pca9956_1.SetPWM(i*3+2, 255*bright/30);
+                    //     }
+                    // }
                 }
             }
-            
-        }else if(Mode == 'B' || Mode == 'b'){
-
         }else if(Mode == 'C' || Mode == 'c'){
-
+            break;
         }else if(Mode == 'Q' || Mode == 'q'){
             break;
         }
