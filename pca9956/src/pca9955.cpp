@@ -98,7 +98,7 @@ int PCA9955::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref,
     return 0;	
 };
 
-void PCA9956::GetAll(){
+void PCA9955::GetAll(){
     for(int i=0;i<24;i++){
         cout << "addr : " << i << ", IREF : " << GetIREF(i) << ", PWM : " << GetPWM(i) << endl;
     }
