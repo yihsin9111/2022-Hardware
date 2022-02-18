@@ -95,11 +95,12 @@ int main(int argc, char* argv[]){
             }
         }else if(Mode == 'C' || Mode == 'c'){
             cout << "Choose one led between 0 and " << (n+m)*8-1 << endl;
-            cout << "Usage : \n >> <channel> <R duty> <G duty> <B duty> <R iref> <G iref> <B iref>";
+            cout << "Usage : \n >> <channel> <R duty> <G duty> <B duty> <R iref> <G iref> <B iref>\n";
+            cout << "You may enter -1 to checkout all register values in PCAs";
             int channel = 0, Rduty = 0, Gduty = 0, Bduty = 0, Riref = 0, Giref = 0, Biref = 0;
             while(1){
                 
-                cin >> channel >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref ;
+                cin >> channel;
                 if(channel == -1){
                     for(int i=0;i<n;i++){
                         pca9956[i].GetAll();
@@ -108,6 +109,7 @@ int main(int argc, char* argv[]){
                         pca9955[i].GetAll();
                     }
                 }
+                cin >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref ;
                 if(channel >= n*8){
                     channel -= n*8;
                     pca9955[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref);
