@@ -56,7 +56,10 @@ int PCA9956::SetPWMAI(int channel, int *PWM, int size){
     args.size = 5;
     args.data = &regData;
 
-    return ioctl(fd, 0x0720, &args) && SetPWM(channel, PWM[0]);
+    int AI = ioctl(fd, 0x0720, &args);
+    int RV = SetPWM(channel, PWM[0]);
+
+    return AI && RV;
 };
 
 int PCA9956::SetIREFAI(int channel, int *IREF, int size){
@@ -79,7 +82,10 @@ int PCA9956::SetIREFAI(int channel, int *IREF, int size){
     args.size = 5;
     args.data = &regData;
 
-    return ioctl(fd, 0x0720, &args) && SetIREF(channel, IREF[0]);
+    int AI = ioctl(fd, 0x0720, &args);
+    int RV = SetIREF(channel, IREF[0]);
+
+    return AI && RV;
 };
 
 
