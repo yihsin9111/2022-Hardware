@@ -30,26 +30,38 @@ int main(int argc, char* argv[]){
 
     while(1){
 
+        //Reset
+        int *IREF = new int [24];
+        int *PWM = new int [24];
+
+        for(int i=0;i<24;i++){
+            IREF[i] = 0;
+            PWM[i] = 0;
+        }
+        for(int i=0;i<n;i++){
+            pca9956[i].SetIREFAI(0, IREF, 24);
+            pca9956[i].SetPWMAI(0, PWM, 24);
+        }
+        for(int i=0;i<m;i++){
+            pca9955[i].SetIREFAI(0, IREF, 24);
+            pca9955[i].SetPWMAI(0, PWM, 24);
+        }
+
         //choose one mode
         char Mode;
         cout << "Plz enter the OF mode you want :\n";
-        cout << "(A)AutoIcrement (B)Breath (C)ChooseOne (Q)Quit :\n";
+        cout << "(B)Breath (C)ChooseOne (Q)Quit :\n";
         cin >> Mode;
 
-        if(Mode == 'A' || Mode == 'a'){
-            
-            
-            break;
-        }else if(Mode == 'B' || Mode == 'b'){
+        if(Mode == 'B' || Mode == 'b'){
             clock_t init, clk;
             bool increase = true;
             init = clock();
             int bright = 0;
-            bool quit = false;
             int *IREF = new int [24];
             int *PWM = new int [24];
 
-            while(!quit){
+            while(1){
                 clk = clock();
                 if((clk-init)%(1000/30) == 0){
                     if(increase == true){
@@ -79,11 +91,21 @@ int main(int argc, char* argv[]){
                     }
 
                 }
-                if(cin >> quit){
-                    if(quit) break;
-                }
             }
         }else if(Mode == 'C' || Mode == 'c'){
+            cout << "Choose one led between 0 and " << (n+m)*8-1 << endl;
+            cout << "Usage : \n >> <channel> <R duty> <G duty> <B duty> <R iref> <G iref> <B iref>";
+            int channel = 0, Rduty = 0, Gduty = 0, Bduty = 0, Riref = 0, Giref = 0, Biref = 0;
+            while(1){
+                
+                cin >> channel >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref ;
+                if(channel >= n*8){
+                    channel -= n*8;
+                    pca9955[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref);
+                }else{
+                    pca9956[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref);
+                }
+            }
 
             break;
         }else if(Mode == 'Q' || Mode == 'q'){
