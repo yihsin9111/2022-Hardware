@@ -99,9 +99,9 @@ int PCA9956::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref,
     IREF[0] = Riref;
     IREF[1] = Giref;
     IREF[2] = Biref;
-    SetPWMAI(led_address*3 + PCA9956_PWM0_ADDR, PWM, 3);
-    SetIREFAI(led_address*3 + PCA9956_IREF0_ADDR, IREF, 3);
-    return 0;	
+    int pAI = SetPWMAI(led_address*3 + PCA9956_PWM0_ADDR, PWM, 3);
+    int iAI = SetIREFAI(led_address*3 + PCA9956_IREF0_ADDR, IREF, 3);
+    return pAI && iAI;
 };
 
 void PCA9956::GetAll(){
