@@ -1,40 +1,40 @@
 /**
- * @file pca9956.h
+ * @file pca9955.h
  *
  */
 /* Copyright (C) 2022 by NTUEE, Taiwan
  *
  */
 
-#ifndef PCA9956_H
-#define PCA9956_H
+#ifndef PCA9955_H
+#define PCA9955_H
 
 #include <cstdint>
 
-#define PCA9956_I2C_ADDRESS_DEFAULT 0x3f
-#define PCA9956_IREF_DEFAULT 255
-#define PCA9956_PWM_DEFAULT 0
+#define PCA9955_I2C_ADDRESS_DEFAULT 0x00
+#define PCA9955_IREF_DEFAULT 255
+#define PCA9955_PWM_DEFAULT 0
 
 #define ADDRESS(x)   (static_cast<int>(x))
 #define VALUE(x)     (static_cast<int>(x))
 #define CHANNEL(x)   (static_cast<int>(x))
 
-#define PCA9956_IREF0_ADDR 0x22
-#define PCA9956_PWM0_ADDR 0x0a
+#define PCA9955_IREF0_ADDR 0x22
+#define PCA9955_PWM0_ADDR 0x0a
 
 #define IREF_MAX 255
 #define IREF_MIN 0
 #define PWM_MAX  255
 #define PWM_MIN  0
 
-#define PCA9956_CHANNELS 24
+#define PCA9955_CHANNELS 16
 
-class PCA9956{
+class PCA9955{
     public:
 
-	PCA9956(int Address = PCA9956_I2C_ADDRESS_DEFAULT);
-	PCA9956() {};
-	~PCA9956() {};
+	PCA9955(int Address = PCA9955_I2C_ADDRESS_DEFAULT);
+    PCA9955() {};
+	~PCA9955() {};
 
 	int SetPWMAI(int channel, int *PWM, int size);
 	int SetIREFAI(int channel, int *IREF, int size);
@@ -58,7 +58,7 @@ class PCA9956{
 
     private:
 
-    int PCA9956_Address;
+    int PCA9955_Address;
 	int fd;
 
 };
