@@ -13,14 +13,15 @@ int main(int argc, char* argv[]){
     cin >> n >> m;
 
     //slave addr sequentially
-    PCA9956 *pca9956 = new PCA9956[m];
+    PCA9956 *pca9956 = new PCA9956[n];
     PCA9955 *pca9955 = new PCA9955[m];
-    cout << "Plz enter the addresses of your PCA9956 slaves in decimal sequentially :\n" ;
+    if(n>0)cout << "Plz enter the addresses of your PCA9956 slaves in decimal sequentially :\n" ;
     for(int i=0;i<n;i++){
         int temp = 0;
         cin >> temp;
         pca9956[i] = PCA9956(temp);
     }
+    if(m>0)cout << "Plz enter the addresses of your PCA9955 slaves in decimal sequentially :\n" ;
     for(int i=0;i<m;i++){
         int temp = 0;
         cin >> temp;
@@ -44,7 +45,8 @@ int main(int argc, char* argv[]){
             bool increase = true;
             init = clock();
             int bright = 0;
-            int *IREF = new int [24*(n+m)];
+            int *IREF = new int [24];
+            int *PWM = new int [24];
 
             while(1){
                 clk = clock();
@@ -64,9 +66,15 @@ int main(int argc, char* argv[]){
 
                     for(int i=0;i<24;i++){
                         IREF[i] = 255*bright/30;
+                        PWM[i] = 50;
                     }
                     for(int i=0;i<n;i++){
                         pca9956[i].SetIREFAI(0, IREF, 24);
+                        pca9956[i].SetPWMAI(0, PWM, 24);
+                    }
+                    for(int i=0;i<m;i++){
+                        pca9955[i].SetIREFAI(0, IREF, 24);
+                        pca9955[i].SetPWMAI(0, PWM, 24);
                     }
 
 
