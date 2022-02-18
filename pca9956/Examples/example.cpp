@@ -96,7 +96,7 @@ int main(int argc, char* argv[]){
         }else if(Mode == 'C' || Mode == 'c'){
             cout << "Choose one led between 0 and " << (n+m)*8-1 << endl;
             cout << "Usage : \n >> <channel> <R duty> <G duty> <B duty> <R iref> <G iref> <B iref>\n";
-            cout << "You may enter -1 to checkout all register values in PCAs";
+            cout << "You may enter -1 to checkout all register values in PCAs\n";
             int channel = 0, Rduty = 0, Gduty = 0, Bduty = 0, Riref = 0, Giref = 0, Biref = 0;
             while(1){
                 
