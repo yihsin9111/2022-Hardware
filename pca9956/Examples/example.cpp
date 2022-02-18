@@ -45,10 +45,11 @@ int main(int argc, char* argv[]){
             bool increase = true;
             init = clock();
             int bright = 0;
+            bool quit = false;
             int *IREF = new int [24];
             int *PWM = new int [24];
 
-            while(1){
+            while(!quit){
                 clk = clock();
                 if((clk-init)%(1000/30) == 0){
                     if(increase == true){
@@ -77,28 +78,13 @@ int main(int argc, char* argv[]){
                         pca9955[i].SetPWMAI(0, PWM, 24);
                     }
 
-
-                    // for(int i=0 ; i<(n+m)*8 ; i++){
-                        
-                        
-                    //     if(i>23){
-                    //     }else if(i>15){
-                    //     pca9956_3.SetPWM((i-16)*3, 255*bright/30);
-                    //     pca9956_3.SetPWM((i-16)*3+1, 255*bright/30);
-                    //     pca9956_3.SetPWM((i-16)*3+2, 255*bright/30);
-                    //     }else if(i>8){
-                    //     pca9956_2.SetPWM((i-8)*3, 255*bright/30);
-                    //     pca9956_2.SetPWM((i-8)*3+1, 255*bright/30);
-                    //     pca9956_2.SetPWM((i-8)*3+2, 255*bright/30);
-                    //     }else{
-                    //     pca9956_1.SetPWM(i*3, 255*bright/30);
-                    //     pca9956_1.SetPWM(i*3+1, 255*bright/30);
-                    //     pca9956_1.SetPWM(i*3+2, 255*bright/30);
-                    //     }
-                    // }
+                }
+                if(cin >> quit){
+                    if(quit) break;
                 }
             }
         }else if(Mode == 'C' || Mode == 'c'){
+
             break;
         }else if(Mode == 'Q' || Mode == 'q'){
             break;
