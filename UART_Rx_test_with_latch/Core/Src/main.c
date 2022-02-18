@@ -33,6 +33,7 @@
 /* USER CODE BEGIN PD */
 #define MAX_NUM_LED 87
 #define LED_BRIGHT 100
+#define LED_CHANNEL_COUNT 16
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -47,8 +48,14 @@ DMA_HandleTypeDef hdma_tim1_ch1;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-uint8_t LED[3 * MAX_NUM_LED + 2] = {0};
-//uint8_t LED0[3] = {0};
+uint8_t LEDLength[LED_CHANNEL_COUNT] = {0};
+uint16_t totalLEDLength = 0;
+uint8_t LEDLengthReceive1[LED_CHANNEL_COUNT + 2] = {0};
+uint8_t LEDLengthReceive2[LED_CHANNEL_COUNT + 2] = {0};
+uint8_t LEDLengthReceive3[LED_CHANNEL_COUNT + 2] = {0};
+uint8_t* LED = 0;
+uint16_t place = 0;
+//uint16_t flag = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -63,7 +70,26 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void fireLED(){
+	place = 0;
+	for(uint8_t ID = 0; ID < LED_CHANNEL_COUNT; ++ID){
+		if(LEDLength[ID] == 0) continue;
+		// MUX OUTPUT CHANNEL SELECT
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10,  (ID >> 0) & (0x1));
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11,  (ID >> 1) & (0x1));
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12,  (ID >> 2) & (0x1));
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13,  (ID >> 3) & (0x1));
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14,  ~(ID >> 3) & (0x1));
 
+		while (!ARGB_Fire(LED + place*3, LEDLength[ID]));
+		place += LEDLength[ID];
+		if(place == totalLEDLength)
+			break;
+		else
+			HAL_Delay(LEDLength[ID]/20);
+	}
+	return;
+}
 /* USER CODE END 0 */
 
 /**
@@ -98,20 +124,51 @@ int main(void)
   MX_TIM1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
   ARGB_Init();
-  ARGB_Clear();
-  ARGB_SetBrightness(LED_BRIGHT);
+
+  while(1){
+	  HAL_UART_Receive(&huart1, LEDLengthReceive1, sizeof(LEDLengthReceive1), 100);
+	  if (LEDLengthReceive1[0]) break;
+  }
+  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+  while(1){
+	  HAL_UART_Receive(&huart1, LEDLengthReceive2, sizeof(LEDLengthReceive2), 100);
+	  if (LEDLengthReceive2[0]) break;
+  }
+  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+  while(1){
+	  HAL_UART_Receive(&huart1, LEDLengthReceive3, sizeof(LEDLengthReceive3), 100);
+	  if (LEDLengthReceive3[0]) break;
+  }
+
+  uint8_t a, b, c;
+  for(int i = 0; i < LED_CHANNEL_COUNT; ++i){
+	  a = LEDLengthReceive1[i+1];
+	  b = LEDLengthReceive2[i+1];
+	  c = LEDLengthReceive3[i+1];
+	  LEDLength[i] = (a & b) | (a & c) | (b & c);
+	  totalLEDLength += LEDLength[i];
+  }
+
+  LED = calloc(totalLEDLength * 3, sizeof(uint8_t));
+  for(int i = 0; i < totalLEDLength * 3; ++i)
+	  LED[i] = 50;
+  fireLED();
+
+  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  HAL_UART_Receive_IT (&huart1, LED, sizeof(LED));
+//  HAL_UART_Receive_IT (&huart1, LED, totalLEDLength * 3);
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  HAL_UART_Receive(&huart1, LED, totalLEDLength * 3, 100);
+	  fireLED();
   }
   /* USER CODE END 3 */
 }
@@ -322,37 +379,8 @@ static void MX_GPIO_Init(void)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-
-	if(LED[0] != 255){
-		HAL_UART_Receive_IT(&huart1, LED, sizeof(LED));
-		return;
-	}
-
-	char ID = LED[1];
-
-	// MUX OUTPUT CHANNEL SELECT
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, (ID >> 0) & (0x1));
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, (ID >> 1) & (0x1));
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, (ID >> 2) & (0x1));
-
-	// MUX (ENABLE) SELECT
-	if(ID<8){
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, 0);
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 1);
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, (ID >> 5) & (0x1));
-	}
-	else{
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, 1);
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, 0);
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, (ID >> 5) & (0x1));
-	}
-
-	for(int i = 0; i < MAX_NUM_LED; ++i)
-	  ARGB_SetRGB(i, LED[3*i+2], LED[3*i+3], LED[3*i+4]);
-	while(!ARGB_Ready());
-	ARGB_Show();
-
-    HAL_UART_Receive_IT(&huart1, LED, sizeof(LED));
+//	flag = 1;
+    HAL_UART_Receive_IT(&huart1, LED, totalLEDLength * 3);
 }
 /* USER CODE END 4 */
 
