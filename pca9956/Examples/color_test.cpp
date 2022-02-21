@@ -6,48 +6,54 @@
 using namespace std;
 
 int main(int argc, char* argv[]){
-    //number of slaves
-    //slave addr sequentially
-    int n=3;
-    PCA9956 *pca9956 = new PCA9956[n];
-    int temp[3]={63,43,86};
-    for(int i=0;i<n;i++){
-        int temp = 0;
-        pca9956[i] = PCA9956(temp);
-	if(pca9956[i].Getfd())cout << "Slave Init Success\n";
+    
+    PCA9956 pca9956 = PCA9956(0x3f);
+	if(pca9956.Getfd())cout << "Slave Init Success\n";
 	else {
 	    cout << "Slave Init Failed\n";
-	    i--;
+        return 0;
 	}
+    
+
+    //Reset
+    int *IREF = new int [24];
+    int *PWM = new int [24];
+
+    for(int i=0;i<24;i++){
+        IREF[i] = 0;
+        PWM[i] = 0;
     }
+    pca9956.SetIREFAI(0, IREF, 24);
+    pca9956.SetPWMAI(0, PWM, 24);
+    
+    int decay = -1, max = 255, min = 0;
+    int level = max;
+    clock_t init;
+    init = clock();
 
-        //Reset
-        int *IREF = new int [24];
-        int *PWM = new int [24];
+    while(1){
 
-        for(int i=0;i<24;i++){
-            IREF[i] = 0;
-            PWM[i] = 0;
-        }
-        for(int i=0;i<n;i++){
-            pca9956[i].SetIREFAI(0, IREF, 24);
-            pca9956[i].SetPWMAI(0, PWM, 24);
-        }
+        float gammaR = 0, gammaG = 0, gammaB = 0, ratioR = 0, ratioG = 0, ratioB = 0;
+        int frameRate = 0;
+        cout << "Usage : \n>> <gamma R> <gamma G> <gamma B> <ratio R> <ratio G> <ratio B> <frame rate(fps)> \n";
+        cin >> gammaR >> gammaG >> gammaB >> ratioR >> ratioG >> ratioB >> frameRate;
 
-        //choose one mode
-        cout << "Usage : \n >> <channel> <R duty> <G duty> <B duty> <R iref> <G iref> <B iref>\n";
-        cout << "You may enter -1 to checkout all register values in PCAs\n";
-        int channel = 0, Rduty = 0, Gduty = 0, Bduty = 0, Riref = 0, Giref = 0, Biref = 0;
-        while(1){
-            
-            cin >> channel;
-            if(channel == -1){  
-                for(int i=0;i<n;i++){
-                    pca9956[i].GetAll();
-                }
-            }else{
-                cin >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref ;
-                cout << pca9956[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref) << endl;
-                }
+        Color_regulator regR(gammaR);
+        Color_regulator regG(gammaG);
+        Color_regulator regB(gammaB);
+
+        while((1000 * (clock() - init)) / CLOCKS_PER_SEC < 1000/frameRate){
+            int Rduty = 0, Gduty = 0, Bduty = 0;
+            Rduty = regR.gamma_correction(level);
+            Gduty = regG.gamma_correction(level);
+            Bduty = regB.gamma_correction(level);
+
+            pca9956.SetRGB(3, Rduty, Gduty, Bduty, VALUE(255*ratioR), VALUE(255*ratioG), VALUE(255*ratioB));
+
+            if(level <= min || level >= max) {
+                decay -= (decay + decay);
             }
+            level -= decay;
+        }
+    }
 }
