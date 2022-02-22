@@ -82,6 +82,27 @@ int PCA9955::SetIREFAI(int channel, int *IREF, int size){
     return ioctl(fd, 0x0720, &args) && SetIREF(channel, IREF[0]);
 };
 
+int SetPWMIREFAI(int *data){
+
+    union i2c_smbus_data regData;
+
+    regData.block[0] = PCA9955_CHANNELS*2-1;
+    for(int i=1;i<PCA9955_CHANNELS*2;i++){
+    	regData.block[i]=data[i];
+    }
+
+    struct i2c_smbus_ioctl_data args;
+    args.rw = 0;
+    args.cmd = PCA9955_PWM0_ADDR+128;
+    args.size = 5;
+    args.data = &regData;
+
+    int AI = ioctl(fd, 0x0720, &args);
+    int RV = SetPWM(0, data[0]);
+
+    return AI && RV;
+    return 0;
+};
 
 int PCA9955::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref, int Giref, int Biref){
     int *PWM, *IREF;
