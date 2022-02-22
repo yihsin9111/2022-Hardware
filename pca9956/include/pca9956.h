@@ -38,6 +38,7 @@ class PCA9956{
 
 	int SetPWMAI(int channel, int *PWM, int size);
 	int SetIREFAI(int channel, int *IREF, int size);
+	int SetPWMIREFAI(int *data);
 
 	int SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref, int Giref, int Biref);
 
