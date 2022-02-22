@@ -1,0 +1,5 @@
+#class(KEYWORD1)
+Color_regulator	KEYWORD1
+
+#function and method(KEYWORD2)
+gamma_correction	KEYWORD2
