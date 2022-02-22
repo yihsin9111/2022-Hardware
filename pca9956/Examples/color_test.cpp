@@ -48,16 +48,8 @@ int main(int argc, char* argv[]){
 	init = clock();
 
         while(1){
-    	     while((1000 * (clock() - init)) / CLOCKS_PER_SEC < 1000/frameRate){
-	    //      // cout << (1000 * (clock() - init)) / CLOCKS_PER_SEC << " " << 1000/30 << endl;
-	     };
-	    // cout << "p" ;
+    	     while((1000 * (clock() - init)) / CLOCKS_PER_SEC < 1000/frameRate);
     	     init = clock();
-//	        clk = clock();
-//    	    if(((clk-init)/CLOCKS_PER_SEC)%(1000/frameRate) == 0){
-	
-//	        init = clk;	
-//              int Rduty = 0, Gduty = 0, Bduty = 0;
                 Rduty = regR.gamma_correction(level);
                 Gduty = regG.gamma_correction(level);
                 Bduty = regB.gamma_correction(level);
@@ -68,9 +60,6 @@ int main(int argc, char* argv[]){
                     decay -= (decay + decay);
                 }
                 level -= decay;
-//                clk = clock();
-//                cout << clk - init << endl;
-//            }
 	    }
     }
 }
