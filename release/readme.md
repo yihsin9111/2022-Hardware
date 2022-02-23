@@ -34,6 +34,6 @@ Please follow the instructions below to install the lastest version of the libra
 7. Wait for stm32 to deal with the data by stopping the program, calling `usleep(27 * 1000);`.  
 
 ## OF
-1. Init PCAs by calling `PCA pca;` as line 35 in `../OF/example.cpp`. 
-2. Declare color data as `int[]`, which is `OFs` in `../OF/example.cpp`. The size of the color data should be a constant value `156`.
+1. Init PCAs by calling `PCA pca;` as line 35 in `../OF/src/example.cpp`. 
+2. Declare color data as `int[]`, which is `OFs` in `../OF/src/example.cpp`. The size of the color data should be a constant value `156`.
 3. After set up color data, you can write the data to PCAs by calling `pca.Write(OFs)` by passing the pointer of the data you just declare.
