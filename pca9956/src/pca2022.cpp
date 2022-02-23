@@ -19,8 +19,44 @@ PCA::PCA(){
     pca9955[1] = PCA9955(PCA9955_ADDR_02);
 };
 
-int PCA::SetAll(int *data){
+int PCA::Write(int *data){
     
-    return (pca9955[0].SetPWMIREFAI(data) && pca9955[1].SetPWMIREFAI(&data[30]) && pca9956[0].SetPWMIREFAI(&data[60]) && pca9956[1].SetPWMIREFAI(&data[108]));
+    int pcaData[156] = {0};
+
+    //transform the data structure
+    for(int i=0;i<5;i++){
+        pcaData[i*3] = data[i*6];
+        pcaData[i*3+1] = data[i*6+1];
+        pcaData[i*3+2] = data[i*6+2];
+        pcaData[i*3+15] = data[i*6+3];
+        pcaData[i*3+1+15] = data[i*6+4];
+        pcaData[i*3+2+15] = data[i*6+5];
+    }
+    for(int i=5;i<10;i++){
+        pcaData[i*3+30] = data[i*6];
+        pcaData[i*3+1+30] = data[i*6+1];
+        pcaData[i*3+2+30] = data[i*6+2];
+        pcaData[i*3+45] = data[i*6+3];
+        pcaData[i*3+1+45] = data[i*6+4];
+        pcaData[i*3+2+45] = data[i*6+5];
+    }
+    for(int i=10;i<18;i++){
+        pcaData[i*3+60] = data[i*6];
+        pcaData[i*3+1+60] = data[i*6+1];
+        pcaData[i*3+2+60] = data[i*6+2];
+        pcaData[i*3+84] = data[i*6+3];
+        pcaData[i*3+1+84] = data[i*6+4];
+        pcaData[i*3+2+84] = data[i*6+5];
+    }
+    for(int i=18;i<26;i++){
+        pcaData[i*3+108] = data[i*6];
+        pcaData[i*3+108] = data[i*6+1];
+        pcaData[i*3+108] = data[i*6+2];
+        pcaData[i*3+132] = data[i*6+3];
+        pcaData[i*3+1+132] = data[i*6+4];
+        pcaData[i*3+2+132] = data[i*6+5];
+    }
+    
+    return (pca9955[0].SetPWMIREFAI(pcaData) && pca9955[1].SetPWMIREFAI(&pcaData[30]) && pca9956[0].SetPWMIREFAI(&pcaData[60]) && pca9956[1].SetPWMIREFAI(&pcaData[108]));
 
 };

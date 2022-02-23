@@ -49,7 +49,7 @@ int main(int argc, char* argv[]){
 
         while(1){
     	     while((1000 * (clock() - init)) / CLOCKS_PER_SEC < 1000/frameRate);
-    	     init = clock();
+    	        init = clock();
                 Rduty = regR.gamma_correction(level);
                 Gduty = regG.gamma_correction(level);
                 Bduty = regB.gamma_correction(level);

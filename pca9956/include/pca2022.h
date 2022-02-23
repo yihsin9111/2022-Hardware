@@ -16,7 +16,7 @@ class PCA{
     public:
         PCA();
 
-        int SetAll(int *data);
+        int Write(int *data);
     private:
         PCA9956 *pca9956;
         PCA9955 *pca9955;
