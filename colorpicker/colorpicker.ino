@@ -7,17 +7,67 @@ const byte interruptPin = 2;
 
 int num_leds = 30;
 // the grb that the user input
-int ig = 0, ir = 0, ib = 0;
-int ia = 0;
-int iRefg = 0, iRefr = 0, iRefb = 0;
+int sigR = 0, sigG = 0, sigB = 0;
+int sigA = 0;
 // false means color picker off
-bool mode = false;
+bool mode = true;
 CRGB leds[35];
 
 void change() {
-  mode = true;
+  mode = false;
 }
+
+void LCD_Show(int sigR, int sigG, int sigB, int sigA) {
+  lcd.setCursor(0,0);
+    lcd.print("R : ");
+    lcd.setCursor(4,0);
+    lcd.print(sigR, DEC);
+    if(sigR<10){
+      lcd.setCursor(5,0);
+      lcd.print("  ");
+    }
+    else if(sigR<100){
+      lcd.setCursor(6,0);
+      lcd.print(" ");
+    }
+    lcd.setCursor(7,0);
+    lcd.print(", G : ");
+    lcd.setCursor(13,0);
+    lcd.print(sigG, DEC);
+    if(sigG<10){
+      lcd.setCursor(14,0);
+      lcd.print("  ");
+    }
+    else if(sigG<100){
+      lcd.setCursor(15,0);
+      lcd.print(" ");
+    }
+    lcd.setCursor(0,1);
+    lcd.print("B : ");
+    lcd.setCursor(4,1);
+    lcd.print(sigB, DEC);
+    if(sigB<10){
+      lcd.setCursor(5,1);
+      lcd.print("  ");
+    }
+    else if(sigB<100){
+      lcd.setCursor(6,1);
+      lcd.print(" ");
+    }
+  }
+}
+
 void setup() {
+  LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x26, 16, 2); // Change to (0x27,20,4) for 20x4 LCD.
+  lcd.init();
+  lcd.backlight();
+  // Check LCD
+  lcd.setCursor(2, 0); // Set the cursor on the third column and first row.
+  lcd.print("ColorPicker"); // Print the string "Hello World!"
+  lcd.setCursor(2, 1); //Set the cursor on the third column and the second row (counting starts at 0!).
+  lcd.print("For Software");
+  delay(1000);
+  lcd.clear();
   // initialize leds
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, num_leds);
   for(int i=0;i<num_leds;i++){
@@ -31,6 +81,8 @@ void setup() {
   pinMode(A2,INPUT); // g
   pinMode(A4,INPUT); // r
   pinMode(A5,INPUT); // b
+  // Interrupt--Change Mode
+  attachInterrupt(digitalPinToInterrupt(interruptPin), change, CHANGE);
 }
 
 void loop() {
@@ -41,8 +93,16 @@ void loop() {
   }
   // 調色模式off
   else {
+    // read RGB and light them 
+    sigR = analogRead(A2)/4;
+    sigG = analogRead(A4)/4;
+    sigB = analogRead(A5)/4;
+    for(int i=0;i<NUM_LEDS;i++){
+      leds[i] = CRGB(sigR, sigG, sigB);
+      FastLED.show();
+    }
+    // show 
     
-  }
 
   
 }
