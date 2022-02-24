@@ -18,12 +18,19 @@ void change() {
   mode = true;
 }
 void setup() {
+  // initialize leds
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, num_leds);
   for(int i=0;i<num_leds;i++){
     leds[i] = CRGB::Black;
    }
   FastLED.show();
+  // initialize serial
   Serial.begin(9600);
+  // initialize knobs
+  pinMode(A1,INPUT); // a
+  pinMode(A2,INPUT); // g
+  pinMode(A4,INPUT); // r
+  pinMode(A5,INPUT); // b
 }
 
 void loop() {
