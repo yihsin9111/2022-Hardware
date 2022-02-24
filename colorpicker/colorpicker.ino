@@ -5,7 +5,7 @@
 #include "rgba_to_rgb.h"
 
 #define LED_DATA_PIN 11
-
+#define NUM_LEDS 30
 #define LED_ALPHA A1
 #define LED_GREEN A2
 #define LED_RED   A4
@@ -16,15 +16,19 @@
 #define OF_GREEN  A8
 #define OF_BLUE   A9
 
+#define ADDRESS 0x3f
+
 const byte interruptPin = 2;
 
-int num_leds = 30;
 // the grb that the user input
 int ledSigR = 0, ledSigG = 0, ledSigB = 0, ledSigA = 0;
 int ofSigR = 0, ofSigG = 0, ofSigB = 0, ofSigA = 0;
 // false means color picker off
 bool mode = true;
 CRGB leds[35];
+// lcd
+LiquidCrystal_I2C sLCD = LiquidCrystal_I2C(0x27, 20, 4); // Change to (0x27,20,4) for 20x4 LCD.
+LiquidCrystal_I2C hLCD = LiquidCrystal_I2C(0x26, 20, 4); // Change to (0x27,20,4) for 20x4 LCD.
 
 void change() {
   mode = !mode;
@@ -79,11 +83,9 @@ void LCD_Show(int ledR, int ledG, int ledB, float ledA, int ofR, int ofG, int of
 }
 
 void setup() {
-  LiquidCrystal_I2C sLCD = LiquidCrystal_I2C(0x27, 20, 4); // Change to (0x27,20,4) for 20x4 LCD.
-  LiquidCrystal_I2C hLCD = LiquidCrystal_I2C(0x26, 20, 4); // Change to (0x27,20,4) for 20x4 LCD.
   // initialize leds
-  FastLED.addLeds<NEOPIXEL, LED_DATA_PIN>(leds, num_leds);
-  for (int i = 0; i < num_leds; i++)
+  FastLED.addLeds<NEOPIXEL, LED_DATA_PIN>(leds, NUM_LEDS);
+  for (int i = 0; i < NUM_LEDS; i++)
   {
     leds[i] = CRGB::Black;
    }
