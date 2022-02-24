@@ -1,5 +1,6 @@
 #include <Wire.h> // Library for I2C communication
 #include <FastLED.h>
+#include <LiquidCrystal_I2C.h> // Library for LCD
 #include "gamma_correction.h"
 #include "rgba_to_rgb.h"
 
@@ -85,7 +86,7 @@ void setup() {
   for (int i = 0; i < num_leds; i++)
   {
     leds[i] = CRGB::Black;
-  }
+   }
   FastLED.show();
   // initialize serial
   Serial.begin(9600);
