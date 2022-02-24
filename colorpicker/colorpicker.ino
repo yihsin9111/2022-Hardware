@@ -78,19 +78,9 @@ void LCD_Show(int ledR, int ledG, int ledB, float ledA, int ofR, int ofG, int of
   sLCD.print(ofA);
 }
 
-
 void setup() {
   LiquidCrystal_I2C sLCD = LiquidCrystal_I2C(0x27, 20, 4); // Change to (0x27,20,4) for 20x4 LCD.
   LiquidCrystal_I2C hLCD = LiquidCrystal_I2C(0x26, 20, 4); // Change to (0x27,20,4) for 20x4 LCD.
-  lcd.init();
-  lcd.backlight();
-  // Check LCD
-  lcd.setCursor(2, 0); // Set the cursor on the third column and first row.
-  lcd.print("ColorPicker"); // Print the string "Hello World!"
-  lcd.setCursor(2, 1); //Set the cursor on the third column and the second row (counting starts at 0!).
-  lcd.print("For Software");
-  delay(1000);
-  lcd.clear();
   // initialize leds
   FastLED.addLeds<NEOPIXEL, LED_DATA_PIN>(leds, num_leds);
   for (int i = 0; i < num_leds; i++)
@@ -106,35 +96,85 @@ void setup() {
   pinMode(LED_RED,INPUT); // led r
   pinMode(LED_BLUE,INPUT); // led b
   
-  pinMode(OF_ALPHA, INPUT); //
+  pinMode(OF_ALPHA, INPUT); // of a
+  pinMode(OF_RED, INPUT);   //of r
+  pinMode(OF_GREEN, INPUT); //of g
+  pinMode(OF_BLUE, INPUT);  //of b
   
+  //Wire
+  Wire.begin();
   // Interrupt--Change Mode
   attachInterrupt(digitalPinToInterrupt(interruptPin), change, CHANGE);
 }
 
-void loop() {
+void loop()
+{
   // change grb to the actual grba we should feed into the leds
   // 調色模式on
   if (mode)
   {
-    float *color;
-    ledSigA = analogRead(A1) / 4;
-    ledSigG = analogRead(A2) / 4;
-    ledSigR = analogRead(A4) / 4;
-    ledSigB = analogRead(A5) / 4;
-    total = ledSigG + ledSigR + ledSigB;
+    float *LEDcolor;
+    int ledTotal;
+    ledSigA = analogRead(LED_ALPHA) / 4;
+    ledSigG = analogRead(LED_GREEN) / 4;
+    ledSigR = analogRead(LED_RED) / 4;
+    ledSigB = analogRead(LED_BLUE) / 4;
+    ledTotal = ledSigG + ledSigR + ledSigB;
 
-    ledSigG = ledSigG * 255 / total;
-    ledSigR = ledSigR * 255 / total;
-    ledSigB = ledSigB * 255 / total;
+    ledSigG = ledSigG * 255 / ledTotal;
+    ledSigR = ledSigR * 255 / ledTotal;
+    ledSigB = ledSigB * 255 / ledTotal;
     // color[0]:g color[1]:r color[2]:b
-    color = rgba_to_rgb(ledSigG, ledSigR, ledSigB, ledSigA, 200);
+    LEDcolor = LEDrgba_to_rgb(ledSigG, ledSigR, ledSigB, ledSigA, 200);
 
     for (int i = 0; i < NUM_LEDS; i++)
     {
-      leds[i] = CRGB((int)color[0], (int)color[1], (int)color[2]);
+      leds[i] = CRGB((int)LEDcolor[0], (int)LEDcolor[1], (int)LEDcolor[2]);
       FastLED.show();
     }
+
+    //OF data read
+    ofSigA = analogRead(OF_ALPHA)/4;
+    ofSigR = analogRead(OF_RED)/4;
+    ofSigG = analogRead(OF_GREEN)/4;
+    ofSigB = analogRead(OF_BLUE)/4;
+    
+    //OF data normalize
+    int ofTotal = 0;
+    ofTotal = ofSigR + ofSigG + ofSigB;
+    
+    ofSigR = ofSigR * 255/ofTotal;
+    ofSigG = ofSigG * 255/ofTotal;
+    ofSigB = ofSigB * 255/ofTotal;
+
+    //handle alpha
+    float *OFcolor = OFrgba_to_rgb(ofSigA);
+    //Set IREF
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x22);        // sends five bytes
+    Wire.write(ofSigR);              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x23);        // sends five bytes
+    Wire.write(ofSigG);              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x24);        // sends five bytes
+    Wire.write(ofSigB);              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x0a);        // sends five bytes
+    Wire.write(int(OFcolor[0]));              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x0b);        // sends five bytes
+    Wire.write(int(OFcolor[1]));              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x0c);        // sends five bytes
+    Wire.write(int(OFcolor[2]));              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+
   }
   // 調色模式off
   else {
@@ -146,6 +186,46 @@ void loop() {
       leds[i] = CRGB(ledSigR, ledSigG, ledSigB);
       FastLED.show();
     }
+
+    //OF data read
+    ofSigR = analogRead(OF_RED)/4;
+    ofSigG = analogRead(OF_GREEN)/4;
+    ofSigB = analogRead(OF_BLUE)/4;
+    
+    //OF data normalize
+    int ofTotal = 0;
+    ofTotal = ofSigR + ofSigG + ofSigB;
+    
+    ofSigR = ofSigR * 255/ofTotal;
+    ofSigG = ofSigG * 255/ofTotal;
+    ofSigB = ofSigB * 255/ofTotal;
+
+    //Set IREF
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x22);        // sends five bytes
+    Wire.write(ofSigR);              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x23);        // sends five bytes
+    Wire.write(ofSigG);              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x24);        // sends five bytes
+    Wire.write(ofSigB);              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x0a);        // sends five bytes
+    Wire.write(255);              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x0b);        // sends five bytes
+    Wire.write(255);              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+    Wire.beginTransmission(ADDRESS); // transmit to device
+    Wire.write(0x0c);        // sends five bytes
+    Wire.write(255);              // sends one byte
+    Wire.endTransmission();    // stop transmitting
+
     // show 
   }
   
