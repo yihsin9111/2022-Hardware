@@ -30,48 +30,58 @@ void change() {
   mode = !mode;
 }
 
-void LCD_Show(int sigR, int sigG, int sigB, int sigA) {
-  lcd.setCursor(0,0);
-  lcd.print("R : ");
-  lcd.setCursor(4,0);
-  lcd.print(sigR, DEC);
-  if(sigR<10){
-    lcd.setCursor(5,0);
-    lcd.print("  ");
+void Align(LiquidCrystal_I2C b, char type, int n) {
+  if(n >= 100) {
+    b.print(type);
+    b.print(n, DEC);
+    b.print(" ");
   }
-  else if(sigR<100){
-    lcd.setCursor(6,0);
-    lcd.print(" ");
+  else if(n >= 10) {
+    b.print(type);
+    b.print(" ");
+    b.print(n, DEC);
+    b.print(" ");    
   }
-  lcd.setCursor(7,0);
-  lcd.print(", G : ");
-  lcd.setCursor(13,0);
-  lcd.print(sigG, DEC);
-  if(sigG<10){
-    lcd.setCursor(14,0);
-    lcd.print("  ");
+  else {
+    b.print(type);
+    b.print("  ");
+    b.print(n, DEC); 
+    b.print(" ");     
   }
-  else if(sigG<100){
-    lcd.setCursor(15,0);
-    lcd.print(" ");
-  }
-  lcd.setCursor(0,1);
-  lcd.print("B : ");
-  lcd.setCursor(4,1);
-  lcd.print(sigB, DEC);
-  if(sigB<10){
-    lcd.setCursor(5,1);
-    lcd.print("  ");
-  }
-  else if(sigB<100){
-    lcd.setCursor(6,1);
-    lcd.print(" ");
-  }
+}
+
+float Round(float a) {
+  a *= 10;
+  a = round(a);
+  a /= 10;
+}
+
+void LCD_Show(int ledR, int ledG, int ledB, float ledA, int ofR, int ofG, int ofB, float ofA) {
+  sLCD.setCursor(0, 0);
+  sLCD.print("LED ");
+  Align(sLCD, 'R', ledR);
+  Align(sLCD, 'G', ledG);
+  Align(sLCD, 'B', ledB);
+  sLCD.setCursor(4, 1);
+  ledA = Round(ledA);
+  sLCD.print("A");
+  sLCD.print(ledA, DEC);
+  
+  sLCD.setCursor(0, 2);
+  sLCD.print("OF  ");
+  Align(sLCD, 'R', ofR);
+  Align(sLCD, 'G', ofG);
+  Align(sLCD, 'B', ofB);
+  sLCD.setCursor(4, 1);
+  ofA = Round(ofA);
+  sLCD.print("A");
+  sLCD.print(ofA);
 }
 
 
 void setup() {
-  LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x26, 16, 2); // Change to (0x27,20,4) for 20x4 LCD.
+  LiquidCrystal_I2C sLCD = LiquidCrystal_I2C(0x27, 20, 4); // Change to (0x27,20,4) for 20x4 LCD.
+  LiquidCrystal_I2C hLCD = LiquidCrystal_I2C(0x26, 20, 4); // Change to (0x27,20,4) for 20x4 LCD.
   lcd.init();
   lcd.backlight();
   // Check LCD
