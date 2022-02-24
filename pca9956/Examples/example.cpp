@@ -1,144 +1,59 @@
-#include <iostream>
+#include "../include/pca2022.h"
 #include <time.h>
-#include "../include/pca9956.h"
-#include "../include/pca9955.h"
 
-using namespace std;
+int OFs[156] = {
+    255, 255, 255, 80, 120, 55, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF0 
+    255, 255, 255, 80, 120, 55, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF1
+    255, 255, 255, 100, 100, 55, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF2
+    255, 255, 255, 100, 100, 55, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF3
+    255, 255, 255, 200, 55, 0, //...
+    255, 255, 255, 200, 55, 0, 
+    255, 255, 255, 0, 55, 200, 
+    255, 255, 255, 0, 55, 200, 
+    255, 255, 255, 55, 0, 200, 
+    255, 255, 255, 55, 0, 200, 
+    255, 255, 255, 200, 0, 55, 
+    255, 255, 255, 200, 0, 55, 
+    255, 255, 255, 170, 85, 0, 
+    255, 255, 255, 170, 85, 0, 
+    255, 255, 255, 85, 170, 0, 
+    255, 255, 255, 85, 170, 0, 
+    255, 255, 255, 170, 0, 85,
+    255, 255, 255, 170, 0, 85, 
+    255, 255, 255, 85, 0, 170,
+    255, 255, 255, 85, 0, 170,
+    255, 255, 255, 0, 170, 85,
+    255, 255, 255, 0, 170, 85,
+    255, 255, 255, 0, 85, 170,
+    255, 255, 255, 0, 85, 170,
+    255, 255, 255, 85, 85, 85, 
+    255, 255, 255, 85, 85, 85, // 26 OFs in total
+};
 
 int main(int argc, char* argv[]){
+    
+    PCA pca; // PCA init
 
-    //number of slaves
-    int n = 0, m = 0;
-    cout << "Usage :\nPlz enter the number of your PCA9956 slaves and that of your PCA9955 slaves respectively:\n";
-    cin >> n >> m;
-
-    //slave addr sequentially
-    PCA9956 *pca9956 = new PCA9956[n];
-    PCA9955 *pca9955 = new PCA9955[m];
-    if(n>0){
-	cout << "Plz enter the addresses of your PCA9956 slaves in decimal sequentially :\n" ;
-	cout << "In decimal plz!\n";
-    }
-    for(int i=0;i<n;i++){
-        int temp = 0;
-        cin >> temp;
-        pca9956[i] = PCA9956(temp);
-	if(pca9956[i].Getfd())cout << "Slave Init Success\n";
-	else {
-	    cout << "Slave Init Failed\n";
-	    i--;
-	}
-    }
-    if(m>0){
-	cout << "Plz enter the addresses of your PCA9955 slaves in decimal sequentially :\n" ;
-	cout << "In decimal plz!\n";
-    }
-    for(int i=0;i<m;i++){
-        int temp = 0;
-        cin >> temp;
-        pca9955[i] = PCA9955(temp);
-	if(pca9955[i].Getfd())cout << "Slave Init Success\n";
-	else {
-	    cout << "Slave Init Failed\n";
-	    i--;
-	}
-    }
+    clock_t init, clk;
+    int level = 255, decay = 1;
+	init = clock();
 
     while(1){
-
-        //Reset
-        int *IREF = new int [24];
-        int *PWM = new int [24];
-
-        for(int i=0;i<24;i++){
-            IREF[i] = 0;
-            PWM[i] = 0;
-        }
-        for(int i=0;i<n;i++){
-            pca9956[i].SetIREFAI(0, IREF, 24);
-            pca9956[i].SetPWMAI(0, PWM, 24);
-        }
-        for(int i=0;i<m;i++){
-            pca9955[i].SetIREFAI(0, IREF, 24);
-            pca9955[i].SetPWMAI(0, PWM, 24);
+        while((1000 * (clock() - init)) / CLOCKS_PER_SEC < 1000/30);
+        init = clock();
+        
+        for(int i=0;i<26;i++){
+            OFs[i*6]   = level;
+            OFs[i*6+1] = level;
+            OFs[i*6+2] = level;
         }
 
-        //choose one mode
-        char Mode;
-        cout << "Plz enter the OF mode you want :\n";
-        cout << "(B)Breath (C)ChooseOne (Q)Quit :\n";
-        cin >> Mode;
+        pca.Write(OFs); // PCA Write
 
-        if(Mode == 'B' || Mode == 'b'){
-            clock_t init, clk;
-            bool increase = true;
-            init = clock();
-            int bright = 0;
-            int *IREF = new int [24];
-            int *PWM = new int [24];
-
-            while(1){
-                clk = clock();
-                if((clk-init)%(1000/30) == 0){
-                    if(increase == true){
-                        bright+=1;
-                        if(bright == 30){
-                            increase = false;
-                        }
-                    }
-                    else if(increase == false){
-                        bright-=1;
-                        if(bright == 0){
-                            increase = true;
-                        }
-                    }
-
-                    for(int i=0;i<24;i++){
-                        IREF[i] = 255*bright/30;
-                        PWM[i] = 50;
-                    }
-                    for(int i=0;i<n;i++){
-                        pca9956[i].SetIREFAI(0, IREF, 24);
-                        pca9956[i].SetPWMAI(0, PWM, 24);
-                    }
-                    for(int i=0;i<m;i++){
-                        pca9955[i].SetIREFAI(0, IREF, 24);
-                        pca9955[i].SetPWMAI(0, PWM, 24);
-                    }
-
-                }
-            }
-        }else if(Mode == 'C' || Mode == 'c'){
-            cout << "Choose one led between 0 and " << (n+m)*8-1 << endl;
-            cout << "Usage : \n >> <channel> <R duty> <G duty> <B duty> <R iref> <G iref> <B iref>\n";
-            cout << "You may enter -1 to checkout all register values in PCAs\n";
-            int channel = 0, Rduty = 0, Gduty = 0, Bduty = 0, Riref = 0, Giref = 0, Biref = 0;
-            while(1){
-                
-                cin >> channel;
-                if(channel == -1){
-                    for(int i=0;i<n;i++){
-                        pca9956[i].GetAll();
-                    }
-                    for(int i=0;i<m;i++){
-                        pca9955[i].GetAll();
-                    }
-                }else{
-                    cin >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref ;
-                    if(channel >= n*8){
-                        channel -= n*8;
-                        cout << pca9955[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref) << endl;
-                    }else{
-		        cout << pca9956[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref) << endl;
-                    }
-		}
-
-            }
-
-            break;
-        }else if(Mode == 'Q' || Mode == 'q'){
-            break;
+        if(level <= 0 || level >= 255) {
+            decay -= (decay + decay);
         }
+        level -= decay;
     }
 
 }
