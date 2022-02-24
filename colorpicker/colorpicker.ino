@@ -3,18 +3,20 @@
 #include "gamma_correction.h"
 
 #define DATA_PIN 11
+const byte interruptPin = 2;
+
 int num_leds = 30;
 // the grb that the user input
-int ig = 0;
-int ir = 0;
-int ib = 0;
+int ig = 0, ir = 0, ib = 0;
 int ia = 0;
+int iRefg = 0, iRefr = 0, iRefb = 0;
+// false means color picker off
+bool mode = false;
 CRGB leds[35];
 
-Color_regulator reg_g(1.8);
-Color_regulator reg_r(1.6);
-Color_regulator reg_b(1.66);
-
+void change() {
+  mode = true;
+}
 void setup() {
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, num_leds);
   for(int i=0;i<num_leds;i++){
@@ -26,10 +28,14 @@ void setup() {
 
 void loop() {
   // change grb to the actual grba we should feed into the leds
-//  int g = reg_g.gamma_correction(ig);
-//  int r = reg_r.gamma_correction(ir);
-//  int b = reg_b.gamma_correction(ib);
-  
+  // 調色模式on
+  if(mode) {
+    
+  }
+  // 調色模式off
+  else {
+    
+  }
 
   
 }

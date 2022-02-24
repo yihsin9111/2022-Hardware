@@ -3,7 +3,7 @@
 #define MAX_BRIGHTNESS 200
 
 Color_regulator::Color_regulator(float g){
-  gamma=g;
+  gamma = g;
 }
 int Color_regulator::gamma_correction(float c)
 {
