@@ -24,9 +24,3 @@ float *rgba_to_rgb(float r, float g, float b, float a, int max_brightness)
 
   return color;
 };
-int main()
-{
-  float *color;
-  color = rgba_to_rgb(200, 200, 143, 0.3, 200);
-  cout << color[0] << " " << color[1] << " " << color[2];
-}
