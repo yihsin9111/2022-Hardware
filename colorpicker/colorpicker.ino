@@ -25,6 +25,11 @@ void setup() {
 }
 
 void loop() {
-  // change grb to the actual grba we should feed into 
-  int r = reg_g.gamma_correction(
+  // change grb to the actual grba we should feed into the leds
+//  int g = reg_g.gamma_correction(ig);
+//  int r = reg_r.gamma_correction(ir);
+//  int b = reg_b.gamma_correction(ib);
+  
+
+  
 }
