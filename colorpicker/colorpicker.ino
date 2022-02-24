@@ -34,7 +34,7 @@ void change() {
   mode = !mode;
 }
 
-void Align(LiquidCrystal_I2C b, char type, int n) {
+void Align(LiquidCrystal_I2C b, String type, int n) {
   if(n >= 100) {
     b.print(type);
     b.print(n, DEC);
@@ -60,7 +60,7 @@ float Round(float a) {
   a /= 10;
 }
 
-void LCD_Show(int ledR, int ledG, int ledB, float ledA, int ofR, int ofG, int ofB, float ofA) {
+void sLCD_Show(int ledR, int ledG, int ledB, float ledA, int ofR, int ofG, int ofB, float ofA) {
   sLCD.setCursor(0, 0);
   sLCD.print("LED ");
   Align(sLCD, 'R', ledR);
@@ -82,7 +82,41 @@ void LCD_Show(int ledR, int ledG, int ledB, float ledA, int ofR, int ofG, int of
   sLCD.print(ofA);
 }
 
+void hLCD_Show(int IR, int IG, int IB, int PR, int PG, int PB, int ledR, int ledG, int ledB) {
+  hLCD.setCursor(0, 0);
+  hLCD.print("LED ");
+  Align(hLCD, 'R', ledR);
+  Align(hLCD, 'G', ledG);
+  Align(hLCD, 'B', ledB);
+  hLCD.setCursor(0, 1); 
+  hLCD.print("OF ");   
+  Align(hLCD, "IR", IR);
+  Align(hLCD, "IG", IG);
+  Align(hLCD, "IB", IB);
+  hLCD.setCursor(3, 2); 
+  Align(hLCD, "PR", PR);
+  Align(hLCD, "PG", PG);
+  Align(hLCD, "PB", PB);
+}
+
 void setup() {
+  // Initialize the LCDs:
+  slcd.init();
+  slcd.backlight();
+  slcd.setCursor(2, 0); //Set the cursor on the third column and the second row (counting starts at 0!).
+  slcd.print("Mode: Color Picking");
+  slcd.setCursor(2, 1); //Set the cursor on the third column and the second row (counting starts at 0!).
+  slcd.print("for software team");  
+  delay(1000);
+  slcd.clear();
+  hlcd.init();
+  hlcd.backlight();
+  hlcd.setCursor(2, 0); //Set the cursor on the third column and the second row (counting starts at 0!).
+  hlcd.print("Mode: Color Picking");
+  hlcd.setCursor(2, 1); //Set the cursor on the third column and the second row (counting starts at 0!).
+  hlcd.print("for hardware team");  
+  delay(1000);
+  hlcd.clear();
   // initialize leds
   FastLED.addLeds<NEOPIXEL, LED_DATA_PIN>(leds, NUM_LEDS);
   for (int i = 0; i < NUM_LEDS; i++)
