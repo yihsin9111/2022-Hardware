@@ -63,9 +63,9 @@ float Round(float a) {
 void sLCD_Show(int ledR, int ledG, int ledB, float ledA, int ofR, int ofG, int ofB, float ofA) {
   sLCD.setCursor(0, 0);
   sLCD.print("LED ");
-  Align(sLCD, 'R', ledR);
-  Align(sLCD, 'G', ledG);
-  Align(sLCD, 'B', ledB);
+  Align(sLCD, "R", ledR);
+  Align(sLCD, "G", ledG);
+  Align(sLCD, "B", ledB);
   sLCD.setCursor(4, 1);
   ledA = Round(ledA);
   sLCD.print("A");
@@ -73,9 +73,9 @@ void sLCD_Show(int ledR, int ledG, int ledB, float ledA, int ofR, int ofG, int o
   
   sLCD.setCursor(0, 2);
   sLCD.print("OF  ");
-  Align(sLCD, 'R', ofR);
-  Align(sLCD, 'G', ofG);
-  Align(sLCD, 'B', ofB);
+  Align(sLCD, "R", ofR);
+  Align(sLCD, "G", ofG);
+  Align(sLCD, "B", ofB);
   sLCD.setCursor(4, 1);
   ofA = Round(ofA);
   sLCD.print("A");
@@ -85,9 +85,9 @@ void sLCD_Show(int ledR, int ledG, int ledB, float ledA, int ofR, int ofG, int o
 void hLCD_Show(int IR, int IG, int IB, int PR, int PG, int PB, int ledR, int ledG, int ledB) {
   hLCD.setCursor(0, 0);
   hLCD.print("LED ");
-  Align(hLCD, 'R', ledR);
-  Align(hLCD, 'G', ledG);
-  Align(hLCD, 'B', ledB);
+  Align(hLCD, "R", ledR);
+  Align(hLCD, "G", ledG);
+  Align(hLCD, "B", ledB);
   hLCD.setCursor(0, 1); 
   hLCD.print("OF ");   
   Align(hLCD, "IR", IR);
@@ -101,22 +101,22 @@ void hLCD_Show(int IR, int IG, int IB, int PR, int PG, int PB, int ledR, int led
 
 void setup() {
   // Initialize the LCDs:
-  slcd.init();
-  slcd.backlight();
-  slcd.setCursor(2, 0); //Set the cursor on the third column and the second row (counting starts at 0!).
-  slcd.print("Mode: Color Picking");
-  slcd.setCursor(2, 1); //Set the cursor on the third column and the second row (counting starts at 0!).
-  slcd.print("for software team");  
+  sLCD.init();
+  sLCD.backlight();
+  sLCD.setCursor(2, 0); //Set the cursor on the third column and the second row (counting starts at 0!).
+  sLCD.print("Mode: Color Picking");
+  sLCD.setCursor(2, 1); //Set the cursor on the third column and the second row (counting starts at 0!).
+  sLCD.print("for software team");  
   delay(1000);
-  slcd.clear();
-  hlcd.init();
-  hlcd.backlight();
-  hlcd.setCursor(2, 0); //Set the cursor on the third column and the second row (counting starts at 0!).
-  hlcd.print("Mode: Color Picking");
-  hlcd.setCursor(2, 1); //Set the cursor on the third column and the second row (counting starts at 0!).
-  hlcd.print("for hardware team");  
+  sLCD.clear();
+  hLCD.init();
+  hLCD.backlight();
+  hLCD.setCursor(2, 0); //Set the cursor on the third column and the second row (counting starts at 0!).
+  hLCD.print("Mode: Color Picking");
+  hLCD.setCursor(2, 1); //Set the cursor on the third column and the second row (counting starts at 0!).
+  hLCD.print("for hardware team");  
   delay(1000);
-  hlcd.clear();
+  hLCD.clear();
   // initialize leds
   FastLED.addLeds<NEOPIXEL, LED_DATA_PIN>(leds, NUM_LEDS);
   for (int i = 0; i < NUM_LEDS; i++)
