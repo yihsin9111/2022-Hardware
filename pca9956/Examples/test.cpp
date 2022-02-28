@@ -131,7 +131,7 @@ int main(int argc, char* argv[]){
                     }else{
 		        cout << pca9956[channel/8].SetRGB(channel%8, Rduty, Gduty, Bduty, Riref, Giref, Biref) << endl;
                     }
-		}
+		        }
 
             }
 
