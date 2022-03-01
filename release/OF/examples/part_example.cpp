@@ -36,7 +36,7 @@ int OFs[156] = {
 int main(int argc, char* argv[]){
 
     int *channelOrder = new int [26];
-    for(int i=0;i<26;i++)channelOrder[i] = i+1;
+    for(int i=0;i<26;i++)channelOrder[i] = i;
     
     int **pcaTypeAddr = new int* [4];
     

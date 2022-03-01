@@ -17,13 +17,13 @@ PCA::PCA(int *channelOrder, int **pcaTypeAddr):channelOrder(channelOrder){
 int PCA::Write(int *data){
 
     for(int i = 0; i < 6; i++){
-        if(channelOrder[i] != i+1){
-            data[(channelOrder[i]-1)*6] = data[i*6];
-            data[(channelOrder[i]-1)*6+1] = data[i*6+1];
-            data[(channelOrder[i]-1)*6+2] = data[i*6+2];
-            data[(channelOrder[i]-1)*6+3] = data[i*6+3];
-            data[(channelOrder[i]-1)*6+4] = data[i*6+4];
-            data[(channelOrder[i]-1)*6+5] = data[i*6+5];
+        if(channelOrder[i] != i){
+            data[channelOrder[i]*6] = data[i*6];
+            data[channelOrder[i]*6+1] = data[i*6+1];
+            data[channelOrder[i]*6+2] = data[i*6+2];
+            data[channelOrder[i]*6+3] = data[i*6+3];
+            data[channelOrder[i]*6+4] = data[i*6+4];
+            data[channelOrder[i]*6+5] = data[i*6+5];
         }
     }
 
