@@ -55,14 +55,14 @@ int main(int argc, char* argv[]){
 
     PCA pca(channelOrder, pcaTypeAddr); // PCA init
 
-    int channel = 0;
+    int channel = 0, newChannel = 0;
 
     int input;
     while(input = getchar()){
         input = getchar();
         switch (input){
-            case 75 : // left
-                int newChannel = channel-1;
+            case 75 : {// left
+                newChannel = channel-1;
                 if(newChannel < 0)newChannel += 26;
                 for(int i=0;i<6;i++){
                     OFs[newChannel*6+i] = OFs[channel*6+i];
@@ -70,8 +70,9 @@ int main(int argc, char* argv[]){
                 }
                 channel = newChannel;
                 break;
-            case 77 : // right
-                int newChannel = channel+1;
+            }
+            case 77 : {// right
+                newChannel = channel+1;
                 if(newChannel > 25)newChannel -= 26;
                 for(int i=0;i<6;i++){
                     OFs[newChannel*6+i] = OFs[channel*6+i];
@@ -79,8 +80,10 @@ int main(int argc, char* argv[]){
                 }
                 channel = newChannel;
                 break;
-            default:
+            }
+            default:{
                 break;
+            }
         }
         pca.Write(OFs);
     }
