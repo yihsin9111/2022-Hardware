@@ -33,8 +33,26 @@ int OFs[156] = {
 };
 
 int main(int argc, char* argv[]){
+
+    int *channelOrder = new int [26];
+    for(int i=0;i<26;i++)channelOrder[i] = i+1;
     
-    PCA pca; // PCA init
+    int **pcaTypeAddr = new int* [4];
+    
+    pcaTypeAddr[0] = new int[2];
+    pcaTypeAddr[0][0] = 9955;
+    pcaTypeAddr[0][1] = 0x3f;
+    pcaTypeAddr[1] = new int[2];
+    pcaTypeAddr[1][0] = 9955;
+    pcaTypeAddr[1][1] = 0x2b;
+    pcaTypeAddr[2] = new int[2];
+    pcaTypeAddr[2][0] = 9956;
+    pcaTypeAddr[2][1] = 0x56;
+    pcaTypeAddr[3] = new int[2];
+    pcaTypeAddr[3][0] = 9956;
+    pcaTypeAddr[3][1] = 0x32;
+
+    PCA pca(channelOrder, pcaTypeAddr); // PCA init
 
     clock_t init, clk;
     int level = 200, decay = 1;
