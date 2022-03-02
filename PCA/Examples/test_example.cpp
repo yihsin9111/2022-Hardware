@@ -108,7 +108,7 @@ int main(int argc, char* argv[]){
                 if(channel == -1){
                     break;
                 }else if(channel == -2){
-		    
+		    pca.Read();
 		    break;
 		}else{
                     cin >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref ;
