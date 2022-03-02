@@ -34,8 +34,8 @@ Please follow the instructions below to install the lastest version of the libra
 7. Wait for stm32 to deal with the data by stopping the program, calling `usleep(27 * 1000);`.  
 
 ## OF
-1. Declare an array of the order of channel as `int [26]`, which is the array `channelOrder` in line 37 in `./OF/src/30fps_example.cpp`. You may change the order if there're bugs in some channels.
-2. Declare an 2 dimensional array of pca types and addresses, which is the array `pcaTypeAddr` in `./OF/src/30fps_example.cpp`.
-3. Init PCAs by calling `PCA pca(channelOrder, pcaTypeAddr);` as line 55 in `./OF/src/30fps_example.cpp`. 
-4. Declare color data as `int[]`, which is `OFs` in `./OF/src/30fps_example.cpp`. The size of the color data should be a constant value `156`.
+1. Declare an array of the order of channel as `int [26]`, which is the array `channelOrder` in line 37 in `./OF/example/example.cpp`. You may change the order if there're bugs in some channels.
+2. Declare an 2 dimensional array of pca types and addresses, which is the array `pcaTypeAddr` in `./OF/example/example.cpp`.
+3. Init PCAs by calling `PCA pca(channelOrder, pcaTypeAddr);` as line 55 in `./OF/example/example.cpp`. 
+4. Declare color data as `int[]`, which is `OFs` in `./OF/example/example.cpp`. The size of the color data should be a constant value `156`.
 5. After set up color data, you can write the data to PCAs by calling `pca.Write(OFs)` by passing the pointer of the data you just declare.

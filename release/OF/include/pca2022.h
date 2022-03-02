@@ -13,17 +13,16 @@
 #include "./pca9955.h"
 
 class LinkedList;
-
-class PCA{
+class PCAnode;
+class LinkedList{
     public:
-        PCA(int *channelOrder, int **pcaTypeAddr);
+        LinkedList():first(nullptr){};
 
-        int Write(int *data);
-    private:
-        LinkedList PCAs;
-        int *channelOrder;
+        void Add(int PCA_ADDR, bool IsPCA9956);
+        
+        PCAnode *first;
+
 };
-
 class PCAnode{
     public:
         
@@ -36,15 +35,20 @@ class PCAnode{
 
         friend class LinkedList;
 };
-
-class LinkedList{
+class PCA{
     public:
-        LinkedList():first(nullptr){};
-
-        void Add(int PCA_ADDR, bool IsPCA9956);
-        
-        PCAnode *first;
-
+        PCA(int *channelOrder, int **pcaTypeAddr);
+	
+	void Debug();
+        int Write(int *data);
+	void Read();
+    private:
+        LinkedList PCAs;
+        int *channelOrder;
 };
+
+
+
+
 
 #endif /* PCA2022_H */
