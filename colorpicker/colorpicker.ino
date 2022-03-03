@@ -31,6 +31,7 @@ LiquidCrystal_I2C sLCD = LiquidCrystal_I2C(0x27, 20, 4); // Change to (0x27,20,4
 LiquidCrystal_I2C hLCD = LiquidCrystal_I2C(0x26, 20, 4); // Change to (0x27,20,4) for 20x4 LCD.
 
 void change() {
+  
   mode = !mode;
 }
 
@@ -154,11 +155,11 @@ void setup() {
   // Interrupt--Change Mode
   attachInterrupt(digitalPinToInterrupt(interruptPin), change, CHANGE);
 
-  Serial.begin(9600);
 }
 
 void loop()
 {
+  Serial.print(digitalRead(interruptPin));
   // change grb to the actual grba we should feed into the leds
   // 調色模式on
   if (mode)
@@ -180,7 +181,7 @@ void loop()
 //    Serial.print(int(ledSigG));
 //    Serial.print(' ');
 //    Serial.println(int(ledSigB));
-    LEDcolor = LEDrgba_to_rgb(ledSigG, ledSigR, ledSigB, ledSigA, 200);
+    LEDcolor = LEDrgba_to_rgb(ledSigR, ledSigG, ledSigB, ledSigA, 255);
 
     for (int i = 0; i < NUM_LEDS; i++)
     {
@@ -242,9 +243,9 @@ void loop()
   // 調色模式off
   else {
     // read RGB and light them 
-    ledSigR = analogRead(A2)/4;
-    ledSigG = analogRead(A4)/4;
-    ledSigB = analogRead(A5)/4;
+    ledSigR = analogRead(LED_RED)/4;
+    ledSigG = analogRead(LED_GREEN)/4;
+    ledSigB = analogRead(LED_BLUE)/4;
     for(int i=0;i<NUM_LEDS;i++){
       leds[i] = CRGB(ledSigR, ledSigG, ledSigB);
       FastLED.show();
