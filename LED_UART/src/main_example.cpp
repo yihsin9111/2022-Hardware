@@ -6,7 +6,7 @@
 using namespace std;
 double wait = 0.005;
 // vector<uint16_t> nLeds{18, 69, 3, 8, 0, 0, 0, 0, 19, 11, 8, 9}; // no longer than 16
-vector<uint16_t> nLeds{100, 30, 30, 35, 35, 26, 26, 47, 47};
+vector<uint16_t> nLeds;
 vector< vector<char> > buf;
 
 const uint8_t rainbow[360] = {
@@ -84,8 +84,7 @@ void breathe(int max, int min) {
     }
 }
 
-void breathe_beta(int max, int min,float g,float r,float b, int fps = 30){
-    
+void breathe_beta(int max, int min,float r,float g,float b, int fps = 30){
     int decay = -1;
     int level = max;
 
@@ -117,7 +116,6 @@ void breathe_beta(int max, int min,float g,float r,float b, int fps = 30){
           }
           // if(i==0&&j==0)
           // cout<<"g: "<<level*0.8<<" "<<(int)buf[0][0]<<"  r: "<<level<<" "<<(int)buf[0][1]<<'\n';
-
 	    }
 	}
 	strips.sendToStrip(buf);
@@ -200,7 +198,7 @@ void rainbow_shine_beta(int fps = 30) {
     int angle = 0;
     clock_t init = clock();
 
-    while(1){
+  while(1){
 	while( (1000 * (clock() - init)) / CLOCKS_PER_SEC < 1000/fps);
 	init = clock();
 
@@ -214,7 +212,7 @@ void rainbow_shine_beta(int fps = 30) {
 	++angle;
 	angle = angle % 360;
 	strips.sendToStrip(buf);
-    }
+  }
 }
 
 void part_test(float rate){  //rate = LED shining period
@@ -266,20 +264,23 @@ void test_color(){
   cout<<"\nplease choose your testing mode.A for rgba;B for rgb: ";
   cin>>mode;
   if(mode=='a'||mode=='A'){
+    float* temp=new float[3];
     cout<<"\nplease enter the color(HEX) in the order of R G B & alpha (ex:0xfffabf 8): ";
-    cin>>color>>alpha;
-    r=color/256;
-    color-=r*256;
-    g=color/16;
-    color-=g*16;
+    cin>>hex>>color>>alpha;
+    r=color/65536;
+    color-=r*65536;
+    g=color/256;
+    color-=g*256;
     b=color;
-    rgba_to_rgb(r,g,b,alpha);
+    cout<<r<<" "<<g<<" "<<b<<" "<<alpha<<endl;
+    temp=rgba_to_rgb(r,g,b,alpha);
+    cout<<temp[0]<<" "<<temp[1]<<" "<<temp[2]<<endl;
     for(int i=0;i<nLeds.size();++i){
       for (int j = 0; j < nLeds[i]; ++j){
         if(i==channel){
-          buf[i][3*j  ] = reg_g.gamma_correction(g); // g
-          buf[i][3*j+1] = reg_r.gamma_correction(r); // r
-          buf[i][3*j+2] = reg_b.gamma_correction(b); // b
+          buf[i][3*j  ] = reg_g.gamma_correction(temp[1]); // g
+          buf[i][3*j+1] = reg_r.gamma_correction(temp[0]); // r
+          buf[i][3*j+2] = reg_b.gamma_correction(temp[2]); // b
         }
         else{
           buf[i][3*j  ] = 0; // g
@@ -292,12 +293,14 @@ void test_color(){
   }
   else if(mode=='b'||mode=='B'){
     cout<<"\nplease enter the color(HEX) in the order of R G B (ex:0xff12a3): ";
-    cin>>color;
-    r=(int)(color/256);
-    color-=r*256;
-    g=(int)color/16;
-    color-=g*16;
+    cin>>hex>>color;
+    cout<<hex<<color<<endl;
+    r=(int)(color/65536);
+    color-=r*65536;
+    g=(int)color/256;
+    color-=g*256;
     b=(int)color;
+    cout<<hex<<r<<" "<<hex<<g<<" "<<hex<<b<<" ";
     for(int i=0;i<nLeds.size();++i){
       for (int j = 0; j < nLeds[i]; ++j){
         if(i==channel){
@@ -315,37 +318,21 @@ void test_color(){
     strips.sendToStrip(buf);
   }
 }
-int main(){
+int main(int argc,char* argv[]){
+  nLeds={60, 60, 60, 60, 60,20,20,20, 19, 11, 8, 9};//change the numbers of lights here
   strips.initialize(nLeds);
 	buf.resize(nLeds.size());
 	for(int i = 0; i < nLeds.size(); ++i){
 		buf[i].resize(nLeds[i] * 3, (char)0);
 	}
-  
-  // while(true) {
-  //   for (int i = 0; i < nLeds.size(); ++i) { 
-	// 		for (int j = 0; j < nLeds[i]; ++j){
-  //       if(j > 50) {
-  //         buf[i][3*j  ] = 12;
-  //         buf[i][3*j+1] = 0;
-  //         buf[i][3*j+2] = 0;
-  //       }
-  //       else {
-  //         buf[i][3*j  ] = 100;
-  //         buf[i][3*j+1] = 0;
-  //         buf[i][3*j+2] = 0;
-  //       }
-	// 		}
-	// 	}
-	// 	strips.sendToStrip(buf);
-	// 	usleep(300 * 1000);
   // breath, brightness maximum and minimum(0-255) ,g,r,b(0-1)
-  //breathe_beta(200,0,0.7,0.4,0.3);
+  //breathe_beta(100,0,0.3,0.7,0.4);
+  test_color();
   //part_test(0.5);
   //off_example();
   // each strip has its own color, set the brightness(0-255)
   // test(12);
-  rainbow_shine_beta(40); // max 40
+  //rainbow_shine_beta(40); // max 40
 
 }
 

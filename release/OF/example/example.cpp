@@ -1,8 +1,9 @@
 #include "../include/pca2022.h"
-#include <time.h>
-#include <iostream>
-using namespace std;
+#include "../include/OFrgba_to_rgb.h"
 
+using namespace std;
+// 26(channel) * 6(PWM&iref)
+// 備用channel 6個值都填上0
 int OFs[156] = {
     255, 255, 255, 80, 70, 55, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF0 
     255, 255, 255, 80, 70, 55, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF1
@@ -36,6 +37,8 @@ int main(int argc, char* argv[]){
 
     int *channelOrder = new int [26];
     for(int i=0;i<26;i++)channelOrder[i] = i;
+    //index 對應 OFs(上面的陣列) 第幾行
+    //存的值表示編號多少的光纖(channel)要吃data
     
     int **pcaTypeAddr = new int* [4];
     
