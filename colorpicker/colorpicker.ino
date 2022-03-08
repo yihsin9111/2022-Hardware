@@ -260,9 +260,9 @@ void loop()
     int ofTotal = 0;
     ofTotal = ofSigR + ofSigG + ofSigB;
     
-    ofSigR = ofSigR * 255/ofTotal;
-    ofSigG = ofSigG * 255/ofTotal;
-    ofSigB = ofSigB * 255/ofTotal;
+    ofSigR = ofSigR * 0.8;
+    ofSigG = ofSigG * 0.8;
+    ofSigB = ofSigB * 0.8;
 
     //Set IREF
     Wire.beginTransmission(ADDRESS); // transmit to device
