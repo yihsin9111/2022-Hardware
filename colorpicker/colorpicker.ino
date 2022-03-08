@@ -181,7 +181,7 @@ void loop()
 //    Serial.print(int(ledSigG));
 //    Serial.print(' ');
 //    Serial.println(int(ledSigB));
-    LEDcolor = LEDrgba_to_rgb(ledSigR, ledSigG, ledSigB, ledSigA, 255);
+    LEDcolor = LEDrgba_to_rgb(ledSigR, ledSigG, ledSigB, ledSigA);
 
     for (int i = 0; i < NUM_LEDS; i++)
     {

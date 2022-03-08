@@ -3,7 +3,7 @@
 #define gamma_g 1.8
 #define gamma_b 1.66
 
-float *LEDrgba_to_rgb(float r, float g, float b, float a, int max_brightness)
+float *LEDrgba_to_rgb(float r, float g, float b, float a, int max_brightness=170)
 {
   float *color = new float[3];
   a/=170;
