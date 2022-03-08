@@ -18,6 +18,7 @@ int main() {
     // resize buf to a (number of strips)*(number of leds of the strip)*3 vector
     nLeds={60, 60, 60, 60, 60,60};//change the numbers of lights here
     strips.initialize(nLeds);
+    
 	buf.resize(nLeds.size());
 	for(int i = 0; i < nLeds.size(); ++i){
 		buf[i].resize(nLeds[i] * 3, (char)0);
