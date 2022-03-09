@@ -16,7 +16,7 @@ PCA::PCA(int *channelOrder, int **pcaTypeAddr):channelOrder(channelOrder){
 
 int PCA::Write(int *data){
 
-    for(int i = 0; i < 6; i++){
+    for(int i = 0; i < 26; i++){
         if(channelOrder[i] != i){
             data[channelOrder[i]*6] = data[i*6];
             data[channelOrder[i]*6+1] = data[i*6+1];
