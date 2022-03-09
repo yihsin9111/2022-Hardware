@@ -16,7 +16,7 @@ PCA::PCA() {
             PCAs.Add(pcaTypeAddr[i][1], true);
 };
 
-int PCA::Write(std::vector<std::vector<char> > &data) {
+int PCA::Write(std::vector<std::vector<unsigned char> > &data) {
     if (data.size() != 26)
         return 1;
 

@@ -40,7 +40,7 @@ class PCA {
     PCA();
 
     void Debug();
-    int Write(std::vector<std::vector<char> > &);
+    int Write(std::vector<std::vector<unsigned char> > &);
     void Read();
 
    private:
