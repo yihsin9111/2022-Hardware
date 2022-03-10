@@ -1,5 +1,5 @@
 /****************************************************************************
-  FileName     [ pca2022.h ]
+  FileName     [ pca.h ]
   PackageName  [ clientApp ]
   Synopsis     [  ]
   Author       [ Ken Chung ]
@@ -9,8 +9,8 @@
 //----------------------------------------------------------------------
 //    Global
 //----------------------------------------------------------------------
-#ifndef PCA2022_H
-#define PCA2022_H
+#ifndef PCA_H
+#define PCA_H
 
 #include <vector>
 
@@ -51,12 +51,12 @@ class PCA {
    public:
     PCA();
 
-    int WriteAll(std::vector<std::vector<unsigned char> > &data);
-    int WriteChannel(std::vector<unsigned char> &data, int channel);
+    int WriteAll(std::vector<std::vector<char> > &data);
+    int WriteChannel(std::vector<char> &data, int channel);
     void Read();
 
    private:
     LinkedList PCAs;
 };
 
-#endif /* PCA2022_H */
+#endif /* PCA */
