@@ -11,8 +11,8 @@
 
 #include <iostream>
 
-#include "../../../WiringPi/wiringPi/wiringPi.h"
-#include "../../../WiringPi/wiringPi/wiringPiI2C.h"
+#include "../../../../WiringPi/wiringPi/wiringPi.h"
+#include "../../../../WiringPi/wiringPi/wiringPiI2C.h"
 
 using namespace std;
 
