@@ -6,7 +6,13 @@ main:
 	g++ -O2 -c ../include/OFrgba_to_rgbiref.h -o ../obj/OFrgba_to_rgbiref.o
 	g++ -O2 -c ../src/gamma_correction.cpp -o ../obj/gamma_correction.o
 	g++ -O2 -c 30fps_example.cpp -o ../obj/30fps_example.o -lwiringPi -lwiringPiDev
+	g++ -O2 -c part_example.cpp -o ../obj/part_example.o -lwiringPi -lwiringPiDev
+	g++ -O2 -c off_example.cpp -o ../obj/off_example.o -lwiringPi -lwiringPiDev
+	g++ -O2 -c test_example.cpp -o ../obj/test_example.o -lwiringPi -lwiringPiDev
 	g++ -O2 ../obj/pca.o ../obj/pca9956.o ../obj/pca9955.o ../obj/30fps_example.o -o ../bin/30fps_example -lwiringPi -l wiringPiDev
+	g++ -O2 ../obj/pca.o ../obj/pca9956.o ../obj/pca9955.o ../obj/part_example.o -o ../bin/part_example -lwiringPi -l wiringPiDev
+	g++ -O2 ../obj/pca.o ../obj/pca9956.o ../obj/pca9955.o ../obj/off_example.o -o ../bin/off_example -lwiringPi -l wiringPiDev
+	g++ -O2 ../obj/pca.o ../obj/pca9956.o ../obj/pca9955.o ../obj/test_example.o -o ../bin/test_example -lwiringPi -l wiringPiDev
 	
 clean:
 	rm -rf ../obj/*.o
