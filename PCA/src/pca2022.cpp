@@ -3,58 +3,93 @@
 #include <iostream>
 #include <vector>
 
-#include "../include/definition.h"
 #include "../include/pca9955.h"
 #include "../include/pca9956.h"
+#include "../include/pcaDefinition.h"
 using namespace std;
 
 PCA::PCA() {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < NUM_PCA; i++)
         if (pcaTypeAddr[i][0] == _PCA9955B)
             PCAs.Add(pcaTypeAddr[i][1], false);
         else
             PCAs.Add(pcaTypeAddr[i][1], true);
 };
 
-int PCA::Write(std::vector<std::vector<unsigned char> > &data) {
-    if (data.size() != 26)
+int PCA::WriteAll(std::vector<std::vector<unsigned char>> &data) {
+    // check for length of data, it needs NUM_OF(26, in pcaDefinition.h) channels for OFs
+    if (data.size() != NUM_OF)
         return 1;
 
     int leds = 0;
     PCAnode *current = PCAs.first;
     while (current != nullptr) {
         if (current->pca9955 != nullptr) {
-            int pcaData[30] = {0};
-            for (int i = 0; i < 5; i++) {
-                if (data[i + leds].size() != 6)
+            int pcaData[NUM_TOTAL_DATA_TO_PCA9955B] = {0};
+            for (int i = 0; i < NUM_CHANNEL_FROM_PCA9955B; i++) {
+                // check for length of each channel data, it needs NUM_AN_OF_NEED_DATA(6, in pcaDefinition.h) datas for an OF
+                if (data[i + leds].size() != NUM_AN_OF_NEED_DATA)
                     return -1;
-                pcaData[i * 3] = data[(i + leds)][0];
-                pcaData[i * 3 + 1] = data[(i + leds)][1];
-                pcaData[i * 3 + 2] = data[(i + leds)][2];
-                pcaData[i * 3 + 15] = data[(i + leds)][3];
-                pcaData[i * 3 + 1 + 15] = data[(i + leds)][4];
-                pcaData[i * 3 + 2 + 15] = data[(i + leds)][5];
+                // data from software would be 26 channels * 6 datas per channel
+                // however, data form need to send to an PCA would be :
+                // NUM_CHANNEL_FROM_PCA9955B(5, in pcaDefinition.h) * 3 pwm datas per channel
+                // and followed by
+                // NUM_CHANNEL_FROM_PCA9955B(5, in pcaDefinition.h) * 3 iref datas per channel
+                // Therefore, we need to transform data form right here
+                //
+                // { {led01PwmR, led01PwmG, led01PwmB, led01IrefR, led01IrefG, led01IrefB},          {led01PwmR, led01PwmG, led01PwmB, led02PwmR, led02PwmG, led02PwmB,
+                //   {led02PwmR, led02PwmG, led02PwmB, led02IrefR, led02IrefG, led02IrefB},       \   led03PwmR, led03PwmG, led03PwmB, led04PwmR, led04PwmG, led04PwmB,
+                //   {led03PwmR, led03PwmG, led03PwmB, led03IrefR, led03IrefG, led03IrefB},    --- \  led05PwmR, led05PwmG, led05PwmB, led06PwmR, led06PwmG, led06PwmB, ...
+                //   {led04PwmR, led04PwmG, led04PwmB, led04IrefR, led04IrefG, led04IrefB},    --- /  led01IrefR, led01IrefG, led01IrefB, led02IrefR, led02IrefG, led02IrefB,
+                //   {led05PwmR, led05PwmG, led05PwmB, led05IrefR, led05IrefG, led05IrefB},       /   led03IrefR, led03IrefG, led03IrefB, led04IrefR, led04IrefG, led04IrefB,
+                //   {led06PwmR, led06PwmG, led06PwmB, led06IrefR, led06IrefG, led06IrefB}, }         led05IrefR, led05IrefG, led05IrefB, led06IrefR, led06IrefG, led06IrefB, ... }
+                pcaData[i * NUM_AN_OF_NEED_PWM] = data[(i + leds)][0];
+                pcaData[i * NUM_AN_OF_NEED_PWM + 1] = data[(i + leds)][1];
+                pcaData[i * NUM_AN_OF_NEED_PWM + 2] = data[(i + leds)][2];
+                pcaData[i * NUM_AN_OF_NEED_IREF + NUM_PWM_DATA_TO_PCA9955B] = data[(i + leds)][3];
+                pcaData[i * NUM_AN_OF_NEED_IREF + NUM_PWM_DATA_TO_PCA9955B + 1] = data[(i + leds)][4];
+                pcaData[i * NUM_AN_OF_NEED_IREF + NUM_PWM_DATA_TO_PCA9955B + 2] = data[(i + leds)][5];
             }
-            leds += 5;
+            leds += NUM_CHANNEL_FROM_PCA9955B;
             current->pca9955[0].SetPWMIREFAI(pcaData);
         } else {
-            int pcaData[48] = {0};
-            for (int i = 0; i < 8; i++) {
-                if (data[i + leds].size() != 6)
+            int pcaData[NUM_TOTAL_DATA_TO_PCA9956] = {0};
+            for (int i = 0; i < NUM_CHANNEL_FROM_PCA9956; i++) {
+                // check for length of each channel data, it needs NUM_AN_OF_NEED_DATA(6, in pcaDefinition.h) datas for an OF
+                if (data[i + leds].size() != NUM_AN_OF_NEED_DATA)
                     return -1;
-                pcaData[i * 3] = data[(i + leds)][0];
-                pcaData[i * 3 + 1] = data[(i + leds)][1];
-                pcaData[i * 3 + 2] = data[(i + leds)][2];
-                pcaData[i * 3 + 24] = data[(i + leds)][3];
-                pcaData[i * 3 + 1 + 24] = data[(i + leds)][4];
-                pcaData[i * 3 + 2 + 24] = data[(i + leds)][5];
+                pcaData[i * NUM_AN_OF_NEED_PWM] = data[(i + leds)][0];
+                pcaData[i * NUM_AN_OF_NEED_PWM + 1] = data[(i + leds)][1];
+                pcaData[i * NUM_AN_OF_NEED_PWM + 2] = data[(i + leds)][2];
+                pcaData[i * NUM_AN_OF_NEED_IREF + NUM_PWM_DATA_TO_PCA9956] = data[(i + leds)][3];
+                pcaData[i * NUM_AN_OF_NEED_IREF + NUM_PWM_DATA_TO_PCA9956 + 1] = data[(i + leds)][4];
+                pcaData[i * NUM_AN_OF_NEED_IREF + NUM_PWM_DATA_TO_PCA9956 + 2] = data[(i + leds)][5];
             }
-            leds += 8;
+            leds += NUM_CHANNEL_FROM_PCA9956;
             current->pca9956[0].SetPWMIREFAI(pcaData);
         }
         current = current->nxt;
     }
 
+    return 0;
+};
+
+int PCA::WriteChannel(std::vector<unsigned char> &data, int channel){
+    // check for length of each channel data, it needs NUM_AN_OF_NEED_DATA(6, in pcaDefinition.h) datas for an OF
+    if(data.size() != NUM_AN_OF_NEED_DATA)
+        return -1;
+
+    PCAnode *current  = PCAs.first;
+    while(current != nullptr){
+        if(current->pca9955 != nullptr){
+            if(channel > NUM_CHANNEL_FROM_PCA9955B) channel -= NUM_CHANNEL_FROM_PCA9955B;
+            else return current->pca9955[0].SetRGB(channel, data[0], data[1], data[2], data[3], data[4], data[5]);
+        }else{
+            if(channel > NUM_CHANNEL_FROM_PCA9956) channel -= NUM_CHANNEL_FROM_PCA9956;
+            else return current->pca9956[0].SetRGB(channel, data[0], data[1], data[2], data[3], data[4], data[5]);
+        }
+        current = current->nxt;
+    }
     return 0;
 };
 
@@ -65,18 +100,6 @@ void PCA::Read() {
             current->pca9955[0].GetAll();
         } else {
             current->pca9956[0].GetAll();
-        }
-        current = current->nxt;
-    }
-};
-
-void PCA::Debug() {
-    PCAnode *current = PCAs.first;
-    while (current != nullptr) {
-        if (current->pca9955 != nullptr) {
-            cout << "9955" << endl;
-        } else {
-            cout << "9956" << endl;
         }
         current = current->nxt;
     }
