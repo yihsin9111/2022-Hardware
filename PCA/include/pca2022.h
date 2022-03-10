@@ -1,11 +1,14 @@
-/**
- * @file 2022pca.h
- *
- */
-/* Copyright (C) 2022 by NTUEE, Taiwan
- *
- */
+/****************************************************************************
+  FileName     [ pca2022.h ]
+  PackageName  [ clientApp ]
+  Synopsis     [  ]
+  Author       [ Ken Chung ]
+  Copyright    [ Copyleft(c) , NTUEE, Taiwan ]
+****************************************************************************/
 
+//----------------------------------------------------------------------
+//    Global
+//----------------------------------------------------------------------
 #ifndef PCA2022_H
 #define PCA2022_H
 
@@ -16,6 +19,9 @@
 
 class LinkedList;
 class PCAnode;
+
+//handle PCAs, each type of whom may be pca9956 or pca9955B, and they're address will be different
+//each PCAnode refer to a pca of a dancer
 class LinkedList {
    public:
     LinkedList() : first(nullptr){};
@@ -24,6 +30,8 @@ class LinkedList {
 
     PCAnode *first;
 };
+//each PCAnode refer to a pca of a dancer
+//call different type of class according to the type of each PCAnode
 class PCAnode {
    public:
     PCAnode();
@@ -35,12 +43,16 @@ class PCAnode {
 
     friend class LinkedList;
 };
+//Initialize function : PCA() , which is the default constructor
+//There're two different function to write data to a PCA, WriteAll(vector<vector<unsigned char>>) and WriteChannel(vector<vector<unsigned char>>)
+//WriteAll can be used to update all OFs' datas
+//WriteChannel is used to updata only one OF datas, which can be used to Debug
 class PCA {
    public:
     PCA();
 
-    void Debug();
-    int Write(std::vector<std::vector<unsigned char> > &);
+    int WriteAll(std::vector<std::vector<unsigned char> > &data);
+    int WriteChannel(std::vector<unsigned char> &data, int channel);
     void Read();
 
    private:
