@@ -1,5 +1,5 @@
 /****************************************************************************
-  FileName     [ definition.h ]
+  FileName     [ pcaDefinition.h ]
   PackageName  [ clientApp ]
   Synopsis     [ definitions ]
   Author       [  ]
@@ -37,6 +37,6 @@ const int pcaTypeAddr[4][2] = {
   {PCA_TYPE_2, PCA_ADDR_2}, 
   {PCA_TYPE_3, PCA_ADDR_3}, 
   {PCA_TYPE_4, PCA_ADDR_4}
-}
+};
 
 #endif /* _DEF_H_ */
