@@ -1,59 +1,24 @@
-#include "../include/pca2022.h"
+#include "../include/OFrgba_to_rgbiref.h"
+#include "../include/pca.h"
+#include "../include/pcaDefinition.h"
 #include <time.h>
 #include <iostream>
+#include <vector>
 using namespace std;
 
-int OFs[156] = {
-    0, 0, 0, 0, 0, 0, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF0 
-    0, 0, 0, 0, 0, 0, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF1
-    0, 0, 0, 0, 0, 0, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF2
-    0, 0, 0, 0, 0, 0, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF3
-    0, 0, 0, 0, 0, 0, //...
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, // 26 OFs in total
-};
+vector<vector<char> > OFs;
 
 int main(int argc, char* argv[]){
 
-    int *channelOrder = new int [26];
-    for(int i=0;i<26;i++)channelOrder[i] = i;
+    PCA pca; // PCA init
     
-    int **pcaTypeAddr = new int* [4];
-    
-    pcaTypeAddr[0] = new int[2];
-    pcaTypeAddr[0][0] = 9956;
-    pcaTypeAddr[0][1] = 0x3f;
-    pcaTypeAddr[1] = new int[2];
-    pcaTypeAddr[1][0] = 9956;
-    pcaTypeAddr[1][1] = 0x2b;
-    pcaTypeAddr[2] = new int[2];
-    pcaTypeAddr[2][0] = 9956;
-    pcaTypeAddr[2][1] = 0x56;
-    pcaTypeAddr[3] = new int[2];
-    pcaTypeAddr[3][0] = 9956;
-    pcaTypeAddr[3][1] = 0x32;
+    OFs.resize(NUM_OF);
+    for(int i = 0; i < NUM_OF; i++){
+        OFs[i].resize(NUM_AN_OF_NEED_DATA);
+        for(int j = 0; j < NUM_AN_OF_NEED_DATA; j++)
+            OFs[i][j] = 0;
+    }
 
-    PCA pca(channelOrder, pcaTypeAddr); // PCA init
-    
-    pca.Write(OFs);
+    pca.WriteAll(OFs);
 
 }

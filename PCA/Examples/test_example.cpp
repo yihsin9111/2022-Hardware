@@ -1,137 +1,99 @@
-#include "../include/pca2022.h"
-#include "../include/rgba_to_rgb.h"
+
 #include <time.h>
+
 #include <iostream>
+
+#include "../include/OFrgba_to_rgbiref.h"
+#include "../include/pca.h"
+#include "../include/pcaDefinition.h"
 using namespace std;
 
-int OFs[156] = {
-    0, 0, 0, 0, 0, 0, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF0 
-    0, 0, 0, 0, 0, 0, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF1
-    0, 0, 0, 0, 0, 0, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF2
-    0, 0, 0, 0, 0, 0, //PWM_RED PWM_GREEN PWM_BLUE IREF_RED IREF_GREEN IREF_BLUE of OF3
-    0, 0, 0, 0, 0, 0, //...
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, // 26 OFs in total
-};
+vector<vector<char> > OFs;
+vector<char> OF;
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
+    PCA pca;  // PCA init
 
-    int *channelOrder = new int [26];
-    for(int i=0;i<26;i++)channelOrder[i] = i;
-    
-    int **pcaTypeAddr = new int* [4];
-    
-    pcaTypeAddr[0] = new int[2];
-    pcaTypeAddr[0][0] = 9956;
-    pcaTypeAddr[0][1] = 0x3f;
-    pcaTypeAddr[1] = new int[2];
-    pcaTypeAddr[1][0] = 9956;
-    pcaTypeAddr[1][1] = 0x2b;
-    pcaTypeAddr[2] = new int[2];
-    pcaTypeAddr[2][0] = 9956;
-    pcaTypeAddr[2][1] = 0x56;
-    pcaTypeAddr[3] = new int[2];
-    pcaTypeAddr[3][0] = 9956;
-    pcaTypeAddr[3][1] = 0x32;
+    OFs.resize(NUM_OF);
+    for(int i = 0; i < NUM_OF; i++){
+        OFs[i].resize(NUM_AN_OF_NEED_DATA);
+        for(int j = 0; j < NUM_AN_OF_NEED_DATA; j++)
+            OFs[i][j] = 0;
+    }
+    pca.WriteAll(OFs);
 
-    PCA pca(channelOrder, pcaTypeAddr); // PCA init
-
-    while(1){
-        
-        //choose one mode
+    while (1) {
+        // choose one mode
         char Mode;
         cout << "Plz enter the OF mode you want:\n";
         cout << "(A)RGBA (B)RGB_PWM_IREF (Q)Quit\n";
         cin >> Mode;
 
-        if(Mode == 'A' || Mode == 'a'){
+        if (Mode == 'A' || Mode == 'a') {
             cout << "Choose one led between 0 and 25" << endl;
             cout << "Usage : \n >> <channel> <R> <G> <B> <A>\n";
             cout << "You may enter -1 to quit the current mode\n";
-	    cout << "Also, You may enter -2 to check all register in all PCAs\n";
+            cout << "Also, You may enter -2 to check all register in all PCAs\n";
             int channel = 0, R = 0, G = 0, B = 0;
-	    float A = 0;
-            while(1){
-
+            float A = 0;
+            while (1) {
                 int newChannel = 0;
                 cin >> newChannel;
-
-                //for(int i = 0; i < 6; i++)
-                //    OFs[channel*6+i] = 0;
+                
+                // first set last channel off
+                for (int i = 0; i < NUM_AN_OF_NEED_DATA; i++)
+                    OFs[channel][i] = 0;
+                
                 channel = newChannel;
-                if(channel == -1){
+                if (channel == -1) {
                     break;
-                }else if(channel == -2){
-		    pca.Read();
-		}else if(channel == -3){
-	            pca.Debug();			
-		}else{
+                } else if (channel == -2) {
+                    pca.Read();
+                } else {
                     cin >> R >> G >> B >> A;
-                    float *color = OFrgba_to_rgb(A);
-		    cout << "pwm : " << color[0] << color[1] << color[2] << endl;
-                    OFs[channel*6] = int(color[0]);
-                    OFs[channel*6+1] = int(color[1]);
-                    OFs[channel*6+2] = int(color[2]);
-                    OFs[channel*6+3] = R;
-                    OFs[channel*6+4] = G;
-                    OFs[channel*6+5] = B;
-                    pca.Write(OFs);
-		        }
-
+                    char* color = OFrgba_to_rgbiref(R, G, B, A);
+                    
+                    OFs[channel][0] = color[0];
+                    OFs[channel][1] = color[1];
+                    OFs[channel][2] = color[2];
+                    OFs[channel][3] = color[3];
+                    OFs[channel][4] = color[4];
+                    OFs[channel][5] = color[5];
+                    pca.WriteAll(OFs);
+                }
             }
 
-        }else if(Mode == 'B' || Mode == 'b'){
+        } else if (Mode == 'B' || Mode == 'b') {
             cout << "Choose one led between 0 and 25" << endl;
             cout << "Usage : \n >> <channel> <R duty> <G duty> <B duty> <R iref> <G iref> <B iref>\n";
             cout << "You may enter -1 to quit the current mode\n";
             int channel = 0, Rduty = 0, Gduty = 0, Bduty = 0, Riref = 0, Giref = 0, Biref = 0;
-            while(1){
-
+            while (1) {
                 int newChannel = 0;
                 cin >> newChannel;
 
-                for(int i = 0; i < 6; i++)
-                    OFs[channel*6+i] = 0;
+                for (int i = 0; i < 6; i++)
+                    OFs[channel][i] = 0;
+                
                 channel = newChannel;
-                if(channel == -1){
+                if (channel == -1) {
                     break;
-                }else if(channel == -2){
-		    pca.Read();
-		    break;
-		}else{
-                    cin >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref ;
-                    OFs[channel*6] = Rduty;
-                    OFs[channel*6+1] = Gduty;
-                    OFs[channel*6+2] = Bduty;
-                    OFs[channel*6+3] = Riref;
-                    OFs[channel*6+4] = Giref;
-                    OFs[channel*6+5] = Biref;
-                    pca.Write(OFs);
-		        }
-
+                } else if (channel == -2) {
+                    pca.Read();
+                    break;
+                } else {
+                    cin >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref;
+                    OFs[channel][0] = Rduty;
+                    OFs[channel][1] = Gduty;
+                    OFs[channel][2] = Bduty;
+                    OFs[channel][3] = Riref;
+                    OFs[channel][4] = Giref;
+                    OFs[channel][5] = Biref;
+                    pca.WriteAll(OFs);
+                }
             }
-        }else if(Mode == 'Q' || Mode == 'q'){
+        } else if (Mode == 'Q' || Mode == 'q') {
             break;
         }
     }
-
 }
