@@ -13,8 +13,8 @@
 #define _DEF_H_
 
 // PCA(OF) I2C address
-#define PCA_ADDR_1 0x00
-#define PCA_ADDR_2 0x20
+#define PCA_ADDR_1 0x3f
+#define PCA_ADDR_2 0x2b
 #define PCA_ADDR_3 0x40
 #define PCA_ADDR_4 0x60
 
