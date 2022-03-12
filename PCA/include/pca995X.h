@@ -33,6 +33,12 @@
 
 #define AUTO_INCREMENT 128
 
+// PCA9956 definitions
+#define PCA9956_CHANNELS 24
+
+// PCA9955 definitions
+#define PCA9955_CHANNELS 15
+
 // Base class for PCA9955 & PCA9956
 class PCA995X {
    public:

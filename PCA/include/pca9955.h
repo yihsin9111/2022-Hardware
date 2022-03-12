@@ -15,9 +15,6 @@
 
 #include "pca995X.h"
 
-// PCA9955 definitions
-#define PCA9955_CHANNELS 15
-
 class PCA9955 : public PCA995X {
    public:
     PCA9955(){};
