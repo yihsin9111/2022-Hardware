@@ -41,11 +41,6 @@ PCA9955::PCA9955(int Address) : PCA9955_Address(Address) {
 int PCA9955::SetPWMAI(int channel, int *PWM, int size) {
     union i2c_smbus_data regData;
 
-    // regData.block[0] = size;
-    // for(int i=0;i<size;i++){
-    // 	regData.block[i]=PWM[i];
-    // }
-
     regData.block[0] = size - 1;
     for (int i = 1; i < size; i++) {
         regData.block[i] = PWM[i];
@@ -62,11 +57,6 @@ int PCA9955::SetPWMAI(int channel, int *PWM, int size) {
 
 int PCA9955::SetIREFAI(int channel, int *IREF, int size) {
     union i2c_smbus_data regData;
-
-    // regData.block[0] = size;
-    // for(int i=0;i<size;i++){
-    // 	regData.block[i]=PWM[i];
-    // }
 
     regData.block[0] = size - 1;
     for (int i = 1; i < size; i++) {
@@ -105,7 +95,7 @@ int PCA9955::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref,
 };
 
 void PCA9955::GetAll() {
-    for (int i = 0; i < 24; i++) {
+    for (int i = 0; i < 15; i++) {
         cout << "addr : " << i << ", IREF : " << GetIREF(i) << ", PWM : " << GetPWM(i) << endl;
     }
 };
