@@ -128,20 +128,3 @@ int PCA995X::I2CWriteReg(int reg, int value) {
 int PCA995X::I2CReadReg(int reg) {
     return wiringPiI2CReadReg8(fd, reg);
 };
-
-// Derived PCA9955
-bool PCA9955::CheckChannelLegal(int channel) {
-    return channel < 0 ? false : channel > PCA9955_CHANNELS ? false
-                                                            : true;
-};
-int PCA9955::GetChannelNum() {
-    return PCA9955_CHANNELS;
-};
-// Derived PCA9956
-bool PCA9956::CheckChannelLegal(int channel) {
-    return channel < 0 ? false : channel > PCA9956_CHANNELS ? false
-                                                            : true;
-};
-int PCA9956::GetChannelNum() {
-    return PCA9956_CHANNELS;
-};

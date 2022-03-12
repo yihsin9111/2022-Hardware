@@ -33,12 +33,7 @@
 
 #define AUTO_INCREMENT 128
 
-// PCA9956 definitions
-#define PCA9956_CHANNELS 24
-
-// PCA9955 definitions
-#define PCA9955_CHANNELS 15
-
+// Base class for PCA9955 & PCA9956
 class PCA995X {
    public:
     PCA995X() {}
@@ -70,28 +65,6 @@ class PCA995X {
 
     int PCA995X_Address;
     int fd;
-};
-
-class PCA9955 : public PCA995X {
-   public:
-    PCA9955(){};
-    ~PCA9955(){};
-    PCA9955(int Address) : PCA995X(Address){};
-
-   protected:
-    bool CheckChannelLegal(int channel);
-    int GetChannelNum();
-};
-
-class PCA9956 : public PCA995X {
-   public:
-    PCA9956(){};
-    ~PCA9956(){};
-    PCA9956(int Address) : PCA995X(Address){};
-
-   protected:
-    bool CheckChannelLegal(int channel);
-    int GetChannelNum();
 };
 
 #endif /* PCA995X_H */
