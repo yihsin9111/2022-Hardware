@@ -79,6 +79,8 @@ class PCA9955 : public PCA995X {
     PCA9955(int Address) : PCA995X(Address){};
 
    protected:
+    bool CheckChannelLegal(int channel);
+    int GetChannelNum();
 };
 
 class PCA9956 : public PCA995X {
@@ -88,6 +90,8 @@ class PCA9956 : public PCA995X {
     PCA9956(int Address) : PCA995X(Address){};
 
    protected:
+    bool CheckChannelLegal(int channel);
+    int GetChannelNum();
 };
 
 #endif /* PCA995X_H */

@@ -14,6 +14,9 @@
 #include "../../../WiringPi/wiringPi/wiringPi.h"
 #include "../../../WiringPi/wiringPi/wiringPiI2C.h"
 
+#define I2C_SMBUS_BLOCK_DATA 5  // SMBus-level access
+#define I2C_SMBUS 0x0720
+
 using namespace std;
 
 enum PCA9955Reg {
@@ -39,7 +42,7 @@ PCA995X::PCA995X(int Address) : PCA995X_Address(Address) {
     fd = wiringPiI2CSetup(PCA995X_Address);
 };
 int PCA995X::SetPWMAI(int channel, int *PWM, int size) {
-    if (!CheckChannelLegal()) return false;
+    if (!CheckChannelLegal(channel)) return false;
 
     union i2c_smbus_data regData;
 
@@ -57,7 +60,7 @@ int PCA995X::SetPWMAI(int channel, int *PWM, int size) {
     return ioctl(fd, I2C_SMBUS, &args) && SetPWM(channel, PWM[0]);
 };
 int PCA995X::SetIREFAI(int channel, int *IREF, int size) {
-    if (!CheckChannelLegal()) return false;
+    if (!CheckChannelLegal(channel)) return false;
 
     union i2c_smbus_data regData;
 
@@ -100,23 +103,23 @@ void PCA995X::GetAll() {
     }
 };
 int PCA995X::SetPWM(int channel, int PWM) {
-    if (!CheckChannelLegal()) return false;
+    if (!CheckChannelLegal(channel)) return false;
     PWM = PWM < PWM_MIN ? PWM_MIN : PWM > PWM_MAX ? PWM_MAX
                                                   : PWM;
     return I2CWriteReg(channel + PCA995X_PWM0_ADDR, PWM);
 };
 int PCA995X::GetPWM(int channel) {
-    if (!CheckChannelLegal()) return false;
+    if (!CheckChannelLegal(channel)) return false;
     return I2CReadReg(channel + PCA995X_PWM0_ADDR);
 };
 int PCA995X::SetIREF(int channel, int IREF) {
-    if (!CheckChannelLegal()) return false;
+    if (!CheckChannelLegal(channel)) return false;
     IREF = IREF < IREF_MIN ? IREF_MIN : IREF > IREF_MAX ? IREF_MAX
                                                         : IREF;
     return I2CWriteReg(channel + PCA995X_IREF0_ADDR, IREF);
 };
 int PCA995X::GetIREF(int channel) {
-    if (!CheckChannelLegal()) return false;
+    if (!CheckChannelLegal(channel)) return false;
     return I2CReadReg(channel + PCA995X_IREF0_ADDR);
 };
 int PCA995X::I2CWriteReg(int reg, int value) {
