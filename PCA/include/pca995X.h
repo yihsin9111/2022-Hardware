@@ -39,12 +39,12 @@
 // PCA9955 definitions
 #define PCA9955_CHANNELS 15
 
-// Base class for PCA9955 & PCA9956
+// class for PCA9955 & PCA9956
 class PCA995X {
    public:
     PCA995X() {}
     ~PCA995X() {}
-    PCA995X(int Address);
+    PCA995X(int Address, int pca_type);
 
     int SetPWMAI(int channel, int *PWM, int size);
     int SetIREFAI(int channel, int *IREF, int size);
@@ -56,9 +56,11 @@ class PCA995X {
 
     int Getfd() { return fd; };
 
-   protected:
-    virtual bool CheckChannelLegal(int channel){};
-    virtual int GetChannelNum(){};
+    int GetType() { return type; };
+
+   private:
+    bool CheckChannelLegal(int channel);
+    int GetChannelNum();
 
     int SetPWM(int channel, int PWM);
     int GetPWM(int channel);
@@ -69,6 +71,7 @@ class PCA995X {
     int I2CWriteReg(int reg, int value);
     int I2CReadReg(int reg);
 
+    int type;
     int PCA995X_Address;
     int fd;
 };

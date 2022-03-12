@@ -19,14 +19,6 @@
 
 using namespace std;
 
-enum PCA9955Reg {
-    PCA9955_REG_PWMALL = 0x42,
-    PCA9955_REF_IREFALL = 0x43,
-};
-enum PCA9956Reg {
-    PCA9956_REG_PWMALL = 0x3f,
-    PCA9956_REF_IREFALL = 0x40,
-};
 union i2c_smbus_data {
     uint8_t byte;
     uint16_t word;
@@ -38,7 +30,7 @@ struct i2c_smbus_ioctl_data {
     int size;
     union i2c_smbus_data *data;
 };
-PCA995X::PCA995X(int Address) : PCA995X_Address(Address) {
+PCA995X::PCA995X(int Address, int pca_type) : PCA995X_Address(Address), type(pca_type) {
     fd = wiringPiI2CSetup(PCA995X_Address);
 };
 int PCA995X::SetPWMAI(int channel, int *PWM, int size) {
@@ -127,4 +119,16 @@ int PCA995X::I2CWriteReg(int reg, int value) {
 };
 int PCA995X::I2CReadReg(int reg) {
     return wiringPiI2CReadReg8(fd, reg);
+};
+bool PCA995X::CheckChannelLegal(int channel) {
+    if (type == 9955) {
+        return channel < 0 ? false : channel > PCA9955_CHANNELS ? false
+                                                                : true;
+    }
+    return channel < 0 ? false : channel > PCA9956_CHANNELS ? false
+                                                            : true;
+};
+int PCA995X::GetChannelNum() {
+    if (type == 9955) return PCA9955_CHANNELS;
+    return PCA9956_CHANNELS;
 };

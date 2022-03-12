@@ -14,35 +14,8 @@
 
 #include <vector>
 
-#include "./pca9955.h"
-#include "./pca9956.h"
+#include "./pca995X.h"
 
-class LinkedList;
-class PCAnode;
-
-//handle PCAs, each type of whom may be pca9956 or pca9955B, and they're address will be different
-//each PCAnode refer to a pca of a dancer
-class LinkedList {
-   public:
-    LinkedList() : first(nullptr){};
-
-    void Add(int PCA_ADDR, bool IsPCA9956);
-
-    PCAnode *first;
-};
-//each PCAnode refer to a pca of a dancer
-//call different type of class according to the type of each PCAnode
-class PCAnode {
-   public:
-    PCAnode();
-    PCAnode(int PCA_ADDR, bool IsPCA9956);
-
-    PCA9956 *pca9956;
-    PCA9955 *pca9955;
-    PCAnode *nxt;
-
-    friend class LinkedList;
-};
 //Initialize function : PCA() , which is the default constructor
 //There're two different function to write data to a PCA, WriteAll(vector<vector<unsigned char>>) and WriteChannel(vector<vector<unsigned char>>)
 //WriteAll can be used to update all OFs' datas
@@ -56,7 +29,7 @@ class PCA {
     void Read();
 
    private:
-    LinkedList PCAs;
+    std::vector<PCA995X> PCAs;
 };
 
 #endif /* PCA */

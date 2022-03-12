@@ -3,8 +3,6 @@
 #include <iostream>
 #include <vector>
 
-#include "../include/pca9955.h"
-#include "../include/pca9956.h"
 #include "../include/pcaDefinition.h"
 using namespace std;
 
@@ -14,11 +12,13 @@ enum {
 };
 
 PCA::PCA() {
+    PCAs.resize(NUM_PCA);
+
     for (int i = 0; i < NUM_PCA; i++)
         if (pcaTypeAddr[i][0] == _PCA9955B)
-            PCAs.Add(pcaTypeAddr[i][1], false);
+            PCAs[0] = PCA995X(pcaTypeAddr[i][1], 9955);
         else
-            PCAs.Add(pcaTypeAddr[i][1], true);
+            PCAs[0] = PCA995X(pcaTypeAddr[i][1], 9956);
 };
 
 int PCA::WriteAll(std::vector<std::vector<char>> &data) {
@@ -27,11 +27,10 @@ int PCA::WriteAll(std::vector<std::vector<char>> &data) {
         return CHANNEL_SIZE_ERROR;
 
     int leds = 0;
-    PCAnode *current = PCAs.first;
 
     // use while loop to go through all PCAs
-    while (current != nullptr) {
-        if (current->pca9955 != nullptr) {
+    for(int i = 0; i < PCAs.size(); i++){
+        if (PCAs[i].GetType() == 9955) {
             int pcaData[NUM_TOTAL_DATA_TO_PCA9955B] = {0};
             for (int i = 0; i < NUM_CHANNEL_FROM_PCA9955B; i++) {
                 // check for length of each channel data, it needs NUM_AN_OF_NEED_DATA(6, in pcaDefinition.h) datas for an OF
@@ -58,7 +57,7 @@ int PCA::WriteAll(std::vector<std::vector<char>> &data) {
                 pcaData[i * NUM_AN_OF_NEED_IREF + NUM_PWM_DATA_TO_PCA9955B + 2] = data[(i + leds)][5];
             }
             leds += NUM_CHANNEL_FROM_PCA9955B;
-            current->pca9955[0].SetPWMIREFAI(pcaData);
+            PCAs[i].SetPWMIREFAI(pcaData);
         } else {
             int pcaData[NUM_TOTAL_DATA_TO_PCA9956] = {0};
             for (int i = 0; i < NUM_CHANNEL_FROM_PCA9956; i++) {
@@ -86,9 +85,8 @@ int PCA::WriteAll(std::vector<std::vector<char>> &data) {
                 pcaData[i * NUM_AN_OF_NEED_IREF + NUM_PWM_DATA_TO_PCA9956 + 2] = data[(i + leds)][5];
             }
             leds += NUM_CHANNEL_FROM_PCA9956;
-            current->pca9956[0].SetPWMIREFAI(pcaData);
+            PCAs[i].SetPWMIREFAI(pcaData);
         }
-        current = current->nxt;
     }
 
     return 0;
@@ -99,67 +97,28 @@ int PCA::WriteChannel(std::vector<char> &data, int channel) {
     if (data.size() != NUM_AN_OF_NEED_DATA)
         return DATA_SIZE_ERROR;
 
-    PCAnode *current = PCAs.first;
-    while (current != nullptr) {
-        if (current->pca9955 != nullptr) {
+    for(int i = 0; i < PCAs.size(); i++){
+        if (PCAs[i].GetType() == 9955) {
             if (channel > NUM_CHANNEL_FROM_PCA9955B)
                 channel -= NUM_CHANNEL_FROM_PCA9955B;
             else
-                return current->pca9955[0].SetRGB(channel, data[0], data[1], data[2], data[3], data[4], data[5]);
+                return PCAs[i].SetRGB(channel, data[0], data[1], data[2], data[3], data[4], data[5]);
         } else {
             if (channel > NUM_CHANNEL_FROM_PCA9956)
                 channel -= NUM_CHANNEL_FROM_PCA9956;
             else
-                return current->pca9956[0].SetRGB(channel, data[0], data[1], data[2], data[3], data[4], data[5]);
+                return PCAs[i].SetRGB(channel, data[0], data[1], data[2], data[3], data[4], data[5]);
         }
-        current = current->nxt;
     }
     return 0;
 };
 
 void PCA::Read() {
-    PCAnode *current = PCAs.first;
-    while (current != nullptr) {
-        if (current->pca9955 != nullptr) {
-            current->pca9955[0].GetAll();
+    for(int i = 0; i < PCAs.size(); i++){
+        if (PCAs[i].GetType() == 9955) {
+            PCAs[i].GetAll();
         } else {
-            current->pca9956[0].GetAll();
+            PCAs[i].GetAll();
         }
-        current = current->nxt;
     }
 };
-
-PCAnode::PCAnode() {
-    pca9956 = nullptr;
-    pca9955 = nullptr;
-    nxt = nullptr;
-};
-
-PCAnode::PCAnode(int PCA_ADDR, bool IsPCA9956) {
-    if (IsPCA9956 == true) {
-        pca9955 = nullptr;
-        pca9956 = new PCA9956[1];
-        pca9956[0] = PCA9956(PCA_ADDR);
-    } else {
-        pca9956 = nullptr;
-        pca9955 = new PCA9955[1];
-        pca9955[0] = PCA9955(PCA_ADDR);
-    }
-
-    nxt = nullptr;
-};
-
-void LinkedList::Add(int PCA_ADDR, bool IsPCA9956) {
-    PCAnode *newNode = new PCAnode(PCA_ADDR, IsPCA9956);
-
-    if (first == nullptr) {
-        first = newNode;
-        return;
-    }
-
-    PCAnode *current = first;
-    while (current->nxt != nullptr) {
-        current = current->nxt;
-    }
-    current->nxt = newNode;
-}
