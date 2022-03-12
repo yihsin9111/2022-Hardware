@@ -36,8 +36,6 @@
 // PCA9956 definitions
 #define PCA9956_CHANNELS 24
 
-#define AA 01
-
 // PCA9955 definitions
 #define PCA9955_CHANNELS 15
 
