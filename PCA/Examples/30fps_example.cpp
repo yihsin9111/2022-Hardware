@@ -10,7 +10,7 @@ using namespace std;
 vector<vector<char> > OFs;
 vector<char> OF;
 
-// #define EX_WRITE_ALL
+ #define EX_WRITE_ALL
 // #define EX_WRITE_CHANNEL
 
 int main(int argc, char* argv[]) {
