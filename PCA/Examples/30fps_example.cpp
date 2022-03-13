@@ -16,7 +16,7 @@ vector<char> OF;
 int main(int argc, char* argv[]) {
     PCA pca;  // PCA init
     clock_t init, clk;
-    int level = 200, decay = 1;
+    int level = 80, decay = 1;
     init = clock();
     while (1) {
         clk = clock();
@@ -39,9 +39,9 @@ int main(int argc, char* argv[]) {
                 OFs[i][0] = level;
                 OFs[i][1] = level;
                 OFs[i][2] = level;
-                OFs[i][3] = 80;
-                OFs[i][4] = 80;
-                OFs[i][5] = 80;
+                OFs[i][3] = 85;
+                OFs[i][4] = 85;
+                OFs[i][5] = 85;
             }
             pca.WriteAll(OFs);  // PCA Write All Channel
                                 // pass data(type : vector<vector<char>>)
