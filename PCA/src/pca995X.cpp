@@ -77,8 +77,8 @@ int PCA995X::SetIREFAI(int channel, int *IREF, int size) {
 
 };
 int PCA995X::SetPWMIREFAI(int *data) {
-    SetPWMAI(0, data, GetChannelNum());
-    SetIREFAI(0, &data[GetChannelNum()], GetChannelNum());
+    SetPWMAI(0, data, GetLedChannelNum()*NUM_AN_OF_NEED_PWM);
+    SetIREFAI(0, &data[GetLedChannelNum()*NUM_AN_OF_NEED_PWM], GetLedChannelNum()*NUM_AN_OF_NEED_IREF);
 
     return 0;
 };
@@ -92,12 +92,12 @@ int PCA995X::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref,
     IREF[0] = Riref;
     IREF[1] = Giref;
     IREF[2] = Biref;
-    int temp01 = SetPWMAI(led_address * 3 + GetPWM0Reg(), PWM, 3);
-    int temp02 = SetIREFAI(led_address * 3 + GetIREF0Reg(), IREF, 3);
+    int temp01 = SetPWMAI(led_address * NUM_AN_OF_NEED_PWM + GetPWM0Reg(), PWM, NUM_AN_OF_NEED_PWM);
+    int temp02 = SetIREFAI(led_address * NUM_AN_OF_NEED_IREF + GetIREF0Reg(), IREF, NUM_AN_OF_NEED_IREF);
     return temp01 && temp02;
 };
 void PCA995X::GetAll() {
-    for (int i = 0; i < GetChannelNum(); i++) {
+    for (int i = 0; i < GetLedChannelNum()*3; i++) {
         cout << "addr : " << i << ", IREF : " << GetIREF(i) << ", PWM : " << GetPWM(i) << endl;
     }
 };
@@ -135,9 +135,9 @@ bool PCA995X::CheckChannelLegal(int channel) {
     return channel < 0 ? false : channel > PCA9956_CHANNELS ? false
                                                             : true;
 };
-int PCA995X::GetChannelNum() {
-    if (type == 9955) return PCA9955_CHANNELS;
-    return PCA9956_CHANNELS;
+int PCA995X::GetLedChannelNum() {
+    if (type == 9955) return NUM_CHANNEL_FROM_PCA9955B;
+    return NUM_CHANNEL_FROM_PCA9956;
 };
 int PCA995X::GetIREF0Reg() {
     if(type == 9955) return PCA9955B_IREF0_ADDR;

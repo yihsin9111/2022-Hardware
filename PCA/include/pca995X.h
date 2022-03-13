@@ -30,12 +30,6 @@
 
 #define AUTO_INCREMENT 128
 
-// PCA9956 definitions
-#define PCA9956_CHANNELS 24
-
-// PCA9955 definitions
-#define PCA9955_CHANNELS 15
-
 // class for PCA9955 & PCA9956
 class PCA995X {
    public:
@@ -54,10 +48,11 @@ class PCA995X {
     int Getfd() { return fd; };
 
     int GetType() { return type; };
+    
+    int GetLedChannelNum();
 
    private:
     bool CheckChannelLegal(int channel);
-    int GetChannelNum();
     int GetIREF0Reg();
     int GetPWM0Reg();
 

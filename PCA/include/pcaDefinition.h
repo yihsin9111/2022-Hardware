@@ -48,6 +48,8 @@
 #define NUM_IREF_DATA_TO_PCA9956 (NUM_CHANNEL_FROM_PCA9956 * NUM_AN_OF_NEED_IREF)          // number of iref need sent to a pca9956
 #define NUM_PWM_DATA_TO_PCA9956 (NUM_CHANNEL_FROM_PCA9956 * NUM_AN_OF_NEED_PWM)            // number of pwm need sent to a pca9956
 #define NUM_TOTAL_DATA_TO_PCA9956 (NUM_IREF_DATA_TO_PCA9956 + NUM_PWM_DATA_TO_PCA9956)     // number of total datas(iref & pwm) need sent to a pca9956
+#define PCA9956_CHANNELS 24
+#define PCA9955_CHANNELS 15
 
 // pca type and addr for pca initialize in pca.cpp
 // an (NUM_PCA * 2) 2D array of int type
