@@ -28,7 +28,13 @@
 #define PWM_MAX 255
 #define PWM_MIN 0
 
-#define AUTO_INCREMENT 128
+// PCA special addr
+#define PCA9956_IREF0_ADDR 0x22
+#define PCA9956_PWM0_ADDR 0x0a
+#define PCA9955B_IREF0_ADDR 0x18
+#define PCA9955B_PWM0_ADDR 0x08
+
+#define AUTO_INCREMENT (1 << 7)
 
 // class for PCA9955 & PCA9956
 class PCA995X {
@@ -53,8 +59,6 @@ class PCA995X {
 
    private:
     bool CheckChannelLegal(int channel);
-    int GetIREF0Reg();
-    int GetPWM0Reg();
 
     int SetPWM(int channel, int PWM);
     int GetPWM(int channel);
@@ -66,6 +70,8 @@ class PCA995X {
     int I2CReadReg(int reg);
 
     int type;
+    int iref0Reg, pwm0Reg;
+    int ledChannelNum;
     int PCA995X_Address;
     int fd;
 };

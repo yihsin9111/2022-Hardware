@@ -14,7 +14,7 @@
 
 #include <vector>
 
-#include "./pca995X.h"
+#include "pca995X.h"
 
 //Initialize function : PCA() , which is the default constructor
 //There're two different function to write data to a PCA, WriteAll(vector<vector<unsigned char>>) and WriteChannel(vector<vector<unsigned char>>)
