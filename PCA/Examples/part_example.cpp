@@ -28,14 +28,14 @@ int main(int argc, char* argv[]){
     OFs[0][4] = 100;
     OFs[0][5] = 100;
 
-    int input;
+    char input;
     while(cin >> input){
         
         newChannel = channel-1;
         if(newChannel < 0)newChannel += NUM_OF;
         for(int i = 0; i < NUM_AN_OF_NEED_DATA; i++){
-            OFs[newChannel][i] = OFs[channel*6][i];
-            OFs[channel*6][i] = 0;
+            OFs[newChannel][i] = OFs[channel][i];
+            OFs[channel][i] = 0;
         }
         channel = newChannel;
         

@@ -23,8 +23,8 @@
 #define VALUE(x) (static_cast<int>(x))
 #define CHANNEL(x) (static_cast<int>(x))
 
-#define PCA9955_IREF0_ADDR 0x22
-#define PCA9955_PWM0_ADDR 0x0a
+#define PCA9955_IREF0_ADDR 0x08
+#define PCA9955_PWM0_ADDR 0x18
 
 #define IREF_MAX 255
 #define IREF_MIN 0

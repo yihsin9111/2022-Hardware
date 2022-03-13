@@ -57,7 +57,9 @@ int PCA9955::SetPWMAI(int channel, int *PWM, int size) {
     args.size = 5;
     args.data = &regData;
 
-    return ioctl(fd, 0x0720, &args) && SetPWM(channel, PWM[0]);
+    int temp01 = ioctl(fd, 0x0720, &args);
+    int temp02 =  SetPWM(channel, PWM[0]);
+    return temp01 && temp02;
 };
 
 int PCA9955::SetIREFAI(int channel, int *IREF, int size) {
@@ -79,7 +81,9 @@ int PCA9955::SetIREFAI(int channel, int *IREF, int size) {
     args.size = 5;
     args.data = &regData;
 
-    return ioctl(fd, 0x0720, &args) && SetIREF(channel, IREF[0]);
+    int temp01 = ioctl(fd, 0x0720, &args);
+    int temp02 = SetIREF(channel, IREF[0]);
+    return temp01 && temp02;
 };
 
 int PCA9955::SetPWMIREFAI(int *data) {
