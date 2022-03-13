@@ -50,19 +50,6 @@ int main(int argc, char* argv[]){
         int *IREF = new int [24];
         int *PWM = new int [24];
 
-        for(int i=0;i<24;i++){
-            IREF[i] = 0;
-            PWM[i] = 0;
-        }
-        for(int i=0;i<n;i++){
-            pca9956[i].SetIREFAI(0, IREF, 24);
-            pca9956[i].SetPWMAI(0, PWM, 24);
-        }
-        for(int i=0;i<m;i++){
-            pca9955[i].SetIREFAI(0, IREF, 24);
-            pca9955[i].SetPWMAI(0, PWM, 24);
-        }
-
         //choose one mode
         char Mode;
         cout << "Plz enter the OF mode you want :\n";
