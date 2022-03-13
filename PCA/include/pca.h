@@ -16,10 +16,10 @@
 
 #include "pca995X.h"
 
-//Initialize function : PCA() , which is the default constructor
-//There're two different function to write data to a PCA, WriteAll(vector<vector<unsigned char>>) and WriteChannel(vector<vector<unsigned char>>)
-//WriteAll can be used to update all OFs' datas
-//WriteChannel is used to updata only one OF datas, which can be used to Debug
+// Initialize function : PCA() , which is the default constructor
+// There're two different function to write data to a PCA, WriteAll(vector<vector<unsigned char>>) and WriteChannel(vector<vector<unsigned char>>)
+// WriteAll can be used to update all OFs' datas
+// WriteChannel is used to updata only one OF datas, which can be used to Debug
 class PCA {
    public:
     PCA();

@@ -1,5 +1,4 @@
 #include "pca995X.h"
-#include "pcaDefinition.h"
 
 #include <asm/ioctl.h>
 #include <errno.h>
@@ -14,6 +13,7 @@
 
 #include "../../../WiringPi/wiringPi/wiringPi.h"
 #include "../../../WiringPi/wiringPi/wiringPiI2C.h"
+#include "pcaDefinition.h"
 
 #define I2C_SMBUS_BLOCK_DATA 5  // SMBus-level access
 #define I2C_SMBUS 0x0720
@@ -53,7 +53,6 @@ int PCA995X::SetPWMAI(int channel, int *PWM, int size) {
     int temp01 = ioctl(fd, I2C_SMBUS, &args);
     int temp02 = SetPWM(channel, PWM[0]);
     return temp01 && temp02;
-
 };
 int PCA995X::SetIREFAI(int channel, int *IREF, int size) {
     if (!CheckChannelLegal(channel)) return false;
@@ -74,11 +73,10 @@ int PCA995X::SetIREFAI(int channel, int *IREF, int size) {
     int temp01 = ioctl(fd, I2C_SMBUS, &args);
     int temp02 = SetIREF(channel, IREF[0]);
     return temp01 && temp02;
-
 };
 int PCA995X::SetPWMIREFAI(int *data) {
-    SetPWMAI(0, data, GetLedChannelNum()*NUM_AN_OF_NEED_PWM);
-    SetIREFAI(0, &data[GetLedChannelNum()*NUM_AN_OF_NEED_PWM], GetLedChannelNum()*NUM_AN_OF_NEED_IREF);
+    SetPWMAI(0, data, GetLedChannelNum() * NUM_AN_OF_NEED_PWM);
+    SetIREFAI(0, &data[GetLedChannelNum() * NUM_AN_OF_NEED_PWM], GetLedChannelNum() * NUM_AN_OF_NEED_IREF);
 
     return 0;
 };
@@ -97,7 +95,7 @@ int PCA995X::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref,
     return temp01 && temp02;
 };
 void PCA995X::GetAll() {
-    for (int i = 0; i < GetLedChannelNum()*3; i++) {
+    for (int i = 0; i < GetLedChannelNum() * 3; i++) {
         cout << "addr : " << i << ", IREF : " << GetIREF(i) << ", PWM : " << GetPWM(i) << endl;
     }
 };
@@ -128,7 +126,7 @@ int PCA995X::I2CReadReg(int reg) {
     return wiringPiI2CReadReg8(fd, reg);
 };
 bool PCA995X::CheckChannelLegal(int channel) {
-    return ( channel >= 0 && channel < ledChannelNum * 3 );
+    return (channel >= 0 && channel < ledChannelNum * 3);
 };
 int PCA995X::GetLedChannelNum() {
     return ledChannelNum;

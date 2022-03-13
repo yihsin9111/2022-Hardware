@@ -48,7 +48,7 @@ class PCA995X {
     int Getfd() { return fd; };
 
     int GetType() { return type; };
-    
+
     int GetLedChannelNum();
 
    private:

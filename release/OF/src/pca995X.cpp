@@ -1,5 +1,4 @@
 #include "pca995X.h"
-#include "pcaDefinition.h"
 
 #include <asm/ioctl.h>
 #include <errno.h>
@@ -12,6 +11,7 @@
 
 #include <iostream>
 
+#include "pcaDefinition.h"
 #include "wiringPi.h"
 #include "wiringPiI2C.h"
 
@@ -33,11 +33,11 @@ struct i2c_smbus_ioctl_data {
 };
 PCA995X::PCA995X(int Address, int pca_type) : PCA995X_Address(Address), type(pca_type) {
     fd = wiringPiI2CSetup(PCA995X_Address);
-    if(pca_type == _PCA9955B){
+    if (pca_type == _PCA9955B) {
         iref0Reg = PCA9955B_IREF0_ADDR;
         pwm0Reg = PCA9955B_PWM0_ADDR;
         ledChannelNum = NUM_CHANNEL_FROM_PCA9955B;
-    }else if(pca_type == _PCA9956){
+    } else if (pca_type == _PCA9956) {
         iref0Reg = PCA9956_IREF0_ADDR;
         pwm0Reg = PCA9956_PWM0_ADDR;
         ledChannelNum = NUM_CHANNEL_FROM_PCA9956;
@@ -62,7 +62,6 @@ int PCA995X::SetPWMAI(int channel, int *PWM, int size) {
     int temp01 = ioctl(fd, I2C_SMBUS, &args);
     int temp02 = SetPWM(channel, PWM[0]);
     return temp01 && temp02;
-
 };
 int PCA995X::SetIREFAI(int channel, int *IREF, int size) {
     if (!CheckChannelLegal(channel)) return false;
@@ -83,11 +82,10 @@ int PCA995X::SetIREFAI(int channel, int *IREF, int size) {
     int temp01 = ioctl(fd, I2C_SMBUS, &args);
     int temp02 = SetIREF(channel, IREF[0]);
     return temp01 && temp02;
-
 };
 int PCA995X::SetPWMIREFAI(int *data) {
-    SetPWMAI(0, data, GetLedChannelNum()*NUM_AN_OF_NEED_PWM);
-    SetIREFAI(0, &data[GetLedChannelNum()*NUM_AN_OF_NEED_PWM], GetLedChannelNum()*NUM_AN_OF_NEED_IREF);
+    SetPWMAI(0, data, GetLedChannelNum() * NUM_AN_OF_NEED_PWM);
+    SetIREFAI(0, &data[GetLedChannelNum() * NUM_AN_OF_NEED_PWM], GetLedChannelNum() * NUM_AN_OF_NEED_IREF);
 
     return 0;
 };
@@ -106,7 +104,7 @@ int PCA995X::SetRGB(int led_address, int Rduty, int Gduty, int Bduty, int Riref,
     return temp01 && temp02;
 };
 void PCA995X::GetAll() {
-    for (int i = 0; i < GetLedChannelNum()*3; i++) {
+    for (int i = 0; i < GetLedChannelNum() * 3; i++) {
         cout << "addr : " << i << ", IREF : " << GetIREF(i) << ", PWM : " << GetPWM(i) << endl;
     }
 };
@@ -137,7 +135,7 @@ int PCA995X::I2CReadReg(int reg) {
     return wiringPiI2CReadReg8(fd, reg);
 };
 bool PCA995X::CheckChannelLegal(int channel) {
-    return ( channel >= 0 && channel < ledChannelNum * 3 );
+    return (channel >= 0 && channel < ledChannelNum * 3);
 };
 int PCA995X::GetLedChannelNum() {
     return ledChannelNum;
