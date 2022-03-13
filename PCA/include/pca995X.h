@@ -23,9 +23,6 @@
 #define VALUE(x) (static_cast<int>(x))
 #define CHANNEL(x) (static_cast<int>(x))
 
-#define PCA995X_IREF0_ADDR 0x22
-#define PCA995X_PWM0_ADDR 0x0a
-
 #define IREF_MAX 255
 #define IREF_MIN 0
 #define PWM_MAX 255
@@ -61,6 +58,8 @@ class PCA995X {
    private:
     bool CheckChannelLegal(int channel);
     int GetChannelNum();
+    int GetIREF0Reg();
+    int GetPWM0Reg();
 
     int SetPWM(int channel, int PWM);
     int GetPWM(int channel);
