@@ -11,6 +11,19 @@
 #define PCA_ADDR_3 0x3f
 #define PCA_ADDR_4 0x23
 
+// PCA special addr
+#define PCA9956_IREF0_ADDR 0x22
+#define PCA9956_PWM0_ADDR 0x0a
+#define PCA9955B_IREF0_ADDR 0x18
+#define PCA9955B_PWM0_ADDR 0x08
+
+#define NUM_CHANNEL_FROM_PCA9955B 5                                     // number of OFs provided from a pca9955B
+#define NUM_CHANNEL_FROM_PCA9956 8                                      // number of OFs provided from a pca9956
+
+// PCA type
+#define _PCA9956 9956
+#define _PCA9955B 9955
+
 using namespace std;
 
 enum {
@@ -33,8 +46,13 @@ const int pcaTypeAddr[NUM_PCA][2] = {
 PCA::PCA() {
     PCAs.resize(NUM_PCA);
 
-    for (int i = 0; i < NUM_PCA; i++)
-        PCAs[i] = PCA995X(pcaTypeAddr[i][1], pcaTypeAddr[i][0]);
+    for (int i = 0; i < NUM_PCA; i++){
+        if(pcaTypeAddr[i][0] == _PCA9955B){
+            PCAs[i] = PCA995X(pcaTypeAddr[i][1], pcaTypeAddr[i][0], PCA9955B_IREF0_ADDR, PCA9955B_PWM0_ADDR, NUM_CHANNEL_FROM_PCA9955B);
+        }else if(pcaTypeAddr[i][1] == _PCA9956){
+            PCAs[i] = PCA995X(pcaTypeAddr[i][1], pcaTypeAddr[i][0], PCA9956_IREF0_ADDR, PCA9956_PWM0_ADDR, NUM_CHANNEL_FROM_PCA9956);
+        }
+    }
 };
 
 int PCA::WriteAll(std::vector<std::vector<char>> &data) {
