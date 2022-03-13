@@ -11,8 +11,8 @@
 
 #include <iostream>
 
-#include "../../../WiringPi/wiringPi/wiringPi.h"
-#include "../../../WiringPi/wiringPi/wiringPiI2C.h"
+#include "wiringPi.h"
+#include "wiringPiI2C.h"
 #include "pcaDefinition.h"
 
 #define I2C_SMBUS_BLOCK_DATA 5  // SMBus-level access
