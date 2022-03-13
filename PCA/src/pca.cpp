@@ -49,7 +49,7 @@ PCA::PCA() {
     for (int i = 0; i < NUM_PCA; i++){
         if(pcaTypeAddr[i][0] == _PCA9955B){
             PCAs[i] = PCA995X(pcaTypeAddr[i][1], pcaTypeAddr[i][0], PCA9955B_IREF0_ADDR, PCA9955B_PWM0_ADDR, NUM_CHANNEL_FROM_PCA9955B);
-        }else if(pcaTypeAddr[i][1] == _PCA9956){
+        }else if(pcaTypeAddr[i][0] == _PCA9956){
             PCAs[i] = PCA995X(pcaTypeAddr[i][1], pcaTypeAddr[i][0], PCA9956_IREF0_ADDR, PCA9956_PWM0_ADDR, NUM_CHANNEL_FROM_PCA9956);
         }
     }
@@ -83,9 +83,9 @@ int PCA::WriteAll(std::vector<std::vector<char>> &data) {
             //   {led05PwmR, led05PwmG, led05PwmB, led05IrefR, led05IrefG, led05IrefB},       /   led03IrefR, led03IrefG, led03IrefB, led04IrefR, led04IrefG, led04IrefB,
             //   {led06PwmR, led06PwmG, led06PwmB, led06IrefR, led06IrefG, led06IrefB}, }         led05IrefR, led05IrefG, led05IrefB, led06IrefR, led06IrefG, led06IrefB, ... }
             for (int k = 0; k < NUM_AN_OF_NEED_PWM; k++)
-                pcaData[j * NUM_AN_OF_NEED_PWM] = data[(j + leds)][k];
+                pcaData[j * NUM_AN_OF_NEED_PWM+k] = data[(j + leds)][k];
             for (int k = 0; k < NUM_AN_OF_NEED_IREF; k++)
-                pcaData[j * NUM_AN_OF_NEED_IREF + PCAs[i].GetLedChannelNum() * NUM_AN_OF_NEED_PWM] = data[(j + leds)][k + NUM_AN_OF_NEED_PWM];
+                pcaData[j * NUM_AN_OF_NEED_IREF + PCAs[i].GetLedChannelNum() * NUM_AN_OF_NEED_PWM+k] = data[(j + leds)][k + NUM_AN_OF_NEED_PWM];
         }
         leds += PCAs[i].GetLedChannelNum();
         PCAs[i].SetPWMIREFAI(pcaData);
