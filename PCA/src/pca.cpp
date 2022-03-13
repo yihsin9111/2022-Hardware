@@ -15,7 +15,7 @@ PCA::PCA() {
     PCAs.resize(NUM_PCA);
 
     for (int i = 0; i < NUM_PCA; i++)
-            PCAs[i] = PCA995X(pcaTypeAddr[i][1], pcaType[i][0]);
+            PCAs[i] = PCA995X(pcaTypeAddr[i][1], pcaTypeAddr[i][0]);
 };
 
 int PCA::WriteAll(std::vector<std::vector<char>> &data) {
