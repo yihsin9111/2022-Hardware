@@ -11,9 +11,9 @@
 
 #include <iostream>
 
+#include "../../../WiringPi/wiringPi/wiringPi.h"
+#include "../../../WiringPi/wiringPi/wiringPiI2C.h"
 #include "pcaDefinition.h"
-#include "wiringPi.h"
-#include "wiringPiI2C.h"
 
 #define I2C_SMBUS_BLOCK_DATA 5  // SMBus-level access
 #define I2C_SMBUS 0x0720
@@ -31,17 +31,8 @@ struct i2c_smbus_ioctl_data {
     int size;
     union i2c_smbus_data *data;
 };
-PCA995X::PCA995X(int Address, int pca_type) : PCA995X_Address(Address), type(pca_type) {
+PCA995X::PCA995X(int Address, int pca_type, int iref0Reg, int pwm0Reg, int ledChannelNum) : PCA995X_Address(Address), type(pca_type), iref0Reg(iref0Reg), pwm0Reg(pwm0Reg), ledChannelNum(ledChannelNum) {
     fd = wiringPiI2CSetup(PCA995X_Address);
-    if (pca_type == _PCA9955B) {
-        iref0Reg = PCA9955B_IREF0_ADDR;
-        pwm0Reg = PCA9955B_PWM0_ADDR;
-        ledChannelNum = NUM_CHANNEL_FROM_PCA9955B;
-    } else if (pca_type == _PCA9956) {
-        iref0Reg = PCA9956_IREF0_ADDR;
-        pwm0Reg = PCA9956_PWM0_ADDR;
-        ledChannelNum = NUM_CHANNEL_FROM_PCA9956;
-    }
 };
 int PCA995X::SetPWMAI(int channel, int *PWM, int size) {
     if (!CheckChannelLegal(channel)) return false;
