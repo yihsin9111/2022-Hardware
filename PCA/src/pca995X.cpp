@@ -50,7 +50,10 @@ int PCA995X::SetPWMAI(int channel, int *PWM, int size) {
     args.size = I2C_SMBUS_BLOCK_DATA;
     args.data = &regData;
 
-    return ioctl(fd, I2C_SMBUS, &args) && SetPWM(channel, PWM[0]);
+    int temp01 = ioctl(fd, I2C_SMBUS, &args);
+    int temp02 = SetPWM(channel, PWM[0]);
+    return temp01 && temp02;
+
 };
 int PCA995X::SetIREFAI(int channel, int *IREF, int size) {
     if (!CheckChannelLegal(channel)) return false;
@@ -68,7 +71,10 @@ int PCA995X::SetIREFAI(int channel, int *IREF, int size) {
     args.size = I2C_SMBUS_BLOCK_DATA;
     args.data = &regData;
 
-    return ioctl(fd, I2C_SMBUS, &args) && SetIREF(channel, IREF[0]);
+    int temp01 = ioctl(fd, I2C_SMBUS, &args);
+    int temp02 = SetIREF(channel, IREF[0]);
+    return temp01 && temp02;
+
 };
 int PCA995X::SetPWMIREFAI(int *data) {
     SetPWMAI(0, data, GetChannelNum());
