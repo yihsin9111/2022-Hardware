@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "../include/OFrgba_to_rgbiref.h"
-#include "../include/pca.h"
-#include "../include/pcaDefinition.h"
+#include "OFrgba_to_rgbiref.h"
+#include "pca.h"
+#include "pcaDefinition.h"
 
 using namespace std;
 

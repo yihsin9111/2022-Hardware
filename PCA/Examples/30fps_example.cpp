@@ -3,8 +3,8 @@
 #include <iostream>
 #include <vector>
 
-#include "../include/pca.h"
-#include "../include/pcaDefinition.h"
+#include "pca.h"
+#include "pcaDefinition.h"
 using namespace std;
 
 vector<vector<char> > OFs;

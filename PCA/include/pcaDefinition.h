@@ -16,6 +16,12 @@
 #define _PCA9956 9956
 #define _PCA9955B 9955
 
+// PCA special addr
+#define PCA9956_IREF0_ADDR 0x22
+#define PCA9956_PWM0_ADDR 0x0a
+#define PCA9955B_IREF0_ADDR 0x18
+#define PCA9955B_PWM0_ADDR 0x08
+
 // numbers of pca data needed
 #define NUM_PCA 4                                                       // number of PCA used
 #define NUM_OF 26                                                       // number of total OFs

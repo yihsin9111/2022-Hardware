@@ -5,18 +5,18 @@
 
 #include "pcaDefinition.h"
 
+// PCA(OF) I2C address
+#define PCA_ADDR_1 0x20
+#define PCA_ADDR_2 0x22
+#define PCA_ADDR_3 0x3f
+#define PCA_ADDR_4 0x23
+
 using namespace std;
 
 enum {
     CHANNEL_SIZE_ERROR = 1,  // if the length of data sent to PCA::WriteAll is not equal to 26, return this error
     DATA_SIZE_ERROR = 2,     // if the length of data for an OF channel is not equal to 6, return this error
 };
-
-// PCA(OF) I2C address
-#define PCA_ADDR_1 0x20
-#define PCA_ADDR_2 0x22
-#define PCA_ADDR_3 0x3f
-#define PCA_ADDR_4 0x23
 
 // pca type and addr for pca initialize in pca.cpp
 // an (NUM_PCA * 2) 2D array of int type
@@ -64,12 +64,10 @@ int PCA::WriteAll(std::vector<std::vector<char>> &data) {
             //   {led04PwmR, led04PwmG, led04PwmB, led04IrefR, led04IrefG, led04IrefB},    --- /  led01IrefR, led01IrefG, led01IrefB, led02IrefR, led02IrefG, led02IrefB,
             //   {led05PwmR, led05PwmG, led05PwmB, led05IrefR, led05IrefG, led05IrefB},       /   led03IrefR, led03IrefG, led03IrefB, led04IrefR, led04IrefG, led04IrefB,
             //   {led06PwmR, led06PwmG, led06PwmB, led06IrefR, led06IrefG, led06IrefB}, }         led05IrefR, led05IrefG, led05IrefB, led06IrefR, led06IrefG, led06IrefB, ... }
-            pcaData[j * NUM_AN_OF_NEED_PWM] = data[(j + leds)][0];
-            pcaData[j * NUM_AN_OF_NEED_PWM + 1] = data[(j + leds)][1];
-            pcaData[j * NUM_AN_OF_NEED_PWM + 2] = data[(j + leds)][2];
-            pcaData[j * NUM_AN_OF_NEED_IREF + PCAs[i].GetLedChannelNum() * NUM_AN_OF_NEED_PWM] = data[(j + leds)][3];
-            pcaData[j * NUM_AN_OF_NEED_IREF + PCAs[i].GetLedChannelNum() * NUM_AN_OF_NEED_PWM + 1] = data[(j + leds)][4];
-            pcaData[j * NUM_AN_OF_NEED_IREF + PCAs[i].GetLedChannelNum() * NUM_AN_OF_NEED_PWM + 2] = data[(j + leds)][5];
+            for(int k = 0; k < NUM_AN_OF_NEED_PWM; k++ )
+                pcaData[j * NUM_AN_OF_NEED_PWM] = data[(j + leds)][k];    
+            for(int k = 0; k < NUM_AN_OF_NEED_IREF; k++)
+                pcaData[j * NUM_AN_OF_NEED_IREF + PCAs[i].GetLedChannelNum() * NUM_AN_OF_NEED_PWM] = data[(j + leds)][k+NUM_AN_OF_NEED_PWM];
         }
         leds += PCAs[i].GetLedChannelNum();
         PCAs[i].SetPWMIREFAI(pcaData);
