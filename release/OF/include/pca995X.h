@@ -57,7 +57,7 @@ class PCA995X {
    private:
     // check if the channel is legally (larger than 0 and smaller than maximum)
     bool CheckChannelLegal(int channel);
-    
+
     // Set/Get pwm value wrt specific channel
     int SetPWM(int channel, int PWM);
     int GetPWM(int channel);

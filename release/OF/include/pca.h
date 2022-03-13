@@ -22,7 +22,7 @@
 // WriteChannel is used to updata only one OF datas, which can be used to Debug
 class PCA {
    public:
-    //constructor : initialize
+    // constructor : initialize
     PCA();
 
     // Write pwm/iref to all slaves' registers
