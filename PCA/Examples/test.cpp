@@ -102,8 +102,8 @@ int main(int argc, char* argv[]){
                         pca9956[i].SetPWMAI(0, PWM, 24);
                     }
                     for(int i=0;i<m;i++){
-                        pca9955[i].SetIREFAI(0, IREF, 24);
-                        pca9955[i].SetPWMAI(0, PWM, 24);
+                        pca9955[i].SetIREFAI(0, IREF, 15);
+                        pca9955[i].SetPWMAI(0, PWM, 15);
                     }
 
                 }
