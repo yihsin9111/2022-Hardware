@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
             for (int i = 0; i < NUM_OF; i++) {
                 OFs[i].resize(NUM_AN_OF_NEED_DATA);  // NUM_AN_OF_NEED_DATA = 6 in pcaDefinition.h
                 OFs[i][0] = level;
-                OFs[i][1] = 200 - level;
+                OFs[i][1] = level;
                 OFs[i][2] = level;
                 OFs[i][3] = 90;
                 OFs[i][4] = 80;

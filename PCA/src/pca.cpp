@@ -15,10 +15,7 @@ PCA::PCA() {
     PCAs.resize(NUM_PCA);
 
     for (int i = 0; i < NUM_PCA; i++)
-        if (pcaTypeAddr[i][0] == _PCA9955B)
-            PCAs[0] = PCA995X(pcaTypeAddr[i][1], 9955);
-        else
-            PCAs[0] = PCA995X(pcaTypeAddr[i][1], 9956);
+            PCAs[i] = PCA995X(pcaTypeAddr[i][1], pcaType[i][0]);
 };
 
 int PCA::WriteAll(std::vector<std::vector<char>> &data) {
