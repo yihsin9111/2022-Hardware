@@ -1,6 +1,6 @@
-#include "../include/OFrgba_to_rgbiref.h"
-#include "../include/pca.h"
-#include "../include/pcaDefinition.h"
+#include "OFrgba_to_bgriref.h"
+#include "pca.h"
+#include "pcaDefinition.h"
 #include <time.h>
 #include <iostream>
 #include <stdio.h>
@@ -31,8 +31,8 @@ int main(int argc, char* argv[]){
     char input;
     while(cin >> input){
         
-        newChannel = channel-1;
-        if(newChannel < 0)newChannel += NUM_OF;
+        newChannel = channel+1;
+        if(newChannel >= NUM_OF)newChannel -= NUM_OF;
         for(int i = 0; i < NUM_AN_OF_NEED_DATA; i++){
             OFs[newChannel][i] = OFs[channel][i];
             OFs[channel][i] = 0;

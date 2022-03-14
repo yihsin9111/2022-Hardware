@@ -2,8 +2,7 @@
 #include <time.h>
 
 #include <iostream>
-
-#include "../include/OFrgba_to_rgbiref.h"
+#include "OFrgba_to_bgriref.h"
 #include "../include/pca.h"
 #include "../include/pcaDefinition.h"
 using namespace std;
@@ -50,7 +49,7 @@ int main(int argc, char* argv[]) {
                     pca.Read();
                 } else {
                     cin >> R >> G >> B >> A;
-                    char* color = OFrgba_to_rgbiref(R, G, B, A);
+                    char* color = OFrgba_to_bgriref(R, G, B, A);
                     
                     OFs[channel][0] = color[0];
                     OFs[channel][1] = color[1];
