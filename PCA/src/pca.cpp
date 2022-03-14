@@ -38,8 +38,8 @@ enum {
 // where value equals to 9955 refering to PCA9955B and that of 9956 refering to PCA9956
 // the second element means the I2C address of pca, which will be value between 0 ~ 127
 const int pcaTypeAddr[NUM_PCA][2] = {
-    {_PCA9955B, PCA_ADDR_1},
     {_PCA9956, PCA_ADDR_2},
+    {_PCA9955B, PCA_ADDR_1},
     {_PCA9955B, PCA_ADDR_3},
     {_PCA9956, PCA_ADDR_4}};
 

@@ -16,7 +16,7 @@
 #define gamma_g 1.8
 #define gamma_b 1.66
 
-char *OFrgba_to_rgbiref(int R, int G, int B, float a) {
+char *OFrgba_to_bgriref(int R, int G, int B, float a) {
     a = a > 12 ? 1 : a / 12;
     // a will be 0-10,15 from software
     // however, OF is too dark if we need to handle a = 15, OF won't be bright enough
@@ -25,12 +25,12 @@ char *OFrgba_to_rgbiref(int R, int G, int B, float a) {
 
     char *color = new char[3];
 
-    color[0] = char(pow(a / 3, gamma_r) * 255);
+    color[0] = char(pow(a / 3, gamma_b) * 255);
     color[1] = char(pow(a / 3, gamma_g) * 255);
-    color[2] = char(pow(a / 3, gamma_b) * 255);
-    color[3] = R;
+    color[2] = char(pow(a / 3, gamma_r) * 255);
+    color[3] = B;
     color[4] = G;
-    color[5] = B;
+    color[5] = R;
 
     return color;
 };
