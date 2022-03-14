@@ -36,12 +36,12 @@ int main(int argc, char* argv[]) {
             OFs.resize(NUM_OF);  // NUM_OF = 26 in pcaDefinition.h
             for (int i = 0; i < NUM_OF; i++) {
                 OFs[i].resize(NUM_AN_OF_NEED_DATA);  // NUM_AN_OF_NEED_DATA = 6 in pcaDefinition.h
-                OFs[i][0] = level;
-                OFs[i][1] = level;
-                OFs[i][2] = level;
-                OFs[i][3] = 85;
-                OFs[i][4] = 85;
-                OFs[i][5] = 85;
+                OFs[i][0] = 0;//b
+                OFs[i][1] = 0;//g
+                OFs[i][2] = level;//r
+                OFs[i][3] = 0;//b
+                OFs[i][4] = 0;//g
+                OFs[i][5] = level;//r
             }
             pca.WriteAll(OFs);  // PCA Write All Channel
                                 // pass data(type : vector<vector<char>>)

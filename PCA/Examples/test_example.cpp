@@ -34,14 +34,13 @@ int main(int argc, char* argv[]) {
             cout << "Usage : \n >> <channel> <R> <G> <B> <A>\n";
             cout << "You may enter -1 to quit the current mode\n";
             cout << "Also, You may enter -2 to check all register in all PCAs\n";
-            int channel = 0, R = 0, G = 0, B = 0;
+            int channel = 0, R = 0, G = 0, B = 0, newChannel = 0;
             float A = 0;
             while (1) {
-                int newChannel = 0;
                 cin >> newChannel;
                 
                 // first set last channel off
-                for (int i = 0; i < NUM_AN_OF_NEED_DATA; i++)
+                for (int i = 0; i < 6; i++)
                     OFs[channel][i] = 0;
                 
                 channel = newChannel;
@@ -68,8 +67,8 @@ int main(int argc, char* argv[]) {
             cout << "Usage : \n >> <channel> <R duty> <G duty> <B duty> <R iref> <G iref> <B iref>\n";
             cout << "You may enter -1 to quit the current mode\n";
             int channel = 0, Rduty = 0, Gduty = 0, Bduty = 0, Riref = 0, Giref = 0, Biref = 0;
+	    int newChannel = 0;
             while (1) {
-                int newChannel = 0;
                 cin >> newChannel;
 
                 for (int i = 0; i < 6; i++)
@@ -80,7 +79,6 @@ int main(int argc, char* argv[]) {
                     break;
                 } else if (channel == -2) {
                     pca.Read();
-                    break;
                 } else {
                     cin >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref;
                     OFs[channel][0] = Rduty;
