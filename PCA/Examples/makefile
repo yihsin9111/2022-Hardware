@@ -2,7 +2,7 @@ main:
 	g++ -O2 -c ../src/pca995X.cpp -I../include/ -o ../obj/pca995X.o -lwiringPi -lwiringPiDev
 	g++ -O2 -c ../src/pca.cpp -I../include/ -o ../obj/pca.o -lwiringPi -lwiringPiDev
 	g++ -O2 -c ../include/pcaDefinition.h -o ../obj/pcaDefinition.o
-	g++ -O2 -c ../include/OFrgba_to_rgbiref.h -o ../obj/OFrgba_to_rgbiref.o
+	g++ -O2 -c ../include/OFrgba_to_bgriref.h -o ../obj/OFrgba_to_bgriref.o
 	g++ -O2 -c ../src/gamma_correction.cpp -I../include/ -o ../obj/gamma_correction.o
 	g++ -O2 -c 30fps_example.cpp -I../include/ -o ../obj/30fps_example.o -lwiringPi -lwiringPiDev
 	g++ -O2 -c part_example.cpp -I../include/ -o ../obj/part_example.o -lwiringPi -lwiringPiDev
