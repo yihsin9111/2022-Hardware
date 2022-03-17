@@ -6,10 +6,79 @@
 #include "pcaDefinition.h"
 
 // PCA(OF) I2C address
-#define PCA_ADDR_1 0x20
-#define PCA_ADDR_2 0x22
-#define PCA_ADDR_3 0x3f
-#define PCA_ADDR_4 0x23
+// if you need to compare to the PCA Boards on the hardware,
+// please refer to the sketch picture below
+//                          -------------------------
+//                            BIT2    BIT1    BIT0
+//                          -------------------------
+#define PCA_ADDR_1 0x22  //   PD(2)   PD(2)   PU(4)
+#define PCA_ADDR_2 0x20  //   PD(2)   PD(2)   PD(2)
+#define PCA_ADDR_3 0x1f  //   PD(2)   PD(2)   GND(1)
+#define PCA_ADDR_4 0x23  //   PD(2)   PD(2)   VDD(5)
+
+// sketch below shows the actual order of PCAs on hardware
+//
+// First three PCA board is on the black adapter, also called black board,
+// Here shows how the black board set
+//
+// |-------------------------------------------------------------------|
+// |                   led9     led10     led11     led12     led13    |
+// |  led8  |---------------|                                          |
+// |        |               |                                          |
+// |        |               |                                          |
+// |  led7  |    1st PCA    |                                          |
+// |        |               |        |-----------------------|         |
+// |        | type:PCA9956  |        |       2nd PCA         |         |
+// |  led6  | color:red     |        |  type:PCA9955B        |         |
+// |        | ADDR:0x22     |        |  color:blue           |         |
+// |        |               |        |  ADDR:0x20            |         |
+// |  led5  |  control for  |        |  control for led 9~13 | led14   |
+// |        |  led 1~8      |        |-----------------------|         |
+// |        |               |                                          |
+// |  led4  |               |        |--------------------|    led15   |
+// |        |               |        |      3rd PCA       |            |
+// |        |               |        |                    |            |
+// |  led3  |               |        |   type:PCA9955B    |    led16   |
+// |        |               |        |   color:blue       |            |
+// |        |---------------|        |   ADDR:0x1f        |            |
+// |  led2                           |                    |    led17   |
+// |          |--------|             |   control for      |            |
+// |          |  BUCK  |             |   led 14~18        |            |
+// |  led1    |--------|             |--------------------|    led18   |
+// |                                                                   |
+// |-------------------------------------------------------------------|
+//
+//
+// The last PCA board is on the white adapter, also called white board,
+// Here shows how the white board set
+//
+// |-----------------------------------------|
+// |                                         |
+// |       |-----------------------|         |
+// |       |                       |         |
+// | led26 |                       |         |
+// |       |        4th PCA        |         |
+// |       |                       |  led25  |
+// |       |     type:PCA9956      |         |
+// | led24 |                       |         |
+// |       |     color:red         |  led23  |
+// |       |                       |         |
+// |       |     ADDR:0x23         |         |
+// | led21 |                       |  led22  |
+// |       |     control for       |         |
+// |       |     led 19~26         |         |
+// |       |                       |         |
+// | led20 |                       |         |
+// |       |                       |         |
+// |       |                       |         |
+// |       |                       |         |
+// | led19 |-----------------------|         |
+// |                                         |
+// |                        |--------|       |
+// |                        |  BUCK  |       |
+// |                        |--------|       |
+// |-----------------------------------------|
+//
 
 // PCA special addr
 #define PCA9956_IREF0_ADDR 0x22
