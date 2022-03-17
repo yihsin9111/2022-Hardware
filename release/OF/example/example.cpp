@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     OF[3] = 40;
     OF[4] = 50;
     OF[5] = 60;
-    pca.WriteChannel(OF, 9);  // PCA Write One Channel
+    pca.WriteChannel(OF, 7);  // PCA Write One Channel
                               // pass data(type : vector<char>) and selected channel(type : int) orderly
 #endif                        /* EX_WRITE_CHANNEL */
 }
