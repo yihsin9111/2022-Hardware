@@ -173,10 +173,8 @@ int PCA::WriteChannel(std::vector<char> &data, int channel) {
     for (int i = 0; i < PCAs.size(); i++) {
         if (channel >= PCAs[i].GetLedChannelNum())
             channel -= PCAs[i].GetLedChannelNum();
-        else{
-	    cout << "i:" << i << ", channel:" << channel << endl;
-            return PCAs[i].SetRGB(channel, data[0], data[1], data[2], data[3], data[4], data[5]);
-	}
+        else
+            return PCAs[i].SetRGB(PCAs[i].GetLedChannelNum() - 1 - channel, data[2], data[1], data[0], data[5], data[4], data[3]);
     }
     return 0;
 };
