@@ -174,7 +174,7 @@ int PCA::WriteChannel(std::vector<char> &data, int channel) {
         if (channel > PCAs[i].GetLedChannelNum())
             channel -= PCAs[i].GetLedChannelNum();
         else
-            return PCAs[i].SetRGB(PCAs[i].GetLedChannelNum() - 1 - channel, data[2], data[1], data[0], data[5], data[4], data[3]);
+            return PCAs[i].SetRGB(PCAs[i].GetLedChannelNum() - 1 - channel, data[0], data[1], data[2], data[3], data[4], data[5]);
     }
     return 0;
 };

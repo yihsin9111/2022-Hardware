@@ -65,6 +65,7 @@ int main(int argc, char* argv[]) {
             cout << "Choose one led between 0 and 25" << endl;
             cout << "Usage : \n >> <channel> <R duty> <G duty> <B duty> <R iref> <G iref> <B iref>\n";
             cout << "You may enter -1 to quit the current mode\n";
+	    cout << "You may enter -2 to read all registers in your pcas\n";
             int channel = 0, Rduty = 0, Gduty = 0, Bduty = 0, Riref = 0, Giref = 0, Biref = 0;
 	    int newChannel = 0;
             while (1) {
@@ -80,12 +81,12 @@ int main(int argc, char* argv[]) {
                     pca.Read();
                 } else {
                     cin >> Rduty >> Gduty >> Bduty >> Riref >> Giref >> Biref;
-                    OFs[channel][0] = Rduty;
+                    OFs[channel][0] = Bduty;
                     OFs[channel][1] = Gduty;
-                    OFs[channel][2] = Bduty;
-                    OFs[channel][3] = Riref;
+                    OFs[channel][2] = Rduty;
+                    OFs[channel][3] = Biref;
                     OFs[channel][4] = Giref;
-                    OFs[channel][5] = Biref;
+                    OFs[channel][5] = Riref;
                     pca.WriteAll(OFs);
                 }
             }
