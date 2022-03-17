@@ -39,9 +39,9 @@ int main(int argc, char* argv[]) {
                 OFs[i][0] = level;//b
                 OFs[i][1] = level;//g
                 OFs[i][2] = level;//r
-                OFs[i][3] = 80;//b
-                OFs[i][4] = 80;//g
-                OFs[i][5] = 80;//r
+                OFs[i][3] = 0;//80;//b
+                OFs[i][4] = 150;//80;//g
+                OFs[i][5] = 150;//80;//r
             }
             pca.WriteAll(OFs);  // PCA Write All Channel
                                 // pass data(type : vector<vector<char>>)

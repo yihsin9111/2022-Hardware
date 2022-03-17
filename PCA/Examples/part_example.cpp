@@ -27,7 +27,7 @@ int main(int argc, char* argv[]){
     OFs[0][3] = 100;
     OFs[0][4] = 100;
     OFs[0][5] = 100;
-    pca.Write(OFs);
+    pca.WriteAll(OFs);
 
     char input;
     while(cin >> input){
