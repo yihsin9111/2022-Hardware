@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) {
     clock_t init, clk;
     int level = 80, decay = 1;
     init = clock();
+    int status = 0;
     while (1) {
         clk = clock();
         if ((clk - init) % (1000 / 15) == 0) {
@@ -39,9 +40,9 @@ int main(int argc, char* argv[]) {
                 OFs[i][0] = level;//b
                 OFs[i][1] = level;//g
                 OFs[i][2] = level;//r
-                OFs[i][3] = 0;//80;//b
-                OFs[i][4] = 150;//80;//g
-                OFs[i][5] = 150;//80;//r
+                OFs[i][3] = (status%3 == 0)*100;//80;//b
+                OFs[i][4] = (status%3 == 1)*100;//80;//g
+                OFs[i][5] = (status%3 == 2)*100;//80;//r
             }
             pca.WriteAll(OFs);  // PCA Write All Channel
                                 // pass data(type : vector<vector<char>>)
@@ -49,6 +50,7 @@ int main(int argc, char* argv[]) {
 
             if (level <= 0 || level >= 255) {
                 decay -= (decay + decay);
+		++status;
             }
             level -= decay;
         }
