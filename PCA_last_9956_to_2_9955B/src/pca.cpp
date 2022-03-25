@@ -113,9 +113,9 @@ const int pcaTypeAddr[NUM_PCA][2] = {
     {_PCA9956, PCA_ADDR_1},
     {_PCA9955B, PCA_ADDR_2},
     {_PCA9955B, PCA_ADDR_3},
-    // {_PCA9956, PCA_ADDR_4}
-    {_PCA9955B, PCA_ADDR_5}, // light 5
-    {_PCA9955B, PCA_ADDR_6} // light 3
+    // {_PCA9956, PCA_ADDR_4} // change this to 2 9955B, (8 channel -> 5 + 3 channel)
+    {_PCA9955B, PCA_ADDR_5}, // light 5 channel
+    {_PCA9955B, PCA_ADDR_6}  // light only 3 channel due to the design
 };
 
 PCA::PCA() {
