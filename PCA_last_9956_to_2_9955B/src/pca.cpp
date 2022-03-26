@@ -115,23 +115,19 @@ const int pcaTypeAddr[NUM_PCA][2] = {
     {_PCA9955B, PCA_ADDR_3},
     // {_PCA9956, PCA_ADDR_4} // change this to 2 9955B, (8 channel -> 5 + 3 channel)
     {_PCA9955B, PCA_ADDR_5}, // light 5 channel
-    {_PCA9955B, PCA_ADDR_6}  // light only 3 channel due to the design
+    {_PCA9955B, PCA_ADDR_6}  // light 5 channel due to the design
 };
 
 PCA::PCA() {
     PCAs.resize(NUM_PCA);
 
-    // the second PCA9955B (last one) will have only three channel due to the design
-    // assigned below
-    for (int i = 0; i < NUM_PCA - 1; i++) {
+    for (int i = 0; i < NUM_PCA; i++) {
         if (pcaTypeAddr[i][0] == _PCA9955B) {
             PCAs[i] = PCA995X(pcaTypeAddr[i][1], pcaTypeAddr[i][0], PCA9955B_IREF0_ADDR, PCA9955B_PWM0_ADDR, NUM_CHANNEL_FROM_PCA9955B);
         } else if (pcaTypeAddr[i][0] == _PCA9956) {
             PCAs[i] = PCA995X(pcaTypeAddr[i][1], pcaTypeAddr[i][0], PCA9956_IREF0_ADDR, PCA9956_PWM0_ADDR, NUM_CHANNEL_FROM_PCA9956);
         }
     }
-    // the second PCA9955B will have only three channel due to the design
-    PCAs[4] = PCA995X(pcaTypeAddr[4][1], pcaTypeAddr[4][0], PCA9955B_IREF0_ADDR, PCA9955B_PWM0_ADDR, 3);
 };
 
 int PCA::WriteAll(std::vector<std::vector<char>> &data) {
@@ -139,20 +135,22 @@ int PCA::WriteAll(std::vector<std::vector<char>> &data) {
     if (data.size() != NUM_OF)
         return CHANNEL_SIZE_ERROR;
 
-    int leds = 0;
+    // due to the pca9956 to 2 pca9955B, we need to copy a new one and pad the channel to the real led's size (28)
+    std::vector<std::vector<char>> paddedData;
+    vector<char> black_channel(NUM_AN_OF_NEED_DATA, 0);
+    for (int i = 0; i < data.size(); ++i) {
+        paddedData.push_back(data[i]);
+    }
+    paddedData.push_back(black_channel);
+    paddedData.push_back(black_channel);
 
+    int leds = 0;
     // use while loop to go through all PCAs
     for (int i = 0; i < PCAs.size(); i++) {
         int* pcaData = new int[PCAs[i].GetLedChannelNum() * NUM_AN_OF_NEED_DATA]();
-        // int pcaData[PCAs[i].GetLedChannelNum() * NUM_AN_OF_NEED_DATA] = {0};
-        for (int j = 0; j < PCAs[i].GetLedChannelNum(); j++) {            
-            // out of the designed NUM_OF size -> should break
-            if (j + leds >= NUM_OF) {
-                break;
-            }
-
+        for (int j = 0; j < PCAs[i].GetLedChannelNum(); j++) {              
             // check for length of each channel data, it needs NUM_AN_OF_NEED_DATA(6, in pcaDefinition.h) datas for an OF
-            if (data[j + leds].size() != NUM_AN_OF_NEED_DATA)
+            if (paddedData[j + leds].size() != NUM_AN_OF_NEED_DATA)
                 return DATA_SIZE_ERROR;
             // data from software would be 26 channels * 6 datas per channel
             // however, data form need to send to an PCA would be :
@@ -170,11 +168,10 @@ int PCA::WriteAll(std::vector<std::vector<char>> &data) {
             // In addition, due to PCB design, led address written on the PCB is reversed as the register order in PCAs
             // so we need to reverse the data into pcaData just as (PCAs[i].GetLedChannelNum() - 1 - j)
             
-            
             for (int k = 0; k < NUM_AN_OF_NEED_PWM; k++)
-                pcaData[j * NUM_AN_OF_NEED_PWM + k] = data[(PCAs[i].GetLedChannelNum() - 1 - j + leds)][k];
+                pcaData[j * NUM_AN_OF_NEED_PWM + k] = paddedData[(PCAs[i].GetLedChannelNum() - 1 - j + leds)][k];
             for (int k = 0; k < NUM_AN_OF_NEED_IREF; k++)
-                pcaData[j * NUM_AN_OF_NEED_IREF + PCAs[i].GetLedChannelNum() * NUM_AN_OF_NEED_PWM + k] = data[(PCAs[i].GetLedChannelNum() - 1 - j + leds)][k + NUM_AN_OF_NEED_PWM];
+                pcaData[j * NUM_AN_OF_NEED_IREF + PCAs[i].GetLedChannelNum() * NUM_AN_OF_NEED_PWM + k] = paddedData[(PCAs[i].GetLedChannelNum() - 1 - j + leds)][k + NUM_AN_OF_NEED_PWM];
         }
         leds += PCAs[i].GetLedChannelNum();
         PCAs[i].SetPWMIREFAI(pcaData);
